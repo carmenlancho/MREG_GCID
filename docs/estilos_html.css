@@ -89,3 +89,72 @@
     height: auto;
     line-height: normal;
 }
+
+/* ======================================================
+   Acento naranja para títulos y elementos "azules" del tema
+   (pegar AL FINAL de estilos_html.css)
+   ====================================================== */
+
+:root{
+  --accent-orange: #C76D3A;      /* naranja agradable */
+  --accent-orange-hover: #C76412; /* un poco más oscuro */
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6,
+.title, .quarto-title-block .title {
+  color: var(--accent-orange) !important;
+}
+
+/* Enlaces */
+a, a:visited {
+  color: var(--accent-orange) !important;
+}
+a:hover, a:focus {
+  color: var(--accent-orange-hover) !important;
+}
+
+/* Sidebar/nav del libro (enlaces activos y hover) */
+.sidebar a:hover,
+.quarto-sidebar a:hover,
+.sidebar a.active,
+.quarto-sidebar a.active,
+.sidebar .active > a,
+.quarto-sidebar .active > a {
+  color: var(--accent-orange) !important;
+}
+
+/* Tabla de contenidos (TOC) */
+#TOC a:hover,
+#TOC a.active,
+nav#TOC a:hover,
+nav#TOC a.active {
+  color: var(--accent-orange) !important;
+}
+
+/* Si tu tema subraya h2 con azul, lo neutralizamos y lo pasamos a naranja */
+h2 {
+  border-bottom-color: rgba(230, 126, 34, 0.25) !important;
+}
+
+/* Botones/elementos primarios típicos de Bootstrap (por si aparecen) */
+.btn-primary,
+.page-item.active .page-link,
+.nav-pills .nav-link.active,
+.nav-tabs .nav-link.active,
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: var(--accent-orange) !important;
+  border-color: var(--accent-orange) !important;
+}
+
+.btn-primary:hover,
+.page-item.active .page-link:hover {
+  background-color: var(--accent-orange-hover) !important;
+  border-color: var(--accent-orange-hover) !important;
+}
+
+/* Poner la numeración de secciones/capítulos del mismo color que los títulos */
+.header-section-number {
+  color: var(--accent-orange) !important;
+}

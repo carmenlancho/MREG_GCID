@@ -28,7 +28,7 @@ lang: es-ES
 
 format:
   html:
-    theme: cerulean
+    theme: united
     lang: es-ES
     css: estilos_html.css
   pdf:
