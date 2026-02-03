@@ -1,0 +1,1282 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrreprt}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{bookmark}{}{\usepackage{bookmark}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\author{}
+\date{}
+
+\begin{document}
+
+<div class="portada">
+    <div class="portada-container">
+        <!-- Header -->
+        <div class="portada-header">
+            <img src="../images/urjc_logo.png" alt="Logo URJC" class="portada-logo">
+            
+            <div class="portada-escuela">
+                Escuela Técnica Superior de<br>
+                Ingeniería Informática
+            </div>
+        </div>
+        
+        <!-- Contenido principal -->
+        <div class="portada-main">
+            <h1 class="portada-titulo">
+                Métodos Estadísticos de Predicción
+            </h1>
+            
+            <h2 class="portada-subtitulo">
+                Ejercicios de la Asignatura
+            </h2>
+            
+            <div class="portada-grado">
+                Grado en Matemáticas
+            </div>
+            
+            <div class="portada-autores-section">
+                <div class="portada-autores-titulo">Autores</div>
+                <div class="portada-autor">Víctor Aceña Gil</div>
+                <div class="portada-autor">Isaac Martín de Diego</div>
+            </div>
+            
+            <div class="portada-fecha">2025-2026</div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="portada-footer">
+            <img src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" 
+                 alt="Licencia Creative Commons" 
+                 class="portada-licencia-logo">
+            
+            <div class="portada-licencia-texto">
+                Copyright © 2025 Víctor Aceña Gil, Isaac Martín de Diego. Esta obra está licenciada bajo CC BY-SA 4.0, Creative Commons Atribución-Compartir Igual 4.0 Internacional.
+            </div>
+        </div>
+        
+        <!-- Elementos decorativos -->
+        <div class="portada-deco-lines">
+            <div class="portada-deco-line"></div>
+            <div class="portada-deco-line"></div>
+            <div class="portada-deco-line"></div>
+        </div>
+    </div>
+</div>
+
+\renewcommand*\contentsname{Índice ejercicios}
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+
+\bookmarksetup{startatroot}
+
+\chapter{\texorpdfstring{\textbf{Introducción}}{Introducción}}\label{introducciuxf3n}
+
+Este documento recopila una serie de ejercicios prácticos y teóricos
+diseñados para complementar la asignatura ``Modelos Estadísticos de
+Predicción'' del Grado en Matemáticas. El objetivo de esta colección es
+afianzar los conocimientos adquiridos en cada tema, fomentando tanto la
+comprensión de los fundamentos teóricos como la habilidad para
+implementar y diagnosticar modelos en R.
+
+\section{\texorpdfstring{\textbf{Estructura de los
+Ejercicios}}{Estructura de los Ejercicios}}\label{estructura-de-los-ejercicios}
+
+Los ejercicios están organizados por temas, siguiendo la estructura del
+curso. Para cada tema, encontrarás una mezcla de:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Preguntas Conceptuales:} Diseñadas para reforzar la
+  comprensión de la teoría subyacente.
+\item
+  \textbf{Problemas Prácticos con R:} Enfocados en la aplicación de las
+  técnicas a conjuntos de datos reales o simulados.
+\item
+  \textbf{Ejercicios de Interpretación:} Centrados en la habilidad
+  crítica de interpretar correctamente las salidas de los modelos
+  estadísticos.
+\end{itemize}
+
+\section{\texorpdfstring{\textbf{Requisitos
+Previos}}{Requisitos Previos}}\label{requisitos-previos}
+
+Para abordar estos ejercicios, se asume que el estudiante ha estudiado
+el contenido teórico del tema correspondiente y posee un manejo básico
+del entorno de programación R y RStudio.
+
+\bookmarksetup{startatroot}
+
+\chapter{\texorpdfstring{\textbf{Regresión Lineal
+Simple}}{Regresión Lineal Simple}}\label{regresiuxf3n-lineal-simple}
+
+\subsection{Ejercicio 1: Fundamentos
+Conceptuales}\label{ejercicio-1-fundamentos-conceptuales}
+
+Basándote en el texto, explica con tus propias palabras por qué un
+coeficiente de correlación de Pearson (\(r\)) alto no es suficiente para
+modelar una relación y por qué la regresión lineal es un paso más allá.
+Menciona al menos dos cosas que el modelo de regresión proporciona y que
+la correlación por sí sola no ofrece.
+
+\subsection{Ejercicio 2: Interpretación de
+Coeficientes}\label{ejercicio-2-interpretaciuxf3n-de-coeficientes}
+
+Un analista ajusta un modelo para predecir el gasto anual en compras
+online (\texttt{gasto}, en euros) basándose en la edad del cliente
+(\texttt{edad}). El modelo ajustado es:
+
+\texttt{gasto\ =\ 1500\ +\ 12\ *\ edad}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  ¿Cuál es el gasto predicho para un cliente de 30 años?
+\item
+  Interpreta el significado de la pendiente (12) en el contexto
+  específico de este problema.
+\item
+  Interpreta el significado del intercepto (1500). ¿Crees que esta
+  interpretación tiene sentido práctico en el mundo real? ¿Por qué?
+\end{enumerate}
+
+\subsection{Ejercicio 3: Aplicación Práctica con R (Ajuste e
+Inferencia)}\label{ejercicio-3-aplicaciuxf3n-pruxe1ctica-con-r-ajuste-e-inferencia}
+
+Utiliza el conjunto de datos \texttt{pressure} de R, que contiene
+mediciones de temperatura y presión de vapor de mercurio.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Ajusta un modelo de regresión lineal simple para predecir la presión
+  (\texttt{pressure}) en función de la temperatura
+  (\texttt{temperature}). Guarda el modelo en un objeto.
+\item
+  Utiliza la función \texttt{summary()} sobre el objeto del modelo.
+\item
+  Interpreta el valor del \textbf{coeficiente de determinación R²}. ¿Qué
+  porcentaje de la variabilidad de la presión es explicado por la
+  temperatura?
+\item
+  Interpreta el \textbf{p-valor del estadístico F}. ¿Es el modelo útil
+  en su conjunto?
+\item
+  ¿Es el coeficiente de la temperatura estadísticamente significativo a
+  un nivel de \(\alpha = 0.05\)? Justifica tu respuesta basándote en el
+  p-valor del test t.
+\end{enumerate}
+
+\subsection{Ejercicio 4: Intervalos de Confianza y
+Predicción}\label{ejercicio-4-intervalos-de-confianza-y-predicciuxf3n}
+
+Usando el modelo del ejercicio anterior
+(\texttt{lm(pressure\ \textasciitilde{}\ temperature,\ data\ =\ pressure)}):
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Calcula el \textbf{intervalo de confianza al 95\%} para la
+  \emph{presión media} esperada cuando la temperatura es de 250 grados.
+\item
+  Calcula el \textbf{intervalo de predicción al 95\%} para la presión de
+  una \emph{única y nueva} medición realizada a 250 grados.
+\item
+  ¿Cuál de los dos intervalos es más ancho? Explica la razón teórica de
+  esta diferencia.
+\end{enumerate}
+
+\subsection{Ejercicio 5: Supuestos del
+Modelo}\label{ejercicio-5-supuestos-del-modelo}
+
+Enumera los cuatro supuestos del modelo de regresión lineal clásico
+(también conocidos como supuestos de Gauss-Markov) y explica brevemente
+la importancia de cada uno.
+
+\subsection{Ejercicio 6: Diagnóstico de Linealidad y
+Homocedasticidad}\label{ejercicio-6-diagnuxf3stico-de-linealidad-y-homocedasticidad}
+
+Para el modelo del ejercicio 3:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Genera y muestra el gráfico de \textbf{Residuos vs.~Valores
+  Ajustados}. Basándote en este gráfico, ¿se cumple el supuesto de
+  \textbf{linealidad}? Explica en qué te basas.
+\item
+  Genera y muestra el gráfico \textbf{Scale-Location}. Basándote en este
+  gráfico, ¿se cumple el supuesto de \textbf{homocedasticidad}? Describe
+  el patrón que indicaría un problema de heterocedasticidad.
+\end{enumerate}
+
+\subsection{Ejercicio 7: Diagnóstico de
+Normalidad}\label{ejercicio-7-diagnuxf3stico-de-normalidad}
+
+Para el modelo del ejercicio 3:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Genera un gráfico \textbf{Normal Q-Q} de los residuos. ¿Parecen seguir
+  los residuos una distribución normal?
+\item
+  Realiza un \textbf{test de Shapiro-Wilk} sobre los residuos del
+  modelo. ¿Qué concluyes a partir del p-valor?
+\end{enumerate}
+
+\subsection{Ejercicio 8: Descomposición de la Varianza
+(ANOVA)}\label{ejercicio-8-descomposiciuxf3n-de-la-varianza-anova}
+
+Explica qué representan la \textbf{Suma de Cuadrados Total (SST)}, la
+\textbf{Suma de Cuadrados de la Regresión (SSR)} y la \textbf{Suma de
+Cuadrados del Error (SSE)}. ¿Cuál es la ecuación fundamental que las
+relaciona?
+
+\subsection{Ejercicio 9: Observaciones
+Influyentes}\label{ejercicio-9-observaciones-influyentes}
+
+Basado en la teoría de los apuntes:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Explica la diferencia entre un residuo simple (\(e_i\)), un residuo
+  estandarizado y un residuo estudentizado. ¿Por qué se prefieren los
+  estudentizados para el diagnóstico?
+\item
+  ¿Qué mide el \textbf{leverage} (\(h_{ii}\))? ¿Y la \textbf{distancia
+  de Cook} (\(D_i\))? ¿Puede una observación tener un leverage alto y no
+  ser influyente?
+\end{enumerate}
+
+\subsection{Ejercicio 10: Relación entre Pruebas de
+Hipótesis}\label{ejercicio-10-relaciuxf3n-entre-pruebas-de-hipuxf3tesis}
+
+En el contexto \textbf{exclusivo} de la regresión lineal simple, ¿qué
+relación matemática existe entre el estadístico \textbf{F} del test
+ANOVA y el estadístico \textbf{t} del test para la pendiente
+\(\beta_1\)? ¿Qué implica esto para sus respectivos p-valores?
+
+\bookmarksetup{startatroot}
+
+\chapter{\texorpdfstring{\textbf{Regresión Lineal
+Múltiple}}{Regresión Lineal Múltiple}}\label{regresiuxf3n-lineal-muxfaltiple}
+
+\subsection{\texorpdfstring{Ejercicio 1: Conceptual (Interpretación
+\emph{Ceteris
+Paribus})}{Ejercicio 1: Conceptual (Interpretación Ceteris Paribus)}}\label{ejercicio-1-conceptual-interpretaciuxf3n-ceteris-paribus}
+
+Un analista ajusta dos modelos para predecir el consumo de un coche
+(\texttt{mpg}):
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{lm(mpg\ \textasciitilde{}\ wt)} obtiene un coeficiente para
+  \texttt{wt} de -5.3.
+\item
+  \texttt{lm(mpg\ \textasciitilde{}\ wt\ +\ hp)} obtiene un coeficiente
+  para \texttt{wt} de -3.8.
+\end{enumerate}
+
+Explica detalladamente por qué el coeficiente para la variable
+\texttt{wt} (peso) cambia al añadir la variable \texttt{hp} (caballos de
+fuerza). ¿Cuál de los dos coeficientes representa el efecto ``puro'' o
+``aislado'' del peso? Fundamenta tu respuesta en el principio de
+\textbf{\emph{ceteris paribus}}.
+
+\subsection{Ejercicio 2: Práctico (Ajuste e Interpretación de un Modelo
+Múltiple)}\label{ejercicio-2-pruxe1ctico-ajuste-e-interpretaciuxf3n-de-un-modelo-muxfaltiple}
+
+Usa el conjunto de datos \texttt{iris} de R. Queremos modelar la anchura
+del pétalo (\texttt{Petal.Width}) en función de la longitud del pétalo
+(\texttt{Petal.Length}) y la anchura del sépalo (\texttt{Sepal.Width}).
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Ajusta un modelo de regresión lineal múltiple:
+  \texttt{lm(Petal.Width\ \textasciitilde{}\ Petal.Length\ +\ Sepal.Width,\ data\ =\ iris)}.
+\item
+  Interpreta el coeficiente estimado para \texttt{Petal.Length}.
+\item
+  Interpreta el coeficiente estimado para \texttt{Sepal.Width}.
+\item
+  Interpreta el intercepto del modelo. ¿Tiene un significado práctico en
+  este contexto biológico?
+\end{enumerate}
+
+\subsection{Ejercicio 3: Conceptual (R² vs.~R²
+Ajustado)}\label{ejercicio-3-conceptual-ruxb2-vs.-ruxb2-ajustado}
+
+Cuando pasamos de un modelo simple a uno múltiple, introducimos el
+\textbf{R² ajustado} como medida de bondad de ajuste.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  ¿Cuál es el principal problema de usar el R² tradicional para comparar
+  modelos con diferente número de predictores?
+\item
+  ¿Cómo soluciona el R² ajustado este problema? Explica qué
+  ``penalización'' introduce en su fórmula.
+\end{enumerate}
+
+\subsection{Ejercicio 4: Interpretación de Salidas de
+R}\label{ejercicio-4-interpretaciuxf3n-de-salidas-de-r}
+
+Te presentan el siguiente resumen de un modelo que predice el prestigio
+de una ocupación (\texttt{prestige}) en función de los ingresos
+(\texttt{income}) y el nivel educativo (\texttt{education}).
+
+\begin{verbatim}
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -6.0647    4.2750   -1.419   0.1595    
+income       0.0013    0.0003    4.524   1.9e-05 ***
+education    4.1832    0.3887   10.762   < 2e-16 ***
+
+Multiple R-squared:  0.79,  Adjusted R-squared:  0.785 
+F-statistic: 185.6 on 2 and 99 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  ¿Es el modelo globalmente significativo? ¿En qué te basas?
+\item
+  ¿Son los predictores \texttt{income} y \texttt{education}
+  individualmente significativos, después de controlar por el efecto del
+  otro? Justifica tu respuesta.
+\item
+  Explica la diferencia conceptual entre lo que evalúa el \textbf{test F
+  global} y lo que evalúan los \textbf{tests t individuales} en este
+  modelo.
+\end{enumerate}
+
+\subsection{Ejercicio 5: Conceptual
+(Multicolinealidad)}\label{ejercicio-5-conceptual-multicolinealidad}
+
+Describe con tus propias palabras qué es la \textbf{multicolinealidad}.
+Menciona tres consecuencias negativas que puede tener la
+multicolinealidad severa en un modelo de regresión y si afecta más a la
+\textbf{predicción} o a la \textbf{inferencia}.
+
+\subsection{Ejercicio 6: Práctico (Diagnóstico de
+Multicolinealidad)}\label{ejercicio-6-pruxe1ctico-diagnuxf3stico-de-multicolinealidad}
+
+Usa el dataset \texttt{mtcars}. Ajusta un modelo para predecir el
+consumo (\texttt{mpg}) usando como predictores el número de cilindros
+(\texttt{cyl}), la cilindrada (\texttt{disp}), los caballos de fuerza
+(\texttt{hp}) y el peso (\texttt{wt}).
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Observa el \texttt{summary()} del modelo. ¿Hay alguna variable que, a
+  pesar de tener una alta correlación simple con \texttt{mpg}, no
+  resulte significativa en el modelo múltiple?
+\item
+  Carga la librería \texttt{car} y calcula el \textbf{Factor de
+  Inflación de la Varianza (VIF)} para cada predictor.
+\item
+  Basándote en los valores del VIF, ¿qué variables presentan un problema
+  de multicolinealidad? ¿Cuál es tu recomendación para simplificar el
+  modelo?
+\end{enumerate}
+
+\subsection{Ejercicio 7: Teórico (Notación
+Matricial)}\label{ejercicio-7-teuxf3rico-notaciuxf3n-matricial}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Escribe la fórmula del estimador de Mínimos Cuadrados Ordinarios
+  (\(\hat{\mathbf{\beta}}\)) en notación matricial.
+\item
+  ¿Qué supuesto fundamental del modelo de regresión múltiple garantiza
+  que la matriz \((\mathbf{X}^T\mathbf{X})\) sea invertible?
+\end{enumerate}
+
+\subsection{Ejercicio 8: Práctico (Gráficos de Regresión
+Parcial)}\label{ejercicio-8-pruxe1ctico-gruxe1ficos-de-regresiuxf3n-parcial}
+
+Usa el dataset \texttt{Prestige} de la librería \texttt{car}.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Ajusta el modelo
+  \texttt{lm(prestige\ \textasciitilde{}\ income\ +\ education\ +\ women,\ data\ =\ Prestige)}.
+\item
+  Genera los gráficos de regresión parcial (o ``added-variable plots'')
+  para este modelo usando la función \texttt{avPlots(tu\_modelo)}.
+\item
+  Explica qué representa el gráfico para la variable \texttt{education}.
+  ¿Qué significan los ejes X e Y de ese gráfico específico? ¿A qué
+  corresponde la pendiente de la línea en ese gráfico?
+\end{enumerate}
+
+\subsection{Ejercicio 9: Inferencia (F-test
+vs.~t-tests)}\label{ejercicio-9-inferencia-f-test-vs.-t-tests}
+
+Describe un escenario hipotético en el que el \textbf{test F global} de
+un modelo de regresión múltiple sea altamente significativo (p
+\textless{} 0.001), pero \textbf{ninguno de los tests t individuales}
+para los coeficientes sea significativo. ¿Cuál es la causa estadística
+más probable de este fenómeno?
+
+\subsection{Ejercicio 10: Práctico (Comparación de Modelos
+Anidados)}\label{ejercicio-10-pruxe1ctico-comparaciuxf3n-de-modelos-anidados}
+
+Usa el dataset \texttt{swiss}.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Ajusta un \textbf{modelo reducido} para predecir \texttt{Fertility}
+  usando solo \texttt{Agriculture} y \texttt{Education}.
+\item
+  Ajusta un \textbf{modelo completo} que, además de las variables
+  anteriores, incluya \texttt{Catholic} y \texttt{Infant.Mortality}.
+\item
+  Utiliza la función \texttt{anova()} para comparar formalmente los dos
+  modelos. ¿Aportan las variables \texttt{Catholic} y
+  \texttt{Infant.Mortality} una mejora estadísticamente significativa al
+  modelo? Interpreta el p-valor del test F resultante.
+\end{enumerate}
+
+\bookmarksetup{startatroot}
+
+\chapter{\texorpdfstring{\textbf{Ingeniería de
+Características}}{Ingeniería de Características}}\label{ingenieruxeda-de-caracteruxedsticas}
+
+\subsection{Ejercicio 1: Conceptual (Diagnóstico antes de
+Transformar)}\label{ejercicio-1-conceptual-diagnuxf3stico-antes-de-transformar}
+
+El texto desaconseja fuertemente el enfoque de ``ensayo y error'' al
+aplicar transformaciones. Explica con tus propias palabras por qué la
+práctica de probar transformaciones hasta que mejore el R² es
+metodológicamente peligrosa. Menciona al menos tres de los riesgos
+específicos discutidos en los apuntes.
+
+\subsection{Ejercicio 2: Práctico (Escalado de
+Variables)}\label{ejercicio-2-pruxe1ctico-escalado-de-variables}
+
+Utiliza el dataset \texttt{iris} de R y céntrate en las cuatro variables
+predictoras continuas (\texttt{Sepal.Length}, \texttt{Sepal.Width},
+\texttt{Petal.Length}, \texttt{Petal.Width}).
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Calcula la media y la desviación estándar de estas cuatro variables en
+  su escala original. ¿Son sus escalas directamente comparables?
+\item
+  Crea un nuevo data frame donde hayas aplicado la
+  \textbf{estandarización Z-Score} a estas cuatro variables. Verifica
+  que las nuevas variables tienen una media cercana a 0 y una desviación
+  estándar de 1.
+\item
+  ¿Por qué este paso de escalado es crucial antes de aplicar métodos de
+  regularización como Ridge o Lasso, tal y como se menciona en el texto?
+\end{enumerate}
+
+\subsection{Ejercicio 3: Conceptual (Elección del Método de
+Escalado)}\label{ejercicio-3-conceptual-elecciuxf3n-del-muxe9todo-de-escalado}
+
+Describe un escenario hipotético para cada uno de los siguientes casos,
+explicando por qué el método de escalado elegido sería el más apropiado:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Un escenario donde la \textbf{estandarización Z-Score} es preferible.
+\item
+  Un escenario donde la \textbf{normalización Min-Max} es preferible.
+\item
+  Un escenario donde el \textbf{escalado robusto} (usando mediana y IQR)
+  es necesario.
+\end{enumerate}
+
+\subsection{Ejercicio 4: Práctico (Transformación para
+Linealizar)}\label{ejercicio-4-pruxe1ctico-transformaciuxf3n-para-linealizar}
+
+En el tema anterior vimos que la relación en el dataset \texttt{cars}
+(entre \texttt{speed} y \texttt{dist}) no era perfectamente lineal.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Ajusta el modelo
+  \texttt{lm(dist\ \textasciitilde{}\ speed,\ data\ =\ cars)} y genera
+  el gráfico de residuos vs.~valores ajustados para confirmar
+  visualmente la no linealidad (patrón curvo).
+\item
+  Los apuntes sugieren que la transformación logarítmica es útil para
+  relaciones con ``rendimientos decrecientes''. Propón y aplica una
+  transformación (ej. sobre el predictor, la respuesta, o ambos) para
+  intentar linealizar la relación. Por ejemplo, ajusta
+  \texttt{lm(log(dist)\ \textasciitilde{}\ speed,\ data\ =\ cars)}.
+\item
+  Genera de nuevo el gráfico de residuos vs.~valores ajustados para el
+  nuevo modelo. Compara ambos diagnósticos. ¿Ha mejorado la linealidad?
+\end{enumerate}
+
+\subsection{Ejercicio 5: Práctico (Transformación de
+Box-Cox)}\label{ejercicio-5-pruxe1ctico-transformaciuxf3n-de-box-cox}
+
+Usa el dataset \texttt{Boston} de la librería \texttt{MASS}. La variable
+respuesta \texttt{medv} (valor mediano de la vivienda) es estrictamente
+positiva y tiene cierta asimetría.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Carga la librería \texttt{MASS} y utiliza la función \texttt{boxcox()}
+  para encontrar el valor de \(\lambda\) óptimo para la variable
+  \texttt{medv} en un modelo simple frente a \texttt{lstat}. La fórmula
+  sería
+  \texttt{boxcox(medv\ \textasciitilde{}\ lstat,\ data\ =\ Boston)}.
+\item
+  Observando el gráfico que se genera, ¿a qué valor ``simple'' (como -1,
+  0, 0.5, 1) se aproxima el \(\lambda\) óptimo?
+\item
+  Basándote en este resultado, ¿cuál de las transformaciones clásicas
+  (logarítmica, raíz cuadrada, inversa, etc.) sería la más recomendable
+  para la variable \texttt{medv}?
+\end{enumerate}
+
+\subsection{Ejercicio 6: Conceptual (Codificación de Variables
+Categóricas)}\label{ejercicio-6-conceptual-codificaciuxf3n-de-variables-categuxf3ricas}
+
+Explica la diferencia fundamental entre la \textbf{Codificación Ordinal}
+y la \textbf{Codificación One-Hot}. Para cada una de las siguientes
+variables, indica qué método de codificación usarías y justifica tu
+elección:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{mes}: (``Enero'', ``Febrero'', ``Marzo'', \ldots)
+\item
+  \texttt{nivel\_riesgo}: (``Bajo'', ``Medio'', ``Alto'', ``Crítico'')
+\item
+  \texttt{pais\_origen}: (``España'', ``Francia'', ``Alemania'',
+  ``Italia'')
+\end{itemize}
+
+\subsection{Ejercicio 7: Práctico (Interacción entre Variables
+Continuas)}\label{ejercicio-7-pruxe1ctico-interacciuxf3n-entre-variables-continuas}
+
+Usa el dataset \texttt{mtcars} para investigar si el efecto del peso de
+un coche (\texttt{wt}) sobre su consumo (\texttt{mpg}) depende de su
+potencia (\texttt{hp}).
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Ajusta un modelo que incluya un término de interacción entre
+  \texttt{wt} y \texttt{hp}. Escribe la fórmula en R.
+\item
+  Observa el \texttt{summary()} del modelo. ¿Es el término de
+  interacción (\texttt{wt:hp}) estadísticamente significativo a un nivel
+  de \(\alpha = 0.05\)?
+\item
+  Basándote en el signo del coeficiente de la interacción, ¿cómo cambia
+  el efecto del peso sobre el consumo a medida que aumenta la potencia?
+  (Es decir, ¿el efecto negativo del peso se hace más fuerte o más débil
+  en los coches más potentes?).
+\end{enumerate}
+
+\subsection{Ejercicio 8: Interpretación de una Interacción (Continua x
+Categórica)}\label{ejercicio-8-interpretaciuxf3n-de-una-interacciuxf3n-continua-x-categuxf3rica}
+
+Un investigador modela el salario (\texttt{salario}, en euros) en
+función de los años de experiencia (\texttt{experiencia}) y si el
+empleado tiene o no un máster (\texttt{master}, con ``No'' como
+categoría de referencia). El modelo ajustado es:
+
+\texttt{salario\ =\ 30000\ +\ 1200*experiencia\ +\ 8000*masterSi\ +\ 300*experiencia:masterSi}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Escribe la ecuación de regresión específica para los empleados que
+  \textbf{no tienen} un máster.
+\item
+  Escribe la ecuación de regresión específica para los empleados que
+  \textbf{sí tienen} un máster.
+\item
+  Interpreta el coeficiente de la interacción (300). ¿Qué nos dice sobre
+  el retorno económico de la experiencia para ambos grupos?
+\end{enumerate}
+
+\subsection{Ejercicio 9: Conceptual (Principio de
+Jerarquía)}\label{ejercicio-9-conceptual-principio-de-jerarquuxeda}
+
+Explica el \textbf{principio de jerarquía} en el contexto de los modelos
+de regresión con interacciones. Si un modelo incluye el término de
+interacción \texttt{A:B}, ¿por qué es una buena práctica incluir siempre
+los efectos principales \texttt{A} y \texttt{B}, incluso si sus tests t
+individuales no son significativos?
+
+\subsection{Ejercicio 10: Conceptual (Ingeniería de Características
+Avanzada)}\label{ejercicio-10-conceptual-ingenieruxeda-de-caracteruxedsticas-avanzada}
+
+Los apuntes discuten la creación de nuevas variables mediante
+\textbf{ratios} y \textbf{combinaciones}. Para cada uno de los
+siguientes escenarios, propón una nueva variable (feature) que podrías
+crear y explica qué relación podría capturar mejor que las variables
+originales por sí solas.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Para predecir la rentabilidad de una tienda, tienes las variables
+  \texttt{ventas\_totales} y \texttt{numero\_de\_empleados}.
+\item
+  Para predecir el riesgo de impago de un solicitante de préstamo,
+  tienes las variables \texttt{ingresos\_anuales} y
+  \texttt{deuda\_total}.
+\end{enumerate}
+
+\bookmarksetup{startatroot}
+
+\chapter{\texorpdfstring{\textbf{Selección de variables, Regularización
+y
+Validación}}{Selección de variables, Regularización y Validación}}\label{selecciuxf3n-de-variables-regularizaciuxf3n-y-validaciuxf3n}
+
+\subsection{Ejercicio 1: Conceptual (Sobreajuste
+vs.~Subajuste)}\label{ejercicio-1-conceptual-sobreajuste-vs.-subajuste}
+
+Explica con tus propias palabras qué es el \textbf{sobreajuste
+(overfitting)} y el \textbf{subajuste (underfitting)}. Describe los
+síntomas de cada uno comparando el error de entrenamiento con el error
+de validación (o de test), y menciona la solución principal para cada
+problema.
+
+\subsection{Ejercicio 2: Práctico (Filtrado
+Básico)}\label{ejercicio-2-pruxe1ctico-filtrado-buxe1sico}
+
+Imagina que recibes un nuevo conjunto de datos con 50 predictores para
+un modelo de regresión. Antes de aplicar métodos computacionalmente
+costosos, decides hacer un filtrado inicial. Describe los \textbf{cuatro
+criterios básicos} que aplicarías para descartar variables de forma
+preliminar, según lo explicado en los apuntes.
+
+\subsection{Ejercicio 3: Conceptual (AIC
+vs.~BIC)}\label{ejercicio-3-conceptual-aic-vs.-bic}
+
+Tanto el AIC como el BIC son criterios para comparar modelos, pero se
+basan en filosofías distintas y tienen penalizaciones diferentes.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Escribe la fórmula de la penalización por complejidad para el AIC y
+  para el BIC.
+\item
+  ¿Cuál de los dos criterios tenderá a seleccionar modelos más simples
+  (más parsimoniosos)? ¿Por qué?
+\item
+  Si tu objetivo principal es la \textbf{precisión predictiva}, ¿cuál de
+  los dos criterios es generalmente preferido?
+\end{enumerate}
+
+\subsection{Ejercicio 4: Práctico (Best Subset y Criterios de
+Información)}\label{ejercicio-4-pruxe1ctico-best-subset-y-criterios-de-informaciuxf3n}
+
+Usa el conjunto de datos \texttt{mtcars} y la librería \texttt{leaps}.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Utiliza la función \texttt{regsubsets()} para realizar una selección
+  del mejor subconjunto (\texttt{best\ subset\ selection}) para predecir
+  \texttt{mpg} usando el resto de variables.
+\item
+  Obtén el \texttt{summary()} de los resultados. ¿Qué modelo (cuántas
+  variables) es el mejor según el criterio \textbf{Cp de Mallows}?
+\item
+  ¿Y cuál es el mejor modelo según el \textbf{R² ajustado}?
+\item
+  ¿Coinciden ambos criterios en el número de variables del modelo
+  óptimo?
+\end{enumerate}
+
+\subsection{Ejercicio 5: Conceptual (Métodos
+Stepwise)}\label{ejercicio-5-conceptual-muxe9todos-stepwise}
+
+Los métodos automáticos paso a paso (forward, backward, stepwise) son
+computacionalmente eficientes, pero el texto advierte sobre su uso.
+Menciona y explica brevemente \textbf{tres de las principales
+limitaciones o problemas} de estos métodos.
+
+\subsection{Ejercicio 6: Práctico (Selección Backward
+Stepwise)}\label{ejercicio-6-pruxe1ctico-selecciuxf3n-backward-stepwise}
+
+Utiliza el conjunto de datos \texttt{swiss} para predecir
+\texttt{Fertility}.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Ajusta el modelo completo:
+  \texttt{modelo\_completo\ \textless{}-\ lm(Fertility\ \textasciitilde{}\ .,\ data\ =\ swiss)}.
+\item
+  Utiliza la función \texttt{step()} para realizar una selección
+  \textbf{regresiva (backward)} basada en el criterio AIC.
+\item
+  Reporta la fórmula del modelo final que selecciona el algoritmo y su
+  valor de AIC.
+\end{enumerate}
+
+\subsection{Ejercicio 7: Conceptual (Ridge
+vs.~Lasso)}\label{ejercicio-7-conceptual-ridge-vs.-lasso}
+
+La regresión Ridge y Lasso son dos métodos de regularización muy
+populares, pero tienen un efecto fundamentalmente diferente sobre los
+coeficientes del modelo.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  ¿Qué tipo de penalización utiliza cada método (\(L_1\) o \(L_2\))?
+\item
+  ¿Cuál de los dos métodos puede realizar selección de variables (es
+  decir, anular coeficientes por completo)?
+\item
+  Describe un escenario en el que preferirías usar Ridge sobre Lasso.
+\end{enumerate}
+
+\subsection{Ejercicio 8: Práctico (Regresión
+Lasso)}\label{ejercicio-8-pruxe1ctico-regresiuxf3n-lasso}
+
+Utiliza el paquete \texttt{glmnet} y el conjunto de datos
+\texttt{mtcars} para predecir \texttt{mpg}.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Prepara los datos: crea una matriz \texttt{x} para los predictores y
+  un vector \texttt{y} para la respuesta.
+\item
+  Utiliza la función \texttt{cv.glmnet()} para realizar una validación
+  cruzada y encontrar el valor de \texttt{lambda} óptimo para una
+  regresión \textbf{Lasso} (\texttt{alpha\ =\ 1}).
+\item
+  Extrae y muestra los coeficientes del modelo Lasso ajustado con el
+  \texttt{lambda.min}.
+\item
+  ¿Qué variables ha eliminado el modelo (coeficientes iguales a cero)?
+\end{enumerate}
+
+\subsection{Ejercicio 9: Conceptual
+(Validación)}\label{ejercicio-9-conceptual-validaciuxf3n}
+
+Explica la diferencia entre la estrategia de validación
+\textbf{Train/Test Split simple} y la \textbf{Validación Cruzada
+k-fold}. ¿Cuál es la principal ventaja de la validación cruzada sobre la
+división simple? ¿En qué situación (tamaño del dataset) recomendarías
+usar cada una?
+
+\subsection{Ejercicio 10: Práctico (Validación
+Cruzada)}\label{ejercicio-10-pruxe1ctico-validaciuxf3n-cruzada}
+
+Imagina que has ajustado dos modelos para predecir \texttt{mpg} en el
+dataset \texttt{mtcars}: 1. Un modelo simple:
+\texttt{mpg\ \textasciitilde{}\ wt\ +\ hp} 2. Un modelo complejo:
+\texttt{mpg\ \textasciitilde{}\ .} (todas las variables)
+
+Utilizando la librería \texttt{caret} y la función \texttt{train()},
+como se muestra en el \texttt{callout-tip} ``La maldición del
+sobreajuste'', configura y ejecuta una \textbf{validación cruzada de 10
+particiones} para estimar el \textbf{RMSE} de ambos modelos. ¿Cuál de
+los dos modelos generaliza mejor a nuevos datos según esta estimación?
+
+\bookmarksetup{startatroot}
+
+\chapter{\texorpdfstring{\textbf{Modelos de Regresión
+Generalizada}}{Modelos de Regresión Generalizada}}\label{modelos-de-regresiuxf3n-generalizada}
+
+\subsection{Ejercicio 1: Conceptual (Fundamentos de
+GLM)}\label{ejercicio-1-conceptual-fundamentos-de-glm}
+
+Explica los \textbf{tres componentes clave} que definen a cualquier
+Modelo Lineal Generalizado (GLM) y describe brevemente la función de
+cada uno.
+
+\subsection{Ejercicio 2: Conceptual (Función de
+Enlace)}\label{ejercicio-2-conceptual-funciuxf3n-de-enlace}
+
+¿Cuál es el propósito fundamental de la \textbf{función de enlace} en un
+GLM? ¿Por qué la regresión lineal clásica es considerada un caso
+particular de un GLM? (Pista: piensa en su función de enlace).
+
+\subsection{Ejercicio 3: Práctico (Ajuste de un Modelo
+Logístico)}\label{ejercicio-3-pruxe1ctico-ajuste-de-un-modelo-loguxedstico}
+
+Usa el conjunto de datos \texttt{mtcars} de R. La variable \texttt{am}
+indica si la transmisión de un coche es automática (0) o manual (1).
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Ajusta un modelo de regresión logística para predecir la probabilidad
+  de que una transmisión sea manual (\texttt{am}) en función del peso
+  del coche (\texttt{wt}) y los caballos de fuerza (\texttt{hp}).
+\item
+  Utiliza la función \texttt{summary()} para examinar el modelo. ¿Qué
+  variables parecen ser significativas?
+\item
+  Obtén los coeficientes del modelo. ¿Cómo interpretarías el signo del
+  coeficiente para la variable \texttt{wt}?
+\end{enumerate}
+
+\subsection{Ejercicio 4: Interpretación (Odds
+Ratios)}\label{ejercicio-4-interpretaciuxf3n-odds-ratios}
+
+Basado en el modelo del ejercicio anterior:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Calcula el \textbf{Odds Ratio (OR)} para el coeficiente de la variable
+  \texttt{hp}.
+\item
+  Interpreta este Odds Ratio en el contexto del problema.
+  Específicamente, ¿cómo cambian las ``odds'' (la razón de probabilidad)
+  de tener una transmisión manual por cada caballo de fuerza adicional,
+  manteniendo el peso constante?
+\end{enumerate}
+
+\subsection{Ejercicio 5: Práctico (Validación del Modelo
+Logístico)}\label{ejercicio-5-pruxe1ctico-validaciuxf3n-del-modelo-loguxedstico}
+
+Continuando con el modelo logístico de \texttt{mtcars}:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Genera las predicciones de probabilidad del modelo para los datos.
+\item
+  Convierte estas probabilidades en clases (``0'' o ``1'') usando un
+  umbral de decisión de 0.5.
+\item
+  Crea la \textbf{matriz de confusión} comparando las predicciones con
+  los valores reales.
+\item
+  Calcula la \textbf{precisión (accuracy)} global del modelo.
+\item
+  (Bonus) Utiliza el paquete \texttt{pROC} para calcular y visualizar la
+  \textbf{curva ROC} y obtener el valor del \textbf{AUC}. ¿Qué tan buena
+  es la capacidad discriminativa del modelo?
+\end{enumerate}
+
+\subsection{Ejercicio 6: Conceptual (Regresión de
+Poisson)}\label{ejercicio-6-conceptual-regresiuxf3n-de-poisson}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  ¿Qué tipo de variable respuesta está diseñada para modelar la
+  regresión de Poisson?
+\item
+  ¿Cuál es el supuesto fundamental de la distribución de Poisson
+  respecto a la relación entre la media y la varianza?
+\item
+  ¿Cómo se llama el problema que surge cuando este supuesto se viola y
+  la varianza es mayor que la media?
+\end{enumerate}
+
+\subsection{Ejercicio 7: Práctico (Ajuste de un Modelo de
+Poisson)}\label{ejercicio-7-pruxe1ctico-ajuste-de-un-modelo-de-poisson}
+
+El dataset \texttt{discoveries} de R es una serie temporal que cuenta el
+número de ``grandes inventos'' por año.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Crea un gráfico de la serie temporal. ¿Parece la media del conteo
+  constante a lo largo del tiempo?
+\item
+  Ajusta un modelo de regresión de Poisson simple donde
+  \texttt{discoveries} es la respuesta y el tiempo
+  (\texttt{time(discoveries)}) es el predictor.
+\item
+  Interpreta el coeficiente del tiempo. (Pista: recuerda exponenciarlo
+  para obtener el Incidence Rate Ratio - IRR).
+\end{enumerate}
+
+\subsection{Ejercicio 8: Diagnóstico
+(Sobredispersión)}\label{ejercicio-8-diagnuxf3stico-sobredispersiuxf3n}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Para el modelo de Poisson del ejercicio anterior, calcula el
+  \textbf{estadístico de dispersión (\(\hat{\phi}\))}. (Pista:
+  \(\hat{\phi} = \frac{\sum r_i^2}{n-p}\), donde los \(r_i\) son los
+  residuos Pearson).
+\item
+  Basándote en el valor de \(\hat{\phi}\), ¿hay evidencia de
+  sobredispersión?
+\item
+  Si encuentras sobredispersión, ¿cuál es el modelo alternativo que
+  proponen los apuntes? ¿Qué ventaja teórica ofrece este modelo
+  alternativo?
+\end{enumerate}
+
+\subsection{Ejercicio 9: Conceptual
+(Deviance)}\label{ejercicio-9-conceptual-deviance}
+
+La \textbf{deviance} es la medida principal de bondad de ajuste en los
+GLM. Explica conceptualmente qué mide. ¿Cómo se utiliza la diferencia en
+deviance entre dos modelos anidados para decidir cuál es mejor?
+
+\subsection{Ejercicio 10: Elección del Modelo
+Adecuado}\label{ejercicio-10-elecciuxf3n-del-modelo-adecuado}
+
+Para cada uno de los siguientes escenarios, indica qué tipo de GLM
+(Logístico, Poisson, Binomial Negativo, Gamma\ldots) sería el más
+apropiado y por qué.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Quieres modelar el \textbf{tiempo (en minutos)} que tarda un cliente
+  en resolver una consulta en un centro de atención telefónica. El
+  tiempo es siempre positivo y muchos valores se agrupan en tiempos
+  cortos, con una cola larga de tiempos muy largos.
+\item
+  Quieres predecir la \textbf{presencia o ausencia} de una especie de
+  planta en diferentes parcelas de un bosque.
+\item
+  Quieres modelar el \textbf{número de visitas} que cada usuario hace a
+  una página web en un mes. Observas que la varianza del número de
+  visitas es mucho mayor que la media.
+\end{enumerate}
+
+\bookmarksetup{startatroot}
+
+\chapter{\texorpdfstring{\textbf{Ejercicios
+Avanzados}}{Ejercicios Avanzados}}\label{ejercicios-avanzados}
+
+\subsection{Ejercicio 1: Derivación de
+Estimadores}\label{ejercicio-1-derivaciuxf3n-de-estimadores}
+
+Considera el modelo de regresión lineal simple
+\(Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i\). Partiendo de la función
+objetivo de Mínimos Cuadrados Ordinarios (MCO),
+\(S(\beta_0, \beta_1) = \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2\),
+realiza la derivación matemática completa para obtener las expresiones
+de los estimadores \(\hat{\beta}_0\) y \(\hat{\beta}_1\). Muestra todos
+los pasos, desde el cálculo de las derivadas parciales hasta la
+resolución de las ecuaciones normales.
+
+\subsection{Ejercicio 2: El Impacto de la
+Multicolinealidad}\label{ejercicio-2-el-impacto-de-la-multicolinealidad}
+
+En un modelo de regresión múltiple con dos predictores estandarizados
+(\(X_1, X_2\)), la varianza del estimador \(\hat{\beta}_1\) viene dada
+por \(\text{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n(1-r_{12}^2)}\),
+donde \(r_{12}\) es la correlación entre \(X_1\) y \(X_2\).
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Explica matemáticamente qué le ocurre a la varianza de
+  \(\hat{\beta}_1\) cuando la correlación entre los predictores
+  (\(r_{12}\)) se aproxima a 1 (multicolinealidad perfecta).
+\item
+  Relaciona esta fórmula con la del Factor de Inflación de la Varianza
+  (VIF). ¿Cómo demuestra esta expresión que la multicolinealidad
+  ``infla'' la varianza de los estimadores de los coeficientes?
+\end{enumerate}
+
+\subsection{Ejercicio 3: Interpretación de Coeficientes en Modelos
+Transformados}\label{ejercicio-3-interpretaciuxf3n-de-coeficientes-en-modelos-transformados}
+
+Considera un modelo de regresión \textbf{log-log}:
+\(\log(Y_i) = \beta_0 + \beta_1 \log(X_i) + \varepsilon_i\). Demuestra
+matemáticamente que el coeficiente \(\beta_1\) puede interpretarse como
+una \textbf{elasticidad}, es decir, el cambio porcentual en \(Y\) ante
+un cambio del 1\% en \(X\). (Pista: utiliza la derivada de \(\log(Y)\)
+con respecto a \(\log(X)\)).
+
+\subsection{Ejercicio 4: Fundamentos de la
+Regularización}\label{ejercicio-4-fundamentos-de-la-regularizaciuxf3n}
+
+Explica desde una perspectiva geométrica por qué la regularización
+\textbf{Lasso (penalización L1)} es capaz de reducir los coeficientes
+exactamente a cero, realizando así selección de variables, mientras que
+la regularización \textbf{Ridge (penalización L2)} solo puede encoger
+los coeficientes hacia cero sin anularlos por completo. Apoya tu
+explicación con un dibujo o descripción de las ``regiones de
+restricción'' de ambos métodos en un espacio de dos coeficientes
+(\(\beta_1, \beta_2\)).
+
+\subsection{Ejercicio 5: La Familia Exponencial y los
+GLM}\label{ejercicio-5-la-familia-exponencial-y-los-glm}
+
+La teoría de los Modelos Lineales Generalizados (GLM) se basa en que
+distribuciones como la Normal, Binomial o Poisson pertenecen a la
+\textbf{familia exponencial}. La forma canónica de esta familia
+establece una relación directa entre la media y la varianza a través de
+la \textbf{función de varianza} \(V(\mu)\). Explica cuál es la función
+de varianza para un modelo de \textbf{Poisson} y para un modelo
+\textbf{Binomial}. ¿Qué implicaciones tiene la forma de \(V(\mu)\) en
+cada caso sobre el comportamiento de los datos y los supuestos del
+modelo?
+
+\subsection{Ejercicio 6: El Problema de la Inferencia en Métodos
+Stepwise}\label{ejercicio-6-el-problema-de-la-inferencia-en-muxe9todos-stepwise}
+
+Los apuntes advierten que los p-valores de un modelo final obtenido
+mediante selección por pasos (stepwise) están \textbf{sesgados y son
+excesivamente optimistas}. Explica el razonamiento estadístico detrás de
+esta advertencia. ¿Por qué el proceso iterativo de ``buscar y
+seleccionar'' la variable más significativa en cada paso invalida los
+supuestos teóricos del test t estándar?
+
+\subsection{Ejercicio 7: Propiedades de los Estimadores
+MCO}\label{ejercicio-7-propiedades-de-los-estimadores-mco}
+
+El \textbf{Teorema de Gauss-Markov} establece que, bajo ciertos
+supuestos, los estimadores de Mínimos Cuadrados Ordinarios (MCO) son
+\textbf{MELI (Mejores Estimadores Lineales Insesgados)}. Demuestra la
+propiedad de \textbf{insesgadez} para el estimador
+\(\hat{\boldsymbol{\beta}}\) en notación matricial. Es decir, demuestra
+que \(E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}\). Muestra todos
+los pasos y menciona qué supuestos del modelo estás utilizando en cada
+paso.
+
+\subsection{Ejercicio 8: Intervalos de Confianza
+vs.~Predicción}\label{ejercicio-8-intervalos-de-confianza-vs.-predicciuxf3n}
+
+La fórmula para el intervalo de predicción para una nueva observación en
+regresión lineal simple es:
+\[\hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( 1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}\]
+Explica el origen y el significado de cada uno de los \textbf{tres
+términos} que se encuentran dentro del paréntesis bajo la raíz cuadrada.
+¿Qué fuente de incertidumbre representa cada término y por qué la suma
+de los tres es necesaria para un intervalo de predicción?
+
+\subsection{Ejercicio 9: Estimación por Máxima
+Verosimilitud}\label{ejercicio-9-estimaciuxf3n-por-muxe1xima-verosimilitud}
+
+Para un modelo de regresión logística, la función de log-verosimilitud
+es:
+\[\ell(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[y_i \log(p_i) + (1-y_i) \log(1-p_i)\right]\]
+donde \(p_i = \frac{1}{1 + e^{-\mathbf{x}_i^T\boldsymbol{\beta}}}\).
+Deriva la \textbf{ecuación de puntuación (score equation)} para un
+coeficiente \(\beta_j\) (es decir, calcula
+\(\frac{\partial \ell}{\partial \beta_j}\)) y demuestra que se iguala a
+cero cuando \(\sum_{i=1}^{n} x_{ij}(y_i - p_i) = 0\). Interpreta el
+significado de esta condición final.
+
+\subsection{Ejercicio 10: El Coeficiente de Regresión
+Parcial}\label{ejercicio-10-el-coeficiente-de-regresiuxf3n-parcial}
+
+El texto afirma que el coeficiente \(\hat{\beta}_j\) de una regresión
+múltiple puede entenderse como el coeficiente de una regresión simple
+entre dos conjuntos de residuos. Explica con detalle este concepto de
+\textbf{regresión parcial}. ¿Qué se está ``parcializando'' o
+``eliminando'' de la variable respuesta \(Y\) y del predictor \(X_j\)
+antes de calcular su relación? ¿Por qué este concepto es fundamental
+para entender la interpretación \emph{ceteris paribus}?
+
+
+
+
+\end{document}

@@ -1,0 +1,70 @@
+\contentsline {chapter}{\nonumberline \textbf {Introducción}}{4}{chapter*.2}%
+\contentsline {section}{\nonumberline \textbf {Estructura de los Ejercicios}}{4}{section*.3}%
+\contentsline {section}{\nonumberline \textbf {Requisitos Previos}}{4}{section*.4}%
+\contentsline {chapter}{\nonumberline \textbf {Regresión Lineal Simple}}{5}{chapter*.5}%
+\contentsline {subsection}{\nonumberline Ejercicio 1: Fundamentos Conceptuales}{5}{subsection*.6}%
+\contentsline {subsection}{\nonumberline Ejercicio 2: Interpretación de Coeficientes}{5}{subsection*.7}%
+\contentsline {subsection}{\nonumberline Ejercicio 3: Aplicación Práctica con R (Ajuste e Inferencia)}{5}{subsection*.8}%
+\contentsline {subsection}{\nonumberline Ejercicio 4: Intervalos de Confianza y Predicción}{6}{subsection*.9}%
+\contentsline {subsection}{\nonumberline Ejercicio 5: Supuestos del Modelo}{6}{subsection*.10}%
+\contentsline {subsection}{\nonumberline Ejercicio 6: Diagnóstico de Linealidad y Homocedasticidad}{6}{subsection*.11}%
+\contentsline {subsection}{\nonumberline Ejercicio 7: Diagnóstico de Normalidad}{6}{subsection*.12}%
+\contentsline {subsection}{\nonumberline Ejercicio 8: Descomposición de la Varianza (ANOVA)}{6}{subsection*.13}%
+\contentsline {subsection}{\nonumberline Ejercicio 9: Observaciones Influyentes}{7}{subsection*.14}%
+\contentsline {subsection}{\nonumberline Ejercicio 10: Relación entre Pruebas de Hipótesis}{7}{subsection*.15}%
+\contentsline {chapter}{\nonumberline \textbf {Regresión Lineal Múltiple}}{8}{chapter*.16}%
+\contentsline {subsection}{\nonumberline Ejercicio 1: Conceptual (Interpretación \emph {Ceteris Paribus})}{8}{subsection*.17}%
+\contentsline {subsection}{\nonumberline Ejercicio 2: Práctico (Ajuste e Interpretación de un Modelo Múltiple)}{8}{subsection*.18}%
+\contentsline {subsection}{\nonumberline Ejercicio 3: Conceptual (R² vs.~R² Ajustado)}{8}{subsection*.19}%
+\contentsline {subsection}{\nonumberline Ejercicio 4: Interpretación de Salidas de R}{9}{subsection*.20}%
+\contentsline {subsection}{\nonumberline Ejercicio 5: Conceptual (Multicolinealidad)}{9}{subsection*.21}%
+\contentsline {subsection}{\nonumberline Ejercicio 6: Práctico (Diagnóstico de Multicolinealidad)}{9}{subsection*.22}%
+\contentsline {subsection}{\nonumberline Ejercicio 7: Teórico (Notación Matricial)}{10}{subsection*.23}%
+\contentsline {subsection}{\nonumberline Ejercicio 8: Práctico (Gráficos de Regresión Parcial)}{10}{subsection*.24}%
+\contentsline {subsection}{\nonumberline Ejercicio 9: Inferencia (F-test vs.~t-tests)}{10}{subsection*.25}%
+\contentsline {subsection}{\nonumberline Ejercicio 10: Práctico (Comparación de Modelos Anidados)}{10}{subsection*.26}%
+\contentsline {chapter}{\nonumberline \textbf {Ingeniería de Características}}{11}{chapter*.27}%
+\contentsline {subsection}{\nonumberline Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)}{11}{subsection*.28}%
+\contentsline {subsection}{\nonumberline Ejercicio 2: Práctico (Escalado de Variables)}{11}{subsection*.29}%
+\contentsline {subsection}{\nonumberline Ejercicio 3: Conceptual (Elección del Método de Escalado)}{11}{subsection*.30}%
+\contentsline {subsection}{\nonumberline Ejercicio 4: Práctico (Transformación para Linealizar)}{12}{subsection*.31}%
+\contentsline {subsection}{\nonumberline Ejercicio 5: Práctico (Transformación de Box-Cox)}{12}{subsection*.32}%
+\contentsline {subsection}{\nonumberline Ejercicio 6: Conceptual (Codificación de Variables Categóricas)}{12}{subsection*.33}%
+\contentsline {subsection}{\nonumberline Ejercicio 7: Práctico (Interacción entre Variables Continuas)}{13}{subsection*.34}%
+\contentsline {subsection}{\nonumberline Ejercicio 8: Interpretación de una Interacción (Continua x Categórica)}{13}{subsection*.35}%
+\contentsline {subsection}{\nonumberline Ejercicio 9: Conceptual (Principio de Jerarquía)}{13}{subsection*.36}%
+\contentsline {subsection}{\nonumberline Ejercicio 10: Conceptual (Ingeniería de Características Avanzada)}{13}{subsection*.37}%
+\contentsline {chapter}{\nonumberline \textbf {Selección de variables, Regularización y Validación}}{14}{chapter*.38}%
+\contentsline {subsection}{\nonumberline Ejercicio 1: Conceptual (Sobreajuste vs.~Subajuste)}{14}{subsection*.39}%
+\contentsline {subsection}{\nonumberline Ejercicio 2: Práctico (Filtrado Básico)}{14}{subsection*.40}%
+\contentsline {subsection}{\nonumberline Ejercicio 3: Conceptual (AIC vs.~BIC)}{14}{subsection*.41}%
+\contentsline {subsection}{\nonumberline Ejercicio 4: Práctico (Best Subset y Criterios de Información)}{14}{subsection*.42}%
+\contentsline {subsection}{\nonumberline Ejercicio 5: Conceptual (Métodos Stepwise)}{15}{subsection*.43}%
+\contentsline {subsection}{\nonumberline Ejercicio 6: Práctico (Selección Backward Stepwise)}{15}{subsection*.44}%
+\contentsline {subsection}{\nonumberline Ejercicio 7: Conceptual (Ridge vs.~Lasso)}{15}{subsection*.45}%
+\contentsline {subsection}{\nonumberline Ejercicio 8: Práctico (Regresión Lasso)}{15}{subsection*.46}%
+\contentsline {subsection}{\nonumberline Ejercicio 9: Conceptual (Validación)}{16}{subsection*.47}%
+\contentsline {subsection}{\nonumberline Ejercicio 10: Práctico (Validación Cruzada)}{16}{subsection*.48}%
+\contentsline {chapter}{\nonumberline \textbf {Modelos de Regresión Generalizada}}{17}{chapter*.49}%
+\contentsline {subsection}{\nonumberline Ejercicio 1: Conceptual (Fundamentos de GLM)}{17}{subsection*.50}%
+\contentsline {subsection}{\nonumberline Ejercicio 2: Conceptual (Función de Enlace)}{17}{subsection*.51}%
+\contentsline {subsection}{\nonumberline Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)}{17}{subsection*.52}%
+\contentsline {subsection}{\nonumberline Ejercicio 4: Interpretación (Odds Ratios)}{17}{subsection*.53}%
+\contentsline {subsection}{\nonumberline Ejercicio 5: Práctico (Validación del Modelo Logístico)}{18}{subsection*.54}%
+\contentsline {subsection}{\nonumberline Ejercicio 6: Conceptual (Regresión de Poisson)}{18}{subsection*.55}%
+\contentsline {subsection}{\nonumberline Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)}{18}{subsection*.56}%
+\contentsline {subsection}{\nonumberline Ejercicio 8: Diagnóstico (Sobredispersión)}{18}{subsection*.57}%
+\contentsline {subsection}{\nonumberline Ejercicio 9: Conceptual (Deviance)}{19}{subsection*.58}%
+\contentsline {subsection}{\nonumberline Ejercicio 10: Elección del Modelo Adecuado}{19}{subsection*.59}%
+\contentsline {chapter}{\nonumberline \textbf {Ejercicios Avanzados}}{20}{chapter*.60}%
+\contentsline {subsection}{\nonumberline Ejercicio 1: Derivación de Estimadores}{20}{subsection*.61}%
+\contentsline {subsection}{\nonumberline Ejercicio 2: El Impacto de la Multicolinealidad}{20}{subsection*.62}%
+\contentsline {subsection}{\nonumberline Ejercicio 3: Interpretación de Coeficientes en Modelos Transformados}{20}{subsection*.63}%
+\contentsline {subsection}{\nonumberline Ejercicio 4: Fundamentos de la Regularización}{20}{subsection*.64}%
+\contentsline {subsection}{\nonumberline Ejercicio 5: La Familia Exponencial y los GLM}{21}{subsection*.65}%
+\contentsline {subsection}{\nonumberline Ejercicio 6: El Problema de la Inferencia en Métodos Stepwise}{21}{subsection*.66}%
+\contentsline {subsection}{\nonumberline Ejercicio 7: Propiedades de los Estimadores MCO}{21}{subsection*.67}%
+\contentsline {subsection}{\nonumberline Ejercicio 8: Intervalos de Confianza vs.~Predicción}{21}{subsection*.68}%
+\contentsline {subsection}{\nonumberline Ejercicio 9: Estimación por Máxima Verosimilitud}{22}{subsection*.69}%
+\contentsline {subsection}{\nonumberline Ejercicio 10: El Coeficiente de Regresión Parcial}{22}{subsection*.70}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

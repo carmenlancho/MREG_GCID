@@ -67,3 +67,4 @@ b) ¿Qué mide el **leverage** ($h_{ii}$)? ¿Y la **distancia de Cook** ($D_i$)?
 ### Ejercicio 10: Relación entre Pruebas de Hipótesis
 
 En el contexto **exclusivo** de la regresión lineal simple, ¿qué relación matemática existe entre el estadístico **F** del test ANOVA y el estadístico **t** del test para la pendiente $\beta_1$? ¿Qué implica esto para sus respectivos p-valores?
+
