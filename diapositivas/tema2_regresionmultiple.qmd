@@ -1,12 +1,11 @@
 ---
 title: "Regresión Lineal Múltiple"
-author: "Víctor Aceña - Isaac Martín"
+author: "Carmen Lancho - Natalia Madrueño"
 institute: "DSLAB"
 date: last-modified
 format: 
   beamer: 
     theme: "Madrid"
-    colortheme: "dolphin"
     fonttheme: "structurebold"
     navigation: horizontal
     section-titles: false
@@ -14,7 +13,7 @@ format:
     slide-level: 1
     aspectratio: 169
     header-includes: |
-      \usepackage{dslab-new}
+      \usepackage{dslab-new-orange}
       \usedslabmodelos
 knitr:
   opts_chunk:
