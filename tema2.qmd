@@ -203,6 +203,9 @@ $$\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
 Esta compacta y poderosa ecuación es la base de la estimación en
 regresión lineal y es implementada por todo el software estadístico.
 
+Con esto, tenemos que $$\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}} = \underbrace{\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T}_{\mathbf{H}}\hat{\mathbf{y}} = \mathbf{H} \hat{\mathbf{y}}$$
+donde $\mathbf{H}$ es la matriz *hat*. Esta matriz proyecta el vector $\mathbf{y}$ sobre el espacio generado por las columnas $\mathbf{X}$. También se relaciona con los residuos del siguiente modo:
+$$\mathbf{e} = \mathbf{y}-\hat{\mathbf{y}}=\mathbf{y}-\mathbf{H}\mathbf{y} = (\mathbf{I}-\mathbf{H})\mathbf{y}$$
 
 ### Propiedades de los estimadores de MCO
 
