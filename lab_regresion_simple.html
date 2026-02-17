@@ -912,6 +912,157 @@ LM test = 5.1219, df = 2, p-value = 0.07723</code></pre>
 </div>
 </div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identificar puntos influyentes</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>influence_measures <span class="ot">&lt;-</span> <span class="fu">influence.measures</span>(modelo_mpg)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(influence_measures)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Potentially influential observations of
+     lm(formula = mpg ~ wt, data = df) :
+
+                    dfb.1_ dfb.wt  dffit   cov.r   cook.d hat    
+Cadillac Fleetwood  -0.14   0.17    0.19    1.27_*  0.02   0.17  
+Lincoln Continental -0.29   0.35    0.38    1.28_*  0.07   0.20_*
+Chrysler Imperial   -0.83   1.01_*  1.10_*  0.93    0.53   0.18  
+Fiat 128             0.60  -0.49    0.68    0.77_*  0.19   0.07  
+Toyota Corolla       0.74  -0.64    0.78_*  0.83    0.26   0.10  
+Lotus Europa         0.16  -0.14    0.16    1.21_*  0.01   0.13  </code></pre>
+</div>
+</div>
+<p>Este summary muestra un resumen de las observaciones que son potencialmente influyentes y muestra:</p>
+<ul>
+<li>DFBETAS de <span class="math inline">\(\beta_0\)</span> y <span class="math inline">\(\beta_1\)</span>. Mide cuánto cambia el intercepto o <span class="math inline">\(\beta_1\)</span>, respectivamente, si se quita esa observación. Valores cerca de 0 indican poco efecto. El signo indica la dirección del cambio.</li>
+<li>DFFITS. Mide cuańto cambian los valores ajustados al quitar dicha observación. Combina dos cosas: cómo de raro es el punto (es decir, si tiene residuo grande) y cuánto leverage tiene (esto es, si toma valores extremos en <span class="math inline">\(x_1\)</span>).</li>
+<li>COVRATIO. Ratio del determinante de la matriz de covarianzas de <span class="math inline">\(\beta\)</span> con y sin esa observación. Es decir, indica si esa observación hace que las estimaciones sean más o menos precisas. Valores mayores que 1 indican que, al quitar el punto, la incertidumbre baja y valores menores que 1 indican que la incertidumbre sube, es decir, el punto ayudaba con la precisión.</li>
+<li>Distancia de Cook. Medida global de influencia. ¿Cuánto cambia el modelo si quito el punto?</li>
+<li>Leverage hat. Indica cómo de extremos es el valor de <span class="math inline">\(x_1\)</span>.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Distancia de Cook</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>cook_distances <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(modelo_mpg)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>influential_points <span class="ot">&lt;-</span> <span class="fu">which</span>(cook_distances <span class="sc">&gt;</span> <span class="dv">4</span><span class="sc">/</span><span class="fu">nrow</span>(mtcars))</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Puntos potencialmente influyentes (Cook's D &gt; 4/n):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Puntos potencialmente influyentes (Cook's D &gt; 4/n):</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">rownames</span>(mtcars)[influential_points])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Chrysler Imperial" "Fiat 128"          "Toyota Corolla"   </code></pre>
+</div>
+</div>
+<p>¿Qué hacemos? Revisar los datos, evaluar con más detalle el gráfico de residuos vs leverage, probar a quitar dichas observaciones y recalcular el modelo, probar transformaciones, etc.</p>
+</section>
+</section>
+<section id="predicciones" class="level2">
+<h2 class="anchored" data-anchor-id="predicciones">Predicciones</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicciones para nuevos valores</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>nuevos_pesos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">wt =</span> <span class="fu">c</span>(<span class="fl">2.5</span>, <span class="fl">3.0</span>, <span class="fl">3.5</span>, <span class="fl">4.0</span>, <span class="fl">4.5</span>))</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicción puntual</span></span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>predicciones <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_mpg, <span class="at">newdata =</span> nuevos_pesos)</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Intervalos de confianza para la media</span></span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>ic_media <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_mpg, <span class="at">newdata =</span> nuevos_pesos, <span class="at">interval =</span> <span class="st">"confidence"</span>)</span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Intervalos de predicción para nuevas observaciones</span></span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>ic_prediccion <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_mpg, <span class="at">newdata =</span> nuevos_pesos, <span class="at">interval =</span> <span class="st">"prediction"</span>)</span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear tabla de resultados</span></span>
+<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a>tabla_predicciones <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">Peso =</span> nuevos_pesos<span class="sc">$</span>wt,</span>
+<span id="cb61-16"><a href="#cb61-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">MPG_Predicho =</span> <span class="fu">round</span>(predicciones, <span class="dv">2</span>),</span>
+<span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">IC_Inferior_Media =</span> <span class="fu">round</span>(ic_media[,<span class="dv">2</span>], <span class="dv">2</span>),</span>
+<span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">IC_Superior_Media =</span> <span class="fu">round</span>(ic_media[,<span class="dv">3</span>], <span class="dv">2</span>),</span>
+<span id="cb61-19"><a href="#cb61-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">IP_Inferior =</span> <span class="fu">round</span>(ic_prediccion[,<span class="dv">2</span>], <span class="dv">2</span>),</span>
+<span id="cb61-20"><a href="#cb61-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">IP_Superior =</span> <span class="fu">round</span>(ic_prediccion[,<span class="dv">3</span>], <span class="dv">2</span>)</span>
+<span id="cb61-21"><a href="#cb61-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb61-22"><a href="#cb61-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-23"><a href="#cb61-23" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tabla_predicciones)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Peso MPG_Predicho IC_Inferior_Media IC_Superior_Media IP_Inferior IP_Superior
+1  2.5        23.92             22.55             25.30       17.55       30.29
+2  3.0        21.25             20.12             22.38       14.93       27.57
+3  3.5        18.58             17.43             19.73       12.25       24.90
+4  4.0        15.91             14.49             17.32        9.53       22.29
+5  4.5        13.24             11.40             15.07        6.75       19.72</code></pre>
+</div>
+</div>
+<p>Visualizamos los intervalos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear secuencia fina de valores para graficar</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>wt_seq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(mtcars<span class="sc">$</span>wt), <span class="fu">max</span>(mtcars<span class="sc">$</span>wt), <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>pred_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">wt =</span> wt_seq)</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular intervalos</span></span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>pred_conf <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_mpg, <span class="at">newdata =</span> pred_data, <span class="at">interval =</span> <span class="st">"confidence"</span>)</span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>pred_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_mpg, <span class="at">newdata =</span> pred_data, <span class="at">interval =</span> <span class="st">"prediction"</span>)</span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Combinar datos</span></span>
+<span id="cb63-10"><a href="#cb63-10" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb63-11"><a href="#cb63-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">wt =</span> wt_seq,</span>
+<span id="cb63-12"><a href="#cb63-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit =</span> pred_conf[,<span class="dv">1</span>],</span>
+<span id="cb63-13"><a href="#cb63-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">conf_lwr =</span> pred_conf[,<span class="dv">2</span>],</span>
+<span id="cb63-14"><a href="#cb63-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">conf_upr =</span> pred_conf[,<span class="dv">3</span>],</span>
+<span id="cb63-15"><a href="#cb63-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">pred_lwr =</span> pred_pred[,<span class="dv">2</span>],</span>
+<span id="cb63-16"><a href="#cb63-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">pred_upr =</span> pred_pred[,<span class="dv">3</span>]</span>
+<span id="cb63-17"><a href="#cb63-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb63-18"><a href="#cb63-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-19"><a href="#cb63-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico con intervalos</span></span>
+<span id="cb63-20"><a href="#cb63-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb63-21"><a href="#cb63-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Intervalos de predicción (más amplios)</span></span>
+<span id="cb63-22"><a href="#cb63-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> plot_data, <span class="fu">aes</span>(<span class="at">x =</span> wt, <span class="at">ymin =</span> pred_lwr, <span class="at">ymax =</span> pred_upr),</span>
+<span id="cb63-23"><a href="#cb63-23" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb63-24"><a href="#cb63-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Intervalos de confianza (más estrechos)</span></span>
+<span id="cb63-25"><a href="#cb63-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> plot_data, <span class="fu">aes</span>(<span class="at">x =</span> wt, <span class="at">ymin =</span> conf_lwr, <span class="at">ymax =</span> conf_upr),</span>
+<span id="cb63-26"><a href="#cb63-26" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill =</span> <span class="st">"blue"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb63-27"><a href="#cb63-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Línea de regresión</span></span>
+<span id="cb63-28"><a href="#cb63-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> plot_data, <span class="fu">aes</span>(<span class="at">x =</span> wt, <span class="at">y =</span> fit), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb63-29"><a href="#cb63-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Puntos originales</span></span>
+<span id="cb63-30"><a href="#cb63-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> mtcars, <span class="fu">aes</span>(<span class="at">x =</span> wt, <span class="at">y =</span> mpg), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb63-31"><a href="#cb63-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Intervalos de Confianza y Predicción"</span>,</span>
+<span id="cb63-32"><a href="#cb63-32" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Azul oscuro: IC para la media | Azul claro: IP para nuevas observaciones"</span>,</span>
+<span id="cb63-33"><a href="#cb63-33" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Peso (1000 lbs)"</span>, <span class="at">y =</span> <span class="st">"Millas por Galón"</span>) <span class="sc">+</span></span>
+<span id="cb63-34"><a href="#cb63-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lab_regresion_simple_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="cálculo-del-error" class="level3">
+<h3 class="anchored" data-anchor-id="cálculo-del-error">Cálculo del error</h3>
+<p><span class="math display">\[MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2\]</span></p>
+<p><span class="math display">\[RMSE = \sqrt{MSE} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>mse <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">residuals</span>(modelo_mpg)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>mse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8.697561</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(mse)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.949163</code></pre>
+</div>
+</div>
+<p>Me equivoco 2.95 mpg en promedio.</p>
+<p>Lo correcto sería probar ahora en test:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mod &lt;- lm(mpg ~ wt, data = df_train)</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="co"># pred &lt;- predict(mod, newdata = df_test)</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="co"># mse_test &lt;- mean((df_test$mpg - pred)^2)</span></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a><span class="co"># mse_test</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
 </section>

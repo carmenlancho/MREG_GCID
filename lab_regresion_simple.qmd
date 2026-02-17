@@ -467,3 +467,125 @@ grid.arrange(p1_completo, p2_completo, p3_completo,
              p4_completo, p5_completo, p6_completo, ncol = 3)
 ```
 
+
+
+
+
+```{r}
+# Identificar puntos influyentes
+influence_measures <- influence.measures(modelo_mpg)
+summary(influence_measures)
+```
+
+Este summary muestra un resumen de las observaciones que son potencialmente influyentes y muestra:
+
+  - DFBETAS de $\beta_0$ y $\beta_1$. Mide cuánto cambia el intercepto o $\beta_1$, respectivamente, si se quita esa observación. Valores cerca de 0 indican poco efecto. El signo indica la dirección del cambio.
+  - DFFITS. Mide cuańto cambian los valores ajustados al quitar dicha observación. Combina dos cosas: cómo de raro es el punto (es decir, si tiene residuo grande) y cuánto leverage tiene (esto es, si toma valores extremos en $x_1$).
+  - COVRATIO. Ratio del determinante de la matriz de covarianzas de $\beta$ con y sin esa observación. Es decir, indica si esa observación hace que las estimaciones sean más o menos precisas. Valores mayores que 1 indican que, al quitar el punto, la incertidumbre baja y valores menores que 1 indican que la incertidumbre sube, es decir, el punto ayudaba con la precisión.
+  - Distancia de Cook. Medida global de influencia. ¿Cuánto cambia el modelo si quito el punto?
+  - Leverage hat. Indica cómo de extremos es el valor de $x_1$.
+
+
+```{r}
+# Distancia de Cook
+cook_distances <- cooks.distance(modelo_mpg)
+influential_points <- which(cook_distances > 4/nrow(mtcars))
+cat("Puntos potencialmente influyentes (Cook's D > 4/n):\n")
+print(rownames(mtcars)[influential_points])
+```
+
+¿Qué hacemos? Revisar los datos, evaluar con más detalle el gráfico de residuos vs leverage, probar a quitar dichas observaciones y recalcular el modelo, probar transformaciones, etc.
+
+## Predicciones
+```{r}
+# Predicciones para nuevos valores
+nuevos_pesos <- data.frame(wt = c(2.5, 3.0, 3.5, 4.0, 4.5))
+
+# Predicción puntual
+predicciones <- predict(modelo_mpg, newdata = nuevos_pesos)
+
+# Intervalos de confianza para la media
+ic_media <- predict(modelo_mpg, newdata = nuevos_pesos, interval = "confidence")
+
+# Intervalos de predicción para nuevas observaciones
+ic_prediccion <- predict(modelo_mpg, newdata = nuevos_pesos, interval = "prediction")
+
+# Crear tabla de resultados
+tabla_predicciones <- data.frame(
+  Peso = nuevos_pesos$wt,
+  MPG_Predicho = round(predicciones, 2),
+  IC_Inferior_Media = round(ic_media[,2], 2),
+  IC_Superior_Media = round(ic_media[,3], 2),
+  IP_Inferior = round(ic_prediccion[,2], 2),
+  IP_Superior = round(ic_prediccion[,3], 2)
+)
+
+print(tabla_predicciones)
+```
+ Visualizamos los intervalos:
+ 
+```{r}
+# Crear secuencia fina de valores para graficar
+wt_seq <- seq(min(mtcars$wt), max(mtcars$wt), length.out = 100)
+pred_data <- data.frame(wt = wt_seq)
+
+# Calcular intervalos
+pred_conf <- predict(modelo_mpg, newdata = pred_data, interval = "confidence")
+pred_pred <- predict(modelo_mpg, newdata = pred_data, interval = "prediction")
+
+# Combinar datos
+plot_data <- data.frame(
+  wt = wt_seq,
+  fit = pred_conf[,1],
+  conf_lwr = pred_conf[,2],
+  conf_upr = pred_conf[,3],
+  pred_lwr = pred_pred[,2],
+  pred_upr = pred_pred[,3]
+)
+
+# Gráfico con intervalos
+ggplot() +
+  # Intervalos de predicción (más amplios)
+  geom_ribbon(data = plot_data, aes(x = wt, ymin = pred_lwr, ymax = pred_upr),
+              fill = "lightblue", alpha = 0.3) +
+  # Intervalos de confianza (más estrechos)
+  geom_ribbon(data = plot_data, aes(x = wt, ymin = conf_lwr, ymax = conf_upr),
+              fill = "blue", alpha = 0.5) +
+  # Línea de regresión
+  geom_line(data = plot_data, aes(x = wt, y = fit), color = "red", size = 1) +
+  # Puntos originales
+  geom_point(data = mtcars, aes(x = wt, y = mpg), size = 2) +
+  labs(title = "Intervalos de Confianza y Predicción",
+       subtitle = "Azul oscuro: IC para la media | Azul claro: IP para nuevas observaciones",
+       x = "Peso (1000 lbs)", y = "Millas por Galón") +
+  theme_minimal()
+```
+ 
+### Cálculo del error
+$$MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$$
+
+$$RMSE = \sqrt{MSE} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}$$
+```{r}
+mse <- mean(residuals(modelo_mpg)^2)
+mse
+
+```
+```{r}
+rmse <- sqrt(mse)
+rmse
+```
+Me equivoco 2.95 mpg en promedio.
+
+
+Lo correcto sería probar ahora en test:
+```{r}
+# mod <- lm(mpg ~ wt, data = df_train)
+# pred <- predict(mod, newdata = df_test)
+
+# mse_test <- mean((df_test$mpg - pred)^2)
+# mse_test
+
+```
+
+
+
