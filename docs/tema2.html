@@ -920,7 +920,12 @@ Soluciones a los problemas de multicolinealidad
 <section id="gráficos-de-regresión-parcial" class="level4" data-number="3.7.3.2">
 <h4 data-number="3.7.3.2" class="anchored" data-anchor-id="gráficos-de-regresión-parcial"><span class="header-section-number">3.7.3.2</span> Gráficos de regresión parcial</h4>
 <p>Estos gráficos son una de las herramientas visuales más potentes y elegantes de la regresión múltiple. Un gráfico de regresión parcial para un predictor <span class="math inline">\(X_j\)</span> nos permite ver su relación con la respuesta <span class="math inline">\(Y\)</span> <strong>después de haber eliminado el efecto lineal de todos los demás predictores</strong>.</p>
-<p>Se construye de la siguiente forma: 1. Se calculan los residuos de la regresión de <span class="math inline">\(Y\)</span> en función de todos los predictores excepto <span class="math inline">\(X_j\)</span>. Llamemos a estos residuos <span class="math inline">\(e_{Y|X_{-j}}\)</span>. 2. Se calculan los residuos de la regresión de <span class="math inline">\(X_j\)</span> en función de todos los demás predictores. Llamemos a estos residuos <span class="math inline">\(e_{X_j|X_{-j}}\)</span>. 3. Se grafica <span class="math inline">\(e_{Y|X_{-j}}\)</span> (eje Y) contra <span class="math inline">\(e_{X_j|X_{-j}}\)</span> (eje X).</p>
+<p>Se construye de la siguiente forma:</p>
+<ol type="1">
+<li><p>Se calculan los residuos de la regresión de <span class="math inline">\(Y\)</span> en función de todos los predictores excepto <span class="math inline">\(X_j\)</span>. Llamemos a estos residuos <span class="math inline">\(e_{Y|X_{-j}}\)</span>.</p></li>
+<li><p>Se calculan los residuos de la regresión de <span class="math inline">\(X_j\)</span> en función de todos los demás predictores. Llamemos a estos residuos <span class="math inline">\(e_{X_j|X_{-j}}\)</span>.</p></li>
+<li><p>Se grafica <span class="math inline">\(e_{Y|X_{-j}}\)</span> (eje Y) contra <span class="math inline">\(e_{X_j|X_{-j}}\)</span> (eje X).</p></li>
+</ol>
 <div class="callout callout-style-default callout-warning callout-titled" title="Propiedad clave de los gráficos de regresión parcial">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">

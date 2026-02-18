@@ -1047,11 +1047,17 @@ un predictor $X_j$ nos permite ver su relación con la respuesta $Y$
 **después de haber eliminado el efecto lineal de todos los demás
 predictores**.
 
-Se construye de la siguiente forma: 1. Se calculan los residuos de la
+Se construye de la siguiente forma: 
+
+1. Se calculan los residuos de la
 regresión de $Y$ en función de todos los predictores excepto $X_j$.
-Llamemos a estos residuos $e_{Y|X_{-j}}$. 2. Se calculan los residuos de
+Llamemos a estos residuos $e_{Y|X_{-j}}$. 
+
+2. Se calculan los residuos de
 la regresión de $X_j$ en función de todos los demás predictores.
-Llamemos a estos residuos $e_{X_j|X_{-j}}$. 3. Se grafica $e_{Y|X_{-j}}$
+Llamemos a estos residuos $e_{X_j|X_{-j}}$. 
+
+3. Se grafica $e_{Y|X_{-j}}$
 (eje Y) contra $e_{X_j|X_{-j}}$ (eje X).
 
 ::: {.callout-warning title="Propiedad clave de los gráficos de regresión parcial"}
