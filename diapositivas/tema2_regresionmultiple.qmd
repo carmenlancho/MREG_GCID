@@ -534,7 +534,7 @@ $$\text{Residuo Parcial} = e_i + \hat{\beta}_j x_{ij} \quad \text{vs.} \quad x_{
 
 **Interpretación:**
 
-- **Línea sólida**: Relación lineal esperada (pendiente = $\hat{\beta}_j$)
+- **Línea sólida**: Relación lineal esperada
 - **Línea punteada**: Suavizado no paramétrico
 - **Coincidencia**: Linealidad adecuada
 - **Divergencia**: Posible no-linealidad $\rightarrow$ necesita transformación
