@@ -1,0 +1,76 @@
+---
+title: "Regresión lineal múltile"
+---
+
+De nuevo, esto es un ejemplo de juguete y no vamos a dividir en train-test-validación. Pero lo correcto es hacerlo.
+
+# Configuración inicial
+Cargamos los paquetes que vamos a utilizar.
+```{r}
+# Cargar librerías necesarias
+library(tidyverse)
+library(MASS)
+library(car)          # Para VIF y diagnósticos
+library(corrplot)     # Para matrices de correlación
+library(broom)        # Para resultados ordenados
+library(GGally)       # Para gráficos de pares
+
+set.seed(123)
+```
+
+# Carga de datos
+Utilizamos los datos mtcars.
+```{r}
+# Cargar datos
+data(mtcars)
+datos <- mtcars
+head(datos)
+```
+
+Queremos ajustar un modelo de regresión lineal múltiple (escribimos el modelo teórico):
+$$Y=\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p + \varepsilon$$
+
+Ajustamos el modelo a nuestros datos:
+```{r}
+modelo_simple <- lm(mpg ~ wt, data = datos)
+modelo <- lm(mpg ~ wt + hp + cyl, data = datos)
+# modelo <- lm(mpg ~ ., data = datos) # el . indica que usamos todas las regresoras
+```
+
+Visualizamos el ajuste:
+```{r}
+summary(modelo_simple)
+summary(modelo)
+```
+Como la variable `hp` ha salido no significativa, la quitamos del modelo. La variable `cyl` ha salido en duda, pero antes de decidir hacer nada con ella, tratamos la situación de `hp`.
+
+```{r}
+modelo <- lm(mpg ~ wt + cyl, data = datos)
+summary(modelo)
+```
+
+## Interpretación de los coeficientes
+
+```{r}
+coef_modelo <- tidy(modelo) # más organizadito
+print(coef_modelo)
+```
+
+El intercept $\beta_0$ vale `r round(coef_modelo$estimate[1],2)`, cuya interpretación es: el valor esperado de `mpg` cuando `wt=0` y `cyl=0`.
+
+El coeficiente $\beta_{wt}$ vale `r round(coef_modelo$estimate[2],2)`, cuya interpretación es (recordamos que la variable `wt` está medida en 1000 lbs): por cada 1000 lbs que aumente `wt`, el target `mpg` disminuye `r round(abs(coef_modelo$estimate[2]),2)` unidades, manteniendo fija la variable `cyl`.
+
+El coeficiente $\beta_{cyl}$ vale `r round(coef_modelo$estimate[3],2)`, cuya interpretación es: por cada unidad adicional de `cyl`, el target `mpg` disminuye `r round(abs(coef_modelo$estimate[3]),2)` unidades, manteniendo fija la variable `wt`.
+
+
+----
+Matriz de correlación y gráficas
+
+```{r}
+cor(datos[,-1])
+```
+
+
+
+
+
