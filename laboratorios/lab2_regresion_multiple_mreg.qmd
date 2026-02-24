@@ -1,0 +1,539 @@
+---
+title: "Laboratorio 3: Regresión Lineal Múltiple"
+subtitle: "Modelos de Regresión"
+author: "Carmen Lancho Martín - Natalia Madrueño Sierro"
+date: today
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+    embed-resources: true
+execute:
+  warning: false
+  message: false
+---
+
+
+
+## Configuración inicial
+
+```{r setup}
+# Cargar librerías necesarias
+library(tidyverse)
+library(MASS)
+library(car)          # Para VIF y diagnósticos
+library(corrplot)     # Para matrices de correlación
+library(leaps)        # Para selección de variables
+library(broom)        # Para resultados ordenados
+library(GGally)       # Para gráficos de pares
+library(caret)        # Para validación cruzada
+library(performance)  # Para evaluación de modelos
+
+set.seed(123)
+```
+
+## Parte 1: Introducción a la Regresión Múltiple
+
+### Modelo Teórico
+
+La regresión lineal múltiple extiende la regresión simple para incluir múltiples predictores:
+
+$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_p X_p + \epsilon$$
+
+### Ejemplo Básico con mtcars
+
+```{r basic_multiple}
+# Cargar datos
+data(mtcars)
+
+# Modelo simple vs múltiple
+modelo_simple <- lm(mpg ~ wt, data = mtcars)
+modelo_multiple <- lm(mpg ~ wt + hp + cyl, data = mtcars)
+
+# Comparar modelos
+cat("=== COMPARACIÓN DE MODELOS ===\n")
+cat("Modelo Simple - R²:", round(summary(modelo_simple)$r.squared, 3), "\n")
+cat("Modelo Múltiple - R²:", round(summary(modelo_multiple)$r.squared, 3), "\n")
+cat("Modelo Múltiple - R² Ajustado:", round(summary(modelo_multiple)$adj.r.squared, 3), "\n")
+
+# Resumen del modelo múltiple
+summary(modelo_multiple)
+```
+
+### Interpretación de Coeficientes
+
+```{r coefficient_interpretation}
+# Extraer coeficientes y estadísticas
+coef_df <- tidy(modelo_multiple)
+print(coef_df)
+
+cat("\n=== INTERPRETACIÓN DE COEFICIENTES ===\n")
+cat("Intercepto:", round(coef_df$estimate[1], 2), "\n")
+cat("  - MPG esperado cuando wt=0, hp=0, cyl=0 (extrapolación)\n\n")
+
+cat("Peso (wt):", round(coef_df$estimate[2], 2), "\n")
+cat("  - Por cada 1000 lbs adicionales, MPG disminuye en", abs(round(coef_df$estimate[2], 2)), 
+    "unidades, manteniendo hp y cyl constantes\n\n")
+
+cat("Potencia (hp):", round(coef_df$estimate[3], 3), "\n")
+cat("  - Por cada hp adicional, MPG disminuye en", abs(round(coef_df$estimate[3], 3)), 
+    "unidades, manteniendo wt y cyl constantes\n\n")
+
+cat("Cilindros (cyl):", round(coef_df$estimate[4], 2), "\n")
+cat("  - Por cada cilindro adicional, MPG disminuye en", abs(round(coef_df$estimate[4], 2)), 
+    "unidades, manteniendo wt y hp constantes\n")
+```
+
+## Parte 2: Análisis Exploratorio Multivariado
+
+### Matriz de Correlaciones
+
+```{r correlation_matrix}
+# Seleccionar variables numéricas relevantes
+vars_interes <- mtcars[, c("mpg", "wt", "hp", "cyl", "disp", "qsec")]
+
+# Matriz de correlación
+cor_matrix <- cor(vars_interes)
+print(round(cor_matrix, 3))
+
+# Visualización de correlaciones
+corrplot(cor_matrix, method = "color", type = "upper", 
+         order = "hclust", tl.cex = 0.8, tl.col = "black",
+         addCoef.col = "black", number.cex = 0.7)
+```
+
+### Gráficos de Pares
+
+```{r pairs_plot}
+# Gráfico de pares con correlaciones
+ggpairs(vars_interes, 
+        title = "Matriz de Gráficos de Pares",
+        upper = list(continuous = wrap("cor", size = 3)),
+        lower = list(continuous = wrap("points", alpha = 0.7))) +
+  theme_minimal()
+```
+
+## Parte 3: Multicolinealidad
+
+### Detección de Multicolinealidad
+
+```{r multicollinearity}
+# Factor de Inflación de la Varianza (VIF)
+vif_values <- vif(modelo_multiple)
+cat("=== FACTOR DE INFLACIÓN DE LA VARIANZA (VIF) ===\n")
+print(vif_values)
+
+cat("\nInterpretación del VIF:\n")
+cat("- VIF < 5: No hay problema de multicolinealidad\n")
+cat("- 5 ≤ VIF < 10: Multicolinealidad moderada\n")
+cat("- VIF ≥ 10: Multicolinealidad severa\n\n")
+
+for(i in 1:length(vif_values)) {
+  var_name <- names(vif_values)[i]
+  vif_val <- vif_values[i]
+  
+  if(vif_val < 5) {
+    status <- "OK"
+  } else if(vif_val < 10) {
+    status <- "Moderada"
+  } else {
+    status <- "Severa"
+  }
+  
+  cat(var_name, ": VIF =", round(vif_val, 2), "(", status, ")\n")
+}
+
+# Modelo con mayor multicolinealidad
+modelo_colineal <- lm(mpg ~ wt + hp + cyl + disp, data = mtcars)
+vif_colineal <- vif(modelo_colineal)
+cat("\n=== MODELO CON MÁS VARIABLES (mayor multicolinealidad) ===\n")
+print(round(vif_colineal, 2))
+```
+
+### Manejo de Multicolinealidad
+
+```{r handle_multicollinearity}
+# Estrategia 1: Eliminar variables con VIF alto
+# Identificar variable con VIF más alto
+max_vif <- which.max(vif_colineal)
+var_eliminar <- names(max_vif)
+
+cat("Variable con VIF más alto:", var_eliminar, "=", round(vif_colineal[max_vif], 2), "\n")
+
+# Modelo sin la variable problemática
+formula_nueva <- as.formula(paste("mpg ~", paste(names(vif_colineal)[names(vif_colineal) != var_eliminar], collapse = " + ")))
+modelo_reducido <- lm(formula_nueva, data = mtcars)
+
+cat("\nVIF después de eliminar", var_eliminar, ":\n")
+print(round(vif(modelo_reducido), 2))
+
+# Comparar R² ajustado
+cat("\nComparación de modelos:\n")
+cat("Modelo completo - R² ajustado:", round(summary(modelo_colineal)$adj.r.squared, 4), "\n")
+cat("Modelo reducido - R² ajustado:", round(summary(modelo_reducido)$adj.r.squared, 4), "\n")
+```
+
+### Diagnóstico del modelo y detección de observaciones influyentes
+En esta parte evaluamos si el modelo lineal cumple los supuestos básicos y si existen observaciones que estén afectando de forma desproporcionada al ajuste.
+
+```{r}
+modelo_final <- if (exists("modelo_reducido")) modelo_reducido else modelo_multiple
+summary(modelo_final)
+```
+
+#### Comprobación rápida con check_model()
+El paquete performance ofrece un diagnóstico visual muy completo (linealidad, normalidad, homocedasticidad, puntos influyentes, etc.)
+
+```{r}
+performance::check_model(modelo_final)
+```
+
+#### Diagnósticos clásicos (gráficos base de R)
+
+- Residuos vs Ajustados (linealidad y homocedasticidad)
+
+- QQ-plot (normalidad aproximada de residuos)
+
+- Scale-Location (homocedasticidad)
+
+- Residuos vs Leverage con Cook's distance (observaciones influyentes)
+
+```{r}
+par(mfrow = c(2, 2))
+plot(modelo_final)
+par(mfrow = c(1, 1))
+```
+
+#### Tests frecuentes
+
+Los tests ayudan, pero en muestras pequeñas/medianas pueden tener poca potencia y en muestras grandes pueden detectar desviaciones “pequeñas” sin impacto práctico. Por eso se interpretan junto a los gráficos.
+
+```{r}
+# Normalidad de residuos (orientativo)
+shapiro <- shapiro.test(resid(modelo_final))
+
+# Homocedasticidad (Breusch–Pagan)
+bp <- lmtest::bptest(modelo_final)
+
+# Independencia / autocorrelación (Durbin–Watson; más relevante en series temporales)
+dw <- lmtest::dwtest(modelo_final)
+
+list(
+  shapiro = shapiro,
+  breusch_pagan = bp,
+  durbin_watson = dw
+)
+```
+
+
+#### Linealidad: residuos parciales (CPR / component+residual plots)
+
+Los CPR plots ayudan a detectar no linealidad en predictores continuos (pistas de que conviene transformar variables o añadir términos no lineales).
+
+```{r}
+# CPR plots para todos los predictores del modelo final
+car::crPlots(modelo_final)
+```
+
+Si una variable es binaria (0/1), el CPR mostrará dos “columnas” de puntos (en 0 y 1). En ese caso, suele ser más útil revisar outliers por grupo y la influencia.
+
+#### Multicolinealidad (VIF) del modelo final
+
+```{r}
+round(car::vif(modelo_final), 2)
+```
+
+Reglas prácticas (no absolutas): VIF ~ 1 (sin problema), 5–10 (moderado), >10 (alto). Si el objetivo principal es predicción, un VIF alto puede ser tolerable; si es interpretación de coeficientes, conviene actuar
+
+#### Observaciones influyentes y outliers
+
+```{r}
+n <- nobs(modelo_final)
+p <- length(coef(modelo_final))
+
+lev <- hatvalues(modelo_final)
+cook <- cooks.distance(modelo_final)
+dff <- dffits(modelo_final)
+dfb <- dfbetas(modelo_final)
+
+# Umbrales
+cook_thr <- 4/n
+lev_thr  <- 2*p/n
+dfb_thr  <- 2/sqrt(n)
+
+# Índices sospechosos
+idx_cook <- which(cook > cook_thr)
+idx_lev  <- which(lev  > lev_thr)
+idx_dff  <- which(abs(dff) > 2*sqrt(p/n))
+
+# Resumen
+list(
+  n = n, p = p,
+  cook_threshold = cook_thr,
+  leverage_threshold = lev_thr,
+  dfbetas_threshold = dfb_thr,
+  idx_high_cook = idx_cook,
+  idx_high_leverage = idx_lev,
+  idx_high_dffits = idx_dff
+)
+```
+Interpretación:
+
+Obs 17 y obs 20 superan claramente el umbral de Cook (~0.125) → son influyentes (pueden cambiar coeficientes de forma apreciable).
+
+Obs 18 está muy cerca (0.121) y además tiene DFFITS alto → candidato a revisar también.
+
+
+Ranking de las observaciones más influyentes
+```{r}
+library(dplyr)
+library(tibble)
+
+influence_tbl <- tibble(
+  obs = seq_len(n),
+  leverage = lev,
+  cooks_d = cook,
+  dffits = dff
+) %>%
+  arrange(desc(cooks_d))
+
+influence_tbl %>% slice(1:10)
+```
+
+
+
+¿Qué coeficientes cambia cada observación? (DFBETAS)
+
+```{r}
+# Observaciones con al menos un DFBETAS grande
+idx_dfb <- which(apply(abs(dfb) > dfb_thr, 1, any))
+
+idx_dfb
+```
+
+
+La salida muestra DFBETAS grandes para varios coches; el caso más claro es Chrysler Imperial (obs 17) con:
+
+DFBETAS en wt ≈ 1.00 (enorme) → esa observación está empujando fuerte el coeficiente de wt. 
+
+También aparecen Volvo 142E, Maserati Bora, AMC Javelin, etc. como observaciones que mueven algunos coeficientes de forma apreciable.
+
+
+```{r}
+# Ver qué coeficientes son los más afectados (si hay casos)
+if (length(idx_dfb) > 0) {
+  dfb_big <- as.data.frame(dfb[idx_dfb, , drop = FALSE])
+  dfb_big$obs <- idx_dfb
+  dfb_big %>%
+    relocate(obs) %>%
+    arrange(desc(rowSums(abs(across(where(is.numeric), ~ .x)))))
+} else {
+  cat("No se detectaron observaciones con DFBETAS por encima del umbral 2/sqrt(n).\n")
+}
+```
+
+En esta tabla de arriba vemos toda la info de DFBETAS.
+
+Regla que estamos usando: marcamos como “grande” si $∣DFBETAS∣>2/\sqrt{n}$. Como $n=32$, el umbral es 0.3536. 
+
+Cómo se interpreta un DFBETAS grande: esa observación, al quitarla, cambia ese coeficiente en más de ~0.35 errores estándar (y si hay valores ~1, el cambio es grande).
+
+
+**Qué coeficiente “empuja” cada coche (según DFBETAS)**
+
+- Chrysler Imperial (obs 17)
+    - wt = +1.0026 (enorme)
+    - cyl = −0.5608 (muy grande)
+    - Intercepto = −0.4314 (grande)
+    Es el caso más extremo: mueve sobre todo wt y también cyl. 
+
+- Toyota Corolla (obs 20)
+    - Intercepto = +0.7209 (muy grande)
+    - wt = −0.3763 (grande)
+    - Afecta sobre todo al nivel base (intercepto) y también a wt. 
+
+
+
+- Fiat 128 (obs 18)
+    - Intercepto = +0.5930 (grande)
+    - Principalmente empuja el intercepto (los demás coeficientes no pasan el umbral). 
+
+
+
+- Toyota Corona (obs 21)
+    - Intercepto = −0.4555 (grande)
+    - cyl = +0.3491 (muy cerca del umbral, pero no lo supera por poco)
+    - Empuja sobre todo el intercepto. 
+
+
+
+- AMC Javelin (obs 23)
+    - cyl = −0.4042 (grande)
+    - Es una observación que afecta especialmente al coeficiente de cyl. 
+
+
+
+- Lotus Europa (obs 28)
+    - Intercepto = +0.3726 (ligeramente por encima del umbral)
+    - Afecta principalmente al intercepto (y muy poquito al resto). 
+
+
+- Maserati Bora (obs 31)
+    - hp = +0.5135 (muy grande)
+    - Es el que más “tira” del coeficiente de hp. 
+
+
+
+- Volvo 142E (obs 32)
+    - cyl = +0.3699 (grande)
+    - Afecta sobre todo al coeficiente de cyl. 
+
+
+
+- Datsun 710 (obs 3)
+    - Intercepto = −0.3626 (apenas por encima del umbral)
+    - Principalmente influye en el intercepto.
+
+
+Resumen por coeficiente:
+
+ - wt: sobre todo Chrysler Imperial (≈ 1.00) y también Toyota Corolla (≈ −0.38). 
+ - hp: claramente Maserati Bora (≈ 0.51). 
+ - cyl: Chrysler Imperial (≈ −0.56) y AMC Javelin (≈ −0.40) y Volvo 142E (≈ 0.37). 
+ - Intercepto: varios (Toyota Corolla, Fiat 128, Toyota Corona, Chrysler Imperial…).
+
+#### Gráfico de influencia (leverage vs residuos studentizados) con Cook
+Este gráfico resume en una sola figura la influencia por leverage + residuo.
+
+
+Este Influence Plot (de car::influencePlot) junta en una sola figura las 3 cosas que más miramos para detectar observaciones “problemáticas” en regresión:
+
+ - Eje $X$ (Hat-values) = leverage: qué tan “extremo” es el punto en el espacio de predictores $X$. Más a la derecha ⇒ valores de $X$ raros ⇒ puede tener mucha capacidad de “tirar” de la recta/plano.
+
+ - Eje Y (Studentized residuals) = residuo estandarizado: qué tan mal está predicho ese punto (outlier en $Y$). Más arriba/abajo ⇒ peor ajuste (|residuo| grande).
+
+ - Tamaño/Color (Cook’s D) = influencia total: combina leverage + residuo para medir cuánto cambiaría el modelo si quitases ese punto. Burbuja grande/oscura ⇒ muy influyente.
+
+Las líneas discontinuas suelen marcar umbrales aproximados:
+
+ - vertical: leverage “alto”
+
+ - horizontales: residuos studentizados grandes (a menudo $\pm2$)
+ 
+Sobre nuestro gráfico:
+
+1.  Chrysler Imperial (burbuja más grande y oscura)
+    - Está con residuo studentizado > 2 (alto) y leverage moderado-alto.
+    - Por eso su Cook’s D es el mayor (en tu salida era ~0.332). 
+    Interpretación: es el punto más influyente. Si lo quitamos, es bastante probable que cambien los coeficientes (especialmente alguno como wt en mtcars).
+    
+2. Toyota Corolla y Fiat 128 (arriba a la izquierda)
+    - Tienen residuo studentizado muy alto (outliers en $Y$: el modelo los subestima o sobreestima bastante), 
+    - pero leverage bajo (están en zona izquierda).
+    - Aun así, aparecen como influyentes porque el residuo es grande (Cook no tan brutal como Chrysler, pero sí relevante). 
+    Interpretación: son outliers en la respuesta más que puntos raros en $X$. Pueden afectar la estimación, pero normalmente menos que un punto con leverage enorme.
+    
+3. Maserati Bora (muy a la derecha)
+    - Tiene leverage altísimo (hat-value muy grande) ⇒ es un coche “extremo” en predictores.
+    - Pero su residuo studentizado es moderado (no está cerca de $\pm 2$).
+    - Por eso su burbuja es grande, pero no la más grande: mucha capacidad de influir, pero “no está contradiciendo” tanto al modelo. 
+    Interpretación: punto de alto leverage. Es peligroso en el sentido de que si su residuo fuera mayor, dominaría el ajuste. Aunque ahora no sea el peor Cook, merece revisión.
+
+4. Lincoln Continental
+    - Está cerca de residuo 0 y leverage medio. 
+    Interpretación: no parece problemático (si aparece etiquetado suele ser porque está entre los más grandes, pero comparado con los anteriores no es el foco).
+    
+Así, en el gráfico hay tres tipos de casos:
+
+ - Muy influyente por ambas cosas (leverage + residuo): Chrysler Imperial → prioridad 1.
+
+ - Outliers en $Y$ con leverage bajo: Toyota Corolla y Fiat 128 → revisar por qué el modelo falla ahí.
+
+ - Leverage extremo con residuo moderado: Maserati Bora → revisar por ser “extremo” en $X$.
+    
+
+```{r}
+car::influencePlot(modelo_final, id.method = "identify", main = "Influence Plot", sub = "Tamaño ~ Cook's distance")
+```
+
+
+
+En nombres de coches, el influencePlot lista como destacados:
+
+ - Chrysler Imperial (obs 17)
+
+ - Toyota Corolla (obs 20)
+
+ - Fiat 128 (obs 18)
+
+y también aparece Maserati Bora por leverage alto.
+
+
+Leverage alto (puntos “raros” en X)
+
+En la tabla del influencePlot: Maserati Bora tiene Hat = 0.4636 (muy por encima de 0.25) pero Cook = 0.0815 (no supera el umbral)
+
+Qué significa: es un punto con valores de predictores muy extremos (alto leverage), pero no está produciendo una distorsión enorme en el ajuste global (Cook no tan alto). Aun así, merece revisión porque un punto de leverage alto puede cambiar el modelo si su residuo aumentara.
+
+
+#### Conclusión del diagnóstico 
+
+El modelo ajusta bien (R² ajustado ~0.826). 
+
+
+Supuestos: homocedasticidad ok; normalidad “casi ok/borde”; independencia no preocupante aquí.
+
+Multicolinealidad: moderada, no crítica (VIF < 5). 
+
+
+Puntos influyentes reales: sobre todo obs 17 (Chrysler Imperial) y obs 20 (Toyota Corolla); obs 18 (Fiat 128) también a vigilar.
+
+Punto de leverage extremo: Maserati Bora (Hat ~0.46), aunque su Cook no es el mayor.
+
+##### Para cerrar el análisis
+
+Como ya tenemos el bloque de “sensibilidad” (refit sin Cook alto), el paso correcto es:
+
+ 1. Refit sin obs 17 y 20 (y si quieres, también 18).
+
+ 2. Comparar:
+
+    - signos y magnitudes de $\beta$,
+    - p-values,
+    - y $R^2$ ajustado.
+
+Si al quitar esas observaciones cambian mucho los coeficientes (o cambia qué variables “parecen” significativas), entonces la conclusión:
+ “El efecto de X es sensible a observaciones influyentes” y reportar ambos escenarios o justificar por qué esos puntos son válidos/errores.
+
+
+
+#### Qué hacer si encuentramos puntos influyentes
+
+1. Verificar errores de datos (valores mal introducidos, unidades, etc.).
+
+2. Entender si son casos válidos pero extremos (pueden aportar información real).
+
+3. Comparar el modelo con y sin esos puntos para ver sensibilidad del resultado.
+
+4. Considerar alternativas si procede: transformaciones, términos no lineales, modelos robustos, etc.
+
+
+```{r}
+# Ejemplo: refit eliminando las observaciones con Cook alta (si existen)
+idx_remove <- which(cook > cook_thr)
+
+if (length(idx_remove) > 0) {
+  datos_sin <- mtcars[-idx_remove, ]
+  modelo_sin <- update(modelo_final, data = datos_sin)
+
+  cat("Observaciones eliminadas (Cook alto):", idx_remove, "\n\n")
+  cat("Comparación de coeficientes (original vs sin influyentes):\n")
+  print(cbind(original = coef(modelo_final), sin_influyentes = coef(modelo_sin)))
+} else {
+  cat("No hay observaciones con Cook's distance por encima de 4/n.\n")
+}
+```
+
+
