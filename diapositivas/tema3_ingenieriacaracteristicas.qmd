@@ -1,12 +1,11 @@
 ---
 title: "Ingeniería de Características"
-author: "Víctor Aceña - Isaac Martín"
+author: "Carmen Lancho - Natalia Madrueño"
 institute: "DSLAB"
 date: last-modified
 format: 
   beamer: 
     theme: "Madrid"
-    colortheme: "dolphin"
     fonttheme: "structurebold"
     navigation: horizontal
     section-titles: false
@@ -14,7 +13,7 @@ format:
     slide-level: 1
     aspectratio: 169
     header-includes: |
-      \usepackage{dslab-new}
+      \usepackage{dslab-new-orange}
       \usedslabmodelos
 knitr:
   opts_chunk:
@@ -215,7 +214,7 @@ Diseñado específicamente para datos con *outliers*. Utiliza la **mediana** y e
 
     * Al no usar la media ni la desviación estándar, los *outliers* no distorsionan el resultado del escalado.
 
-* **Cuándo Usarlo:**
+* **Cuándo usarlo:**
 
     * Es la opción preferida cuando se sabe o se sospecha que los **datos contienen *outliers*** significativos.
     * Cuando se quiere preservar la estructura de la mayor parte de los datos sin la influencia de los valores extremos.
@@ -352,7 +351,7 @@ Es la solución natural cuando la **varianza es proporcional al cuadrado de la m
 :::::
 
 
-# Transformación de Box-Cox: La Teoría
+# Transformación de Box-Cox: La teoría
 
 Es un método que **optimiza automáticamente** el parámetro de transformación $\lambda$ (lambda) para maximizar la normalidad y homocedasticidad de los residuos. En lugar de elegir manualmente, Box-Cox encuentra el valor $\lambda$ que mejor normaliza los datos.
 
@@ -521,7 +520,7 @@ Transforma una variable con **k categorías sin orden** (ej. color, región) en 
 Imaginemos una variable `Region` con 4 categorías. Al codificarla, elegimos "Norte" como categoría de referencia.
 
 ::::: columns
-:::: {.column width="40%"}
+:::: {.column width="50%"}
 
 **Resultado:**
 
@@ -534,11 +533,11 @@ Imaginemos una variable `Region` con 4 categorías. Al codificarla, elegimos "No
 El coeficiente de `Region_Sur` se interpretaría como la diferencia promedio en la variable respuesta al estar en la región "Sur" **en comparación con la región "Norte"**.
 
 ::::
-:::: {.column width="60%"}
+:::: {.column width="50%"}
 ```{r}
 #| fig-width: 6
 #| fig-height: 4
-#| out-width: "95%"
+#| out-width: "90%"
 library(ggplot2)
 library(fastDummies)
 library(reshape2)
