@@ -14,6 +14,8 @@ library(car)          # Para VIF y diagnósticos
 library(corrplot)     # Para matrices de correlación
 library(broom)        # Para resultados ordenados
 library(GGally)       # Para gráficos de pares
+library(dplyr)
+library(tibble)
 
 set.seed(123)
 ```
@@ -33,14 +35,14 @@ $$Y=\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p + \varepsilon$$
 Ajustamos el modelo a nuestros datos:
 ```{r}
 modelo_simple <- lm(mpg ~ wt, data = datos)
-modelo <- lm(mpg ~ wt + hp + cyl, data = datos)
+modelo3 <- lm(mpg ~ wt + hp + cyl, data = datos)
 # modelo <- lm(mpg ~ ., data = datos) # el . indica que usamos todas las regresoras
 ```
 
 Visualizamos el ajuste:
 ```{r}
 summary(modelo_simple)
-summary(modelo)
+summary(modelo3)
 ```
 Como la variable `hp` ha salido no significativa, la quitamos del modelo. La variable `cyl` ha salido en duda, pero antes de decidir hacer nada con ella, tratamos la situación de `hp`.
 
@@ -64,11 +66,160 @@ El coeficiente $\beta_{cyl}$ vale `r round(coef_modelo$estimate[3],2)`, cuya int
 
 
 ----
+
+## Estudio exploratorio multivariante
+
 Matriz de correlación y gráficas
 
 ```{r}
-cor(datos[,-1])
+corr_matriz <-cor(datos)
 ```
+
+Lo visualizamos:
+
+```{r}
+corrplot(corr_matriz, type = 'upper',addCoef.col = 'black', number.cex = 0.7)
+```
+Vemos que hay bastantes variables que están correlacionadas. No debemos meter variables correlacionadas en el modelo porque sabemos que nos dará problemas de multicolinealidad. Por ejemplo, cyl y hp tienen una correlación de 0.83 --> no meteríamos ambas en un modelo. Para elegir entre ellas, nos guiamos por la interpretación y por su correlación con el target mpg. En este caso como la correlación de cyl con mpg es mayor que la de hp, nos decantaríamos por meter cyl antes que hp en el modelo.
+
+Realizamos ahora un ggpairs.
+
+```{r}
+ggpairs(datos)
+```
+
+## Multicolinealidad
+
+Obtenemos el VIF (Factor de Inflación de la Varianza)
+
+```{r}
+vif(modelo)
+```
+
+En este caso los valores no son preocupantes, estamos tranquilos con respecto a la multicolinealidad
+
+Lo calculamos también para el modelo con 3 variables:
+```{r}
+vif(modelo3)
+```
+Observamos que hay un valor bastante cercano a 5 que nos indica que podemos tener problemas de multicolinealidad. En este caso, ya hemos estudiado la matriz de correlación y hemos quitado la variable hp.
+
+## Diagnóstico del modelo
+
+```{r}
+plot(modelo)
+```
+
+```{r}
+# Añadimos histograma de los residuos para verificar la normalidad
+hist(modelo$residuals)
+```
+
+
+En principio parece que el modelo verifica todos los supuestos. Vamos a hacer otra verificación con los contrastes de hipótesis.
+
+```{r}
+# Normalidad de residuos (orientativo)
+shapiro <- shapiro.test(resid(modelo))
+
+# Homocedasticidad (Breusch–Pagan)
+bp <- lmtest::bptest(modelo)
+
+# Independencia / autocorrelación (Durbin–Watson; más relevante en series temporales)
+dw <- lmtest::dwtest(modelo)
+
+list(
+  shapiro = shapiro,
+  breusch_pagan = bp,
+  durbin_watson = dw
+)
+```
+
+## CPR plots (Componente + Residuo)
+Estos gráficos nos sirven para comprobar la forma funcional (lineal) de la relación de cada una de las regresoras con el target. Los gráficos muestran una tendencia lineal en ambos casos, lo que quiere decir que podemos asumir que la forma funcional es correcta, es decir, que cada una de las regresoras y el target tienen una relación lineal. 
+
+```{r}
+car::crPlots(modelo)
+```
+## Partial residual plot (added variable plot)
+
+Estos gráficos nos sirven para interpretar la relación entre cada regresora y el target. Muestran realmente el $\hat{\beta}_j$ de cada regresor.
+
+```{r}
+car::avPlots(modelo)
+```
+
+
+## Valores influyentes
+
+```{r}
+n <- nobs(modelo)
+p <- length(coef(modelo))
+
+lev <- hatvalues(modelo)
+cook <- cooks.distance(modelo)
+dff <- dffits(modelo)
+dfb <- dfbetas(modelo)
+
+# Umbrales
+cook_thr <- 4/n
+lev_thr  <- 2*p/n
+dfb_thr  <- 2/sqrt(n)
+
+# Índices sospechosos
+idx_cook <- which(cook > cook_thr)
+idx_lev  <- which(lev  > lev_thr)
+idx_dff  <- which(abs(dff) > 2*sqrt(p/n))
+
+# Resumen
+list(
+  n = n, p = p,
+  cook_threshold = cook_thr,
+  leverage_threshold = lev_thr,
+  dfbetas_threshold = dfb_thr,
+  idx_high_cook = idx_cook,
+  idx_high_leverage = idx_lev,
+  idx_high_dffits = idx_dff
+)
+
+
+
+influence_tbl <- tibble(
+  obs = seq_len(n),
+  leverage = lev,
+  cooks_d = cook,
+  dffits = dff
+) %>%
+  arrange(desc(cooks_d))
+
+influence_tbl %>% slice(1:10)
+```
+
+¿Qué coeficientes cambia cada observación? (DFBETAS)
+```{r}
+# Observaciones con al menos un DFBETAS grande
+idx_dfb <- which(apply(abs(dfb) > dfb_thr, 1, any))
+
+idx_dfb
+```
+
+Veamos ahora qué coeficientes son los más afectados:
+```{r}
+# Ver qué coeficientes son los más afectados (si hay casos)
+if (length(idx_dfb) > 0) {
+  dfb_big <- as.data.frame(dfb[idx_dfb, , drop = FALSE])
+  dfb_big$obs <- idx_dfb
+  dfb_big %>%
+    relocate(obs) %>%
+    arrange(desc(rowSums(abs(across(where(is.numeric), ~ .x)))))
+} else {
+  cat("No se detectaron observaciones con DFBETAS por encima del umbral 2/sqrt(n).\n")
+}
+```
+```{r}
+car::influencePlot(modelo)
+```
+
 
 
 

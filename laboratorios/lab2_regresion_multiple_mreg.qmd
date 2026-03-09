@@ -42,7 +42,7 @@ La regresión lineal múltiple extiende la regresión simple para incluir múlti
 
 $$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_p X_p + \epsilon$$
 
-### Ejemplo Básico con mtcars
+### Ejemplo básico con mtcars
 
 ```{r basic_multiple}
 # Cargar datos
@@ -62,7 +62,7 @@ cat("Modelo Múltiple - R² Ajustado:", round(summary(modelo_multiple)$adj.r.squ
 summary(modelo_multiple)
 ```
 
-### Interpretación de Coeficientes
+### Interpretación de coeficientes
 
 ```{r coefficient_interpretation}
 # Extraer coeficientes y estadísticas
@@ -86,9 +86,9 @@ cat("  - Por cada cilindro adicional, MPG disminuye en", abs(round(coef_df$estim
     "unidades, manteniendo wt y hp constantes\n")
 ```
 
-## Parte 2: Análisis Exploratorio Multivariado
+## Parte 2: Análisis exploratorio multivariado
 
-### Matriz de Correlaciones
+### Matriz de correlaciones
 
 ```{r correlation_matrix}
 # Seleccionar variables numéricas relevantes
@@ -104,12 +104,12 @@ corrplot(cor_matrix, method = "color", type = "upper",
          addCoef.col = "black", number.cex = 0.7)
 ```
 
-### Gráficos de Pares
+### Gráficos de pares
 
 ```{r pairs_plot}
 # Gráfico de pares con correlaciones
 ggpairs(vars_interes, 
-        title = "Matriz de Gráficos de Pares",
+        title = "Matriz de gráficos de pares",
         upper = list(continuous = wrap("cor", size = 3)),
         lower = list(continuous = wrap("points", alpha = 0.7))) +
   theme_minimal()
@@ -117,7 +117,7 @@ ggpairs(vars_interes,
 
 ## Parte 3: Multicolinealidad
 
-### Detección de Multicolinealidad
+### Detección de multicolinealidad
 
 ```{r multicollinearity}
 # Factor de Inflación de la Varianza (VIF)
@@ -152,7 +152,7 @@ cat("\n=== MODELO CON MÁS VARIABLES (mayor multicolinealidad) ===\n")
 print(round(vif_colineal, 2))
 ```
 
-### Manejo de Multicolinealidad
+### Manejo de multicolinealidad
 
 ```{r handle_multicollinearity}
 # Estrategia 1: Eliminar variables con VIF alto
@@ -183,12 +183,6 @@ modelo_final <- if (exists("modelo_reducido")) modelo_reducido else modelo_multi
 summary(modelo_final)
 ```
 
-#### Comprobación rápida con check_model()
-El paquete performance ofrece un diagnóstico visual muy completo (linealidad, normalidad, homocedasticidad, puntos influyentes, etc.)
-
-```{r}
-performance::check_model(modelo_final)
-```
 
 #### Diagnósticos clásicos (gráficos base de R)
 
@@ -322,7 +316,7 @@ También aparecen Volvo 142E, Maserati Bora, AMC Javelin, etc. como observacione
 
 
 ```{r}
-# Ver qué coeficientes son los más afectados (si hay casos)
+# Ver qué coeficientes son los más afectados
 if (length(idx_dfb) > 0) {
   dfb_big <- as.data.frame(dfb[idx_dfb, , drop = FALSE])
   dfb_big$obs <- idx_dfb
@@ -405,10 +399,7 @@ Resumen por coeficiente:
  - Intercepto: varios (Toyota Corolla, Fiat 128, Toyota Corona, Chrysler Imperial…).
 
 #### Gráfico de influencia (leverage vs residuos studentizados) con Cook
-Este gráfico resume en una sola figura la influencia por leverage + residuo.
-
-
-Este Influence Plot (de car::influencePlot) junta en una sola figura las 3 cosas que más miramos para detectar observaciones “problemáticas” en regresión:
+Este gráfico junta en una sola figura las 3 cosas que más miramos para detectar observaciones “problemáticas” en regresión:
 
  - Eje $X$ (Hat-values) = leverage: qué tan “extremo” es el punto en el espacio de predictores $X$. Más a la derecha ⇒ valores de $X$ raros ⇒ puede tener mucha capacidad de “tirar” de la recta/plano.
 
@@ -509,7 +500,7 @@ Si al quitar esas observaciones cambian mucho los coeficientes (o cambia qué va
 
 
 
-#### Qué hacer si encuentramos puntos influyentes
+#### Qué hacer si encontramos puntos influyentes
 
 1. Verificar errores de datos (valores mal introducidos, unidades, etc.).
 
@@ -536,4 +527,64 @@ if (length(idx_remove) > 0) {
 }
 ```
 
+
+
+## Parte 4: Interacciones entre variables
+
+### Modelos con interacciones
+
+```{r interactions}
+# Modelo con interacción
+modelo_interaccion <- lm(mpg ~ wt + hp + wt:hp, data = mtcars)
+
+# Comparar con modelo sin interacción
+modelo_sin_interaccion <- lm(mpg ~ wt + hp, data = mtcars)
+
+# Resúmenes
+cat("=== MODELO SIN INTERACCIÓN ===\n")
+print(summary(modelo_sin_interaccion)$coefficients)
+
+cat("\n=== MODELO CON INTERACCIÓN ===\n")
+print(summary(modelo_interaccion)$coefficients)
+
+# Test F para la interacción
+anova_test <- anova(modelo_sin_interaccion, modelo_interaccion)
+print(anova_test)
+
+cat("\nInterpretación de la interacción:\n")
+coef_int <- coef(modelo_interaccion)
+cat("- Cuando hp = 0, el efecto de wt es:", round(coef_int[2], 3), "\n")
+cat("- Por cada unidad adicional de hp, el efecto de wt cambia en:", round(coef_int[4], 5), "\n")
+```
+
+### Visualización de interacciones
+
+```{r interaction_plots}
+# Crear datos para visualización
+wt_range <- range(mtcars$wt)
+hp_levels <- quantile(mtcars$hp, c(0.25, 0.5, 0.75))
+
+# Generar predicciones
+pred_data <- expand.grid(
+  wt = seq(wt_range[1], wt_range[2], length.out = 50),
+  hp = hp_levels
+)
+
+pred_data$mpg_pred <- predict(modelo_interaccion, newdata = pred_data)
+pred_data$hp_level <- factor(pred_data$hp, 
+                            levels = hp_levels,
+                            labels = paste("HP =", round(hp_levels)))
+
+# Gráfico de interacción
+ggplot(pred_data, aes(x = wt, y = mpg_pred, color = hp_level)) +
+  geom_line(size = 1.2) +
+  geom_point(data = mtcars, aes(x = wt, y = mpg), 
+             color = "black", alpha = 0.6, inherit.aes = FALSE) +
+  labs(title = "Interacción entre Peso y Potencia",
+       subtitle = "Efecto del peso sobre MPG a diferentes niveles de potencia",
+       x = "Peso (1000 lbs)", y = "MPG Predicho",
+       color = "Nivel de Potencia") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
 
