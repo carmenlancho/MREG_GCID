@@ -282,7 +282,7 @@ window.Quarto = {
   <li><a href="#intervalo-de-confianza-para-la-respuesta-media" id="toc-intervalo-de-confianza-para-la-respuesta-media" class="nav-link" data-scroll-target="#intervalo-de-confianza-para-la-respuesta-media"><span class="header-section-number">2.5.1</span> Intervalo de confianza para la respuesta media</a></li>
   <li><a href="#intervalo-de-predicción-para-una-respuesta-individual" id="toc-intervalo-de-predicción-para-una-respuesta-individual" class="nav-link" data-scroll-target="#intervalo-de-predicción-para-una-respuesta-individual"><span class="header-section-number">2.5.2</span> Intervalo de predicción para una respuesta individual</a></li>
   </ul></li>
-  <li><a href="#diagnóstico-del-modelo" id="toc-diagnóstico-del-modelo" class="nav-link" data-scroll-target="#diagnóstico-del-modelo"><span class="header-section-number">2.6</span> Diagnóstico del Modelo</a>
+  <li><a href="#diagnóstico-del-modelo" id="toc-diagnóstico-del-modelo" class="nav-link" data-scroll-target="#diagnóstico-del-modelo"><span class="header-section-number">2.6</span> Diagnóstico del modelo</a>
   <ul class="collapse">
   <li><a href="#linealidad" id="toc-linealidad" class="nav-link" data-scroll-target="#linealidad"><span class="header-section-number">2.6.1</span> Linealidad</a></li>
   <li><a href="#homocedasticidad" id="toc-homocedasticidad" class="nav-link" data-scroll-target="#homocedasticidad"><span class="header-section-number">2.6.2</span> Homocedasticidad</a></li>
@@ -548,7 +548,7 @@ Minimización de SSE
 <p><span class="math display">\[
     \beta_0 \sum_{i=1}^n x_i + \beta_1 \sum_{i=1}^n x_i^2 = \sum_{i=1}^n x_i y_i. \tag{2}
    \]</span></p>
-<p><strong>Resolución del Sistema de Ecuaciones</strong></p>
+<p><strong>Resolución del sistema de ecuaciones</strong></p>
 <p>El sistema está dado por las ecuaciones (1) y (2):</p>
 <ol type="1">
 <li><span class="math inline">\(n\beta_0 + \beta_1 \sum_{i=1}^n x_i = \sum_{i=1}^n y_i.\)</span><br>
@@ -732,7 +732,7 @@ Repaso
 </ul></li>
 </ol>
 <p>La descomposición fundamental de la varianza es, por tanto: <span class="math inline">\(\text{SST} = \text{SSR} + \text{SSE}\)</span>.</p>
-<p>Para poder comparar estas sumas de cuadrados de forma justa, las estandarizamos dividiéndolas por sus respectivos <strong>grados de libertad</strong>, obteniendo así las <strong>Medias Cuadráticas</strong> (MS):</p>
+<p>Para poder comparar estas sumas de cuadrados de forma justa, las estandarizamos dividiéndolas por sus respectivos <strong>grados de libertad</strong>, obteniendo así las <strong>Medias cuadráticas</strong> (MS):</p>
 <p><span class="math display">\[
 \text{MSR} = \frac{\text{SSR}}{1} \quad \quad \quad \text{MSE} = \frac{\text{SSE}}{n-2}
 \]</span></p>
@@ -1070,7 +1070,7 @@ Figura&nbsp;2.2: Comparación visual del intervalo de confianza (azul, más estr
 </section>
 </section>
 <section id="diagnóstico-del-modelo" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="diagnóstico-del-modelo"><span class="header-section-number">2.6</span> Diagnóstico del Modelo</h2>
+<h2 data-number="2.6" class="anchored" data-anchor-id="diagnóstico-del-modelo"><span class="header-section-number">2.6</span> Diagnóstico del modelo</h2>
 <p>Una vez que hemos ajustado un modelo y evaluado su significancia, el trabajo no ha terminado. Un paso crucial, a menudo subestimado, es el <strong>diagnóstico del modelo</strong> <span class="citation" data-cites="fox2018r harrell2015">(<a href="references.html#ref-fox2018r" role="doc-biblioref">Fox y Weisberg 2018</a>; <a href="references.html#ref-harrell2015" role="doc-biblioref">Harrell 2015</a>)</span>. Este proceso consiste en verificar si se cumplen los supuestos del modelo de regresión lineal clásico. La fiabilidad de nuestras inferencias (los p-valores de los contrastes t y F, y los intervalos de confianza) depende directamente de la validez de estos supuestos.</p>
 <p>El diagnóstico se realiza principalmente a través del <strong>análisis de los residuos</strong> del modelo (<span class="math inline">\(e_i = y_i - \hat{y}_i\)</span>). Los residuos son nuestra mejor aproximación empírica de los errores teóricos no observables (<span class="math inline">\(\varepsilon_i\)</span>). A continuación, se detalla cómo verificar cada uno de los supuestos clave.</p>
 <section id="linealidad" class="level3" data-number="2.6.1">
@@ -1198,7 +1198,7 @@ Figura&nbsp;2.4: Patrón curvo evidente en los residuos, violando el supuesto de
 </div>
 </div>
 <p>El gráfico de diagnóstico es inequívoco. A diferencia del ejemplo anterior, donde los puntos formaban una nube aleatoria, aquí los residuos dibujan un <strong>patrón parabólico</strong> perfecto (una “U” invertida). La línea roja de tendencia, en lugar de ser plana, sigue fielmente esta curva.</p>
-<p><strong>Test de Ramsey RESET para Linealidad</strong></p>
+<p><strong>Test de Ramsey RESET para linealidad</strong></p>
 <p>Además del diagnóstico visual, podemos usar el test de Ramsey RESET (Regression Equation Specification Error Test) para detectar violaciones de linealidad:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(lmtest))</span>
@@ -1267,7 +1267,7 @@ Sobre los residuos estandarizados
 </div>
 <p>La heteroscedasticidad se detecta principalmente buscando patrones en la dispersión de los residuos.</p>
 <ul>
-<li><p><strong>Gráfico de Residuos vs.&nbsp;Valores Ajustados:</strong> Como en la prueba de linealidad, este gráfico es nuestra primera herramienta. Aquí no buscamos patrones en la media de los residuos (que debe ser cero), sino en su <strong>dispersión</strong>. La señal de alarma inequívoca de heteroscedasticidad es una <strong>forma de embudo o megáfono</strong>, donde la dispersión de los residuos aumenta o disminuye a medida que cambian los valores ajustados.</p></li>
+<li><p><strong>Gráfico de residuos vs.&nbsp;valores ajustados:</strong> Como en la prueba de linealidad, este gráfico es nuestra primera herramienta. Aquí no buscamos patrones en la media de los residuos (que debe ser cero), sino en su <strong>dispersión</strong>. La señal de alarma inequívoca de heteroscedasticidad es una <strong>forma de embudo o megáfono</strong>, donde la dispersión de los residuos aumenta o disminuye a medida que cambian los valores ajustados.</p></li>
 <li><p><strong>Gráfico Scale-Location:</strong> Este gráfico está diseñado específicamente para detectar heteroscedasticidad. Muestra la raíz cuadrada de los residuos estandarizados en el eje Y (<code>sqrt(|Standardized residuals|)</code>) frente a los valores ajustados en el eje X. Al usar la raíz cuadrada, se suaviza la distribución de los residuos, haciendo los patrones de varianza más fáciles de ver. Si la varianza es constante (homocedasticidad), deberíamos ver una nube de puntos aleatoria con una línea de tendencia roja aproximadamente plana. Una pendiente en esta línea roja indica que la varianza cambia con el nivel de la respuesta.</p></li>
 <li><p><strong>Prueba de Breusch-Pagan:</strong> Es el contraste de hipótesis formal. Su lógica es ingeniosa: realiza una regresión auxiliar donde intenta predecir los residuos al cuadrado a partir de las variables predictoras originales. Si las variables predictoras ayudan a explicar la magnitud de los residuos al cuadrado, significa que la varianza del error depende de los predictores, y por tanto, hay heteroscedasticidad.</p>
 <ul>

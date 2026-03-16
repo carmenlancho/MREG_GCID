@@ -52,9 +52,9 @@ Conocidas indistintamente como **variables independientes**, **explicativas**, *
 
 Este componente, a menudo subestimado, es conceptualmente crucial. Simboliza la variabilidad intrínseca de la variable de respuesta que **no es capturada o explicada** por las variables predictoras incluidas explícitamente en el modelo. El término de error $\epsilon$ no es un simple "error" en el sentido de equivocación; es un componente estocástico que amalgama múltiples fuentes de variabilidad: 
 
-- **Variables Omitidas**: Ningún modelo es perfecto. Siempre habrá factores que influyen en $Y$ pero que no han sido medidos o incluidos en el modelo (variables latentes). 
-- **Error de Medición**: Las mediciones de $Y$ (y también de $X$) pueden no ser perfectamente precisas. 
-- **Aleatoriedad Intrínseca**: Muchos fenómenos naturales y sociales tienen un componente de variabilidad irreducible. Dos individuos con idénticos valores en todas las variables predictoras pueden, aun así, tener valores distintos en la variable de respuesta.
+- **Variables omitidas**: Ningún modelo es perfecto. Siempre habrá factores que influyen en $Y$ pero que no han sido medidos o incluidos en el modelo (variables latentes). 
+- **Error de medición**: Las mediciones de $Y$ (y también de $X$) pueden no ser perfectamente precisas. 
+- **Aleatoriedad intrínseca**: Muchos fenómenos naturales y sociales tienen un componente de variabilidad irreducible. Dos individuos con idénticos valores en todas las variables predictoras pueden, aun así, tener valores distintos en la variable de respuesta.
 
 Formalmente, la relación fundamental de la regresión se expresa como la descomposición de la variable de respuesta en una parte sistemática y una parte aleatoria:
 
@@ -240,7 +240,7 @@ La gestación de la metodología de regresión se traza hasta las investigacione
     El término y la idea detrás de "regresión a la media" surgieron de
     estos estudios y son hoy fundamentales en estadística y genética.
 
-**Ejemplo Gráfico**
+**Ejemplo gráfico**
 
 Galton representó sus datos en gráficos de dispersión, mostrando cómo
 los puntos (pares de estatura media parental y estatura de los hijos) se

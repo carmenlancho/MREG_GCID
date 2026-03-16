@@ -888,24 +888,24 @@ Ejemplo de selección exhaustiva
 <p><strong>El algoritmo</strong></p>
 <ol type="1">
 <li><strong>Inicio</strong>: Se comienza con el <strong>modelo nulo</strong>, que solo contiene el intercepto (<span class="math inline">\(Y \sim 1\)</span>).</li>
-<li><strong>Primer Paso</strong>: Se ajustan <span class="math inline">\(p\)</span> modelos de regresión simple, uno para cada una de las <span class="math inline">\(p\)</span> variables predictoras disponibles. Se elige la variable que mejor explica la respuesta (la que tiene el p-valor más bajo en su test t, o la que produce el AIC/BIC más bajo). Esta variable se convierte en el primer predictor del modelo.</li>
-<li><strong>Pasos Siguientes</strong>: Se ajustan <span class="math inline">\(p-1\)</span> nuevos modelos, cada uno de los cuales contiene la(s) variable(s) ya seleccionada(s) más una de las variables restantes. De nuevo, se selecciona y se añade la variable que produce la mayor mejora en el criterio elegido.</li>
+<li><strong>Primer paso</strong>: Se ajustan <span class="math inline">\(p\)</span> modelos de regresión simple, uno para cada una de las <span class="math inline">\(p\)</span> variables predictoras disponibles. Se elige la variable que mejor explica la respuesta (la que tiene el p-valor más bajo en su test t, o la que produce el AIC/BIC más bajo). Esta variable se convierte en el primer predictor del modelo.</li>
+<li><strong>Pasos siguientes</strong>: Se ajustan <span class="math inline">\(p-1\)</span> nuevos modelos, cada uno de los cuales contiene la(s) variable(s) ya seleccionada(s) más una de las variables restantes. De nuevo, se selecciona y se añade la variable que produce la mayor mejora en el criterio elegido.</li>
 <li><strong>Finalización</strong>: El proceso se repite y se detiene cuando ninguna de las variables restantes mejora el modelo de forma significativa al ser añadida (por ejemplo, ninguna tiene un p-valor por debajo de un umbral predefinido, o el AIC/BIC del modelo deja de disminuir).</li>
 </ol>
-<p><strong>Ventajas y Limitaciones</strong></p>
+<p><strong>Ventajas y limitaciones</strong></p>
 <ul>
 <li><strong>Ventaja</strong>: Es computacionalmente muy eficiente. Puede aplicarse en situaciones con un número de predictores muy grande, incluso cuando hay más predictores que observaciones (<span class="math inline">\(p &gt; n\)</span>).</li>
-<li><strong>Limitación</strong>: Su principal debilidad es su <strong>“miopía”</strong>. Una variable seleccionada en una etapa temprana se queda en el modelo para siempre. Sin embargo, es posible que esa variable se vuelva redundante una vez que se añadan otros predictores. El método <em>forward</em> no puede rectificar decisiones pasadas, por lo que no garantiza encontrar el mejor modelo posible.</li>
+<li><strong>Limitación</strong>: Su principal debilidad es su “miopía”. Una variable seleccionada en una etapa temprana se queda en el modelo para siempre. Sin embargo, es posible que esa variable se vuelva redundante una vez que se añadan otros predictores. El método <em>forward</em> no puede rectificar decisiones pasadas, por lo que no garantiza encontrar el mejor modelo posible.</li>
 </ul>
 </section>
 <section id="eliminación-regresiva-backward-elimination" class="level3" data-number="5.5.2">
 <h3 data-number="5.5.2" class="anchored" data-anchor-id="eliminación-regresiva-backward-elimination"><span class="header-section-number">5.5.2</span> Eliminación regresiva (Backward Elimination)</h3>
-<p>Esta estrategia adopta el enfoque opuesto: empieza con todo y va eliminando lo que no es útil, como un escultor que retira el mármol sobrante.</p>
+<p>Esta estrategia adopta el enfoque opuesto: empieza con todo y va eliminando lo que no es útil.</p>
 <p><strong>El algoritmo</strong></p>
 <ol type="1">
 <li><strong>Inicio</strong>: Se comienza con el <strong>modelo completo</strong>, que incluye todas las <span class="math inline">\(p\)</span> variables predictoras disponibles (<span class="math inline">\(Y \sim X_1 + X_2 + \dots + X_p\)</span>).</li>
-<li><strong>Primer Paso</strong>: Se ajusta el modelo completo y se examina la significancia de cada predictor. Se identifica la variable <strong>menos significativa</strong>, es decir, aquella con el p-valor más alto en su test t (o la que, al ser eliminada, produce la menor disminución en la calidad del modelo según AIC/BIC).</li>
-<li><strong>Pasos Siguientes</strong>: Si el p-valor de esa variable supera un umbral de permanencia (p.&nbsp;ej., <span class="math inline">\(\alpha_{out} = 0.10\)</span>), se elimina del modelo. A continuación, se vuelve a ajustar el modelo con las <span class="math inline">\(p-1\)</span> variables restantes.</li>
+<li><strong>Primer paso</strong>: Se ajusta el modelo completo y se examina la significancia de cada predictor. Se identifica la variable <strong>menos significativa</strong>, es decir, aquella con el p-valor más alto en su test t (o la que, al ser eliminada, produce la menor disminución en la calidad del modelo según AIC/BIC).</li>
+<li><strong>Pasos siguientes</strong>: Si el p-valor de esa variable supera un umbral de permanencia (p.&nbsp;ej., <span class="math inline">\(\alpha_{out} = 0.10\)</span>), se elimina del modelo. A continuación, se vuelve a ajustar el modelo con las <span class="math inline">\(p-1\)</span> variables restantes.</li>
 <li><strong>Finalización</strong>: El proceso de identificar y eliminar la variable menos significativa se repite hasta que todas las variables que quedan en el modelo son estadísticamente significativas (es decir, todas tienen un p-valor por debajo del umbral de permanencia).</li>
 </ol>
 <p><strong>Ventajas y limitaciones</strong></p>
@@ -917,14 +917,14 @@ Ejemplo de selección exhaustiva
 <section id="selección-paso-a-paso-stepwise-regression" class="level3" data-number="5.5.3">
 <h3 data-number="5.5.3" class="anchored" data-anchor-id="selección-paso-a-paso-stepwise-regression"><span class="header-section-number">5.5.3</span> Selección paso a paso (Stepwise Regression)</h3>
 <p>Este método es un híbrido que intenta combinar lo mejor de las dos estrategias anteriores, permitiendo un proceso de “prueba y error” más flexible.</p>
-<p><strong>El Algoritmo</strong></p>
+<p><strong>El algoritmo</strong></p>
 <p>La selección <em>stepwise</em> es esencialmente una selección <em>forward</em> con un añadido crucial: en cada paso, después de añadir una nueva variable, se realiza una <strong>verificación hacia atrás</strong> para comprobar si alguna de las variables que ya estaban en el modelo se ha vuelto redundante.</p>
 <ol type="1">
-<li><strong>Paso Adelante (Forward)</strong>: Al igual que en la selección progresiva, se añade la variable que más mejora el modelo.</li>
-<li><strong>Paso Atrás (Backward)</strong>: Después de añadir esa variable, se examinan <strong>todas las variables ya incluidas</strong> en el modelo. Si alguna de ellas ha perdido su significancia (su p-valor ha aumentado por encima de un umbral de eliminación), se elimina.</li>
+<li><strong>Paso adelante (Forward)</strong>: Al igual que en la selección progresiva, se añade la variable que más mejora el modelo.</li>
+<li><strong>Paso atrás (Backward)</strong>: Después de añadir esa variable, se examinan <strong>todas las variables ya incluidas</strong> en el modelo. Si alguna de ellas ha perdido su significancia (su p-valor ha aumentado por encima de un umbral de eliminación), se elimina.</li>
 <li><strong>Repetición</strong>: El proceso continúa, alternando pasos hacia adelante y hacia atrás, hasta que se alcanza un punto de equilibrio en el que ninguna variable puede ser añadida ni eliminada según los umbrales establecidos.</li>
 </ol>
-<p><strong>Ventajas y Limitaciones</strong></p>
+<p><strong>Ventajas y limitaciones</strong></p>
 <ul>
 <li><strong>Ventaja</strong>: Es más robusto que los métodos <em>forward</em> o <em>backward</em> puros, ya que puede corregir decisiones anteriores. Una variable que fue importante al principio puede ser eliminada más tarde si otra la hace redundante.</li>
 <li><strong>Limitación</strong>: A pesar de su flexibilidad, sigue siendo un algoritmo “codicioso” (<em>greedy</em>) que no explora todo el espacio de modelos. Por tanto, tampoco garantiza encontrar el mejor modelo global.</li>

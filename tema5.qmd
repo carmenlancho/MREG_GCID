@@ -29,7 +29,7 @@ Los GLM proporcionan una estructura flexible para modelar la relación entre una
 
 Un GLM se define por tres componentes clave:
 
-1.  **Componente Aleatorio:**
+1.  **Componente aleatorio:**
 
     Este componente describe la distribución de la variable dependiente. En la regresión lineal, la variable dependiente sigue una distribución normal. En los GLM, puede seguir otras distribuciones de la **familia exponencial**, como:
 
@@ -37,7 +37,7 @@ Un GLM se define por tres componentes clave:
     -   **Distribución de Poisson:** Para datos de conteo (número de eventos).
     -   **Distribución Gamma:** Para variables continuas y positivas (como costos o tiempos).
 
-2.  **Componente Sistemático:**\
+2.  **Componente sistemático:**\
     Este componente describe cómo las variables independientes se combinan linealmente en el modelo. Se define como:
 
     $$
@@ -46,7 +46,7 @@ Un GLM se define por tres componentes clave:
 
     Donde $\eta$ es el **predictor lineal** y $\boldsymbol{\beta}$ representa los coeficientes del modelo.
 
-3.  **Función de Enlace:**\
+3.  **Función de enlace:**\
     La función de enlace conecta el componente sistemático con la media de la variable dependiente. Mientras que en la regresión lineal la relación es directa ($y = \eta$), en los GLM se utiliza una función de enlace $g(\mu)$ para transformar la media $\mu$ y ajustar diferentes tipos de datos.
 
     $$
@@ -82,7 +82,7 @@ Los GLM se utilizan en una amplia variedad de disciplinas para resolver problema
 
 **Regresión Binomial Negativa (para conteos con sobredispersión):**
 
--   **Salud Pública:** Modelado del número de visitas al médico o incidentes de una enfermedad en una población.
+-   **Salud pública:** Modelado del número de visitas al médico o incidentes de una enfermedad en una población.
 
 **Modelos Gamma (para variables continuas positivas):**
 
@@ -97,7 +97,7 @@ Los GLM se utilizan en una amplia variedad de disciplinas para resolver problema
 | **Distribución de la variable dependiente** | Normal | Familia exponencial (binomial, Poisson, gamma, etc.) |
 | **Tipo de variable dependiente** | Continua | Binaria, de conteo, continua positiva |
 | **Relación entre las variables** | Lineal directa | Relación transformada mediante una función de enlace |
-| **Función de Enlace** | Identidad ($g(\mu) = \mu$) | Logit, logarítmica, inversa, etc. |
+| **Función de enlace** | Identidad ($g(\mu) = \mu$) | Logit, logarítmica, inversa, etc. |
 
 ------------------------------------------------------------------------
 
@@ -105,9 +105,9 @@ Las ventajas principales de los GLM son:
 
 -   **Flexibilidad:** Los GLM permiten modelar diferentes tipos de variables dependientes, lo que amplía significativamente el rango de problemas que se pueden abordar.
 
--   **Interpretación Coherente:** Aunque se utilizan funciones de enlace, los coeficientes de los GLM pueden interpretarse de manera similar a los modelos lineales, proporcionando información sobre el impacto de cada variable independiente.
+-   **Interpretación coherente:** Aunque se utilizan funciones de enlace, los coeficientes de los GLM pueden interpretarse de manera similar a los modelos lineales, proporcionando información sobre el impacto de cada variable independiente.
 
--   **Evaluación Estadística Robusta:** Los GLM permiten la realización de pruebas de hipótesis, la construcción de intervalos de confianza y la evaluación de la bondad del ajuste mediante medidas ya conocidas como el AIC o el BIC.
+-   **Evaluación estadística robusta:** Los GLM permiten la realización de pruebas de hipótesis, la construcción de intervalos de confianza y la evaluación de la bondad del ajuste mediante medidas ya conocidas como el AIC o el BIC.
 
 
 Los **Modelos Lineales Generalizados** amplían el alcance de la regresión lineal clásica, proporcionando herramientas para modelar una amplia variedad de tipos de datos, desde variables binarias hasta datos de conteo y variables continuas no normales. A través del uso de funciones de enlace y distribuciones flexibles, los GLM permiten resolver problemas complejos del mundo real en campos tan diversos como la medicina, el marketing, la ingeniería y las ciencias sociales.
@@ -285,9 +285,9 @@ La **deviance** (o **desviación**) es la medida principal de bondad de ajuste e
 
 La deviance se basa en el principio de **máxima verosimilitud** y mide qué tan bien el modelo propuesto se ajusta a los datos comparado con el mejor ajuste posible. Para entender este concepto, es importante distinguir entre dos tipos de modelos:
 
-1. **Modelo Saturado**: Un modelo hipotético que tiene tantos parámetros como observaciones, por lo que puede predecir perfectamente cada valor observado. Este modelo representa el "ajuste perfecto" teórico.
+1. **Modelo saturado**: Un modelo hipotético que tiene tantos parámetros como observaciones, por lo que puede predecir perfectamente cada valor observado. Este modelo representa el "ajuste perfecto" teórico.
 
-2. **Modelo Propuesto**: El modelo que estamos evaluando, con un número limitado de parámetros basado en nuestras variables predictoras.
+2. **Modelo propuesto**: El modelo que estamos evaluando, con un número limitado de parámetros basado en nuestras variables predictoras.
 
 La deviance mide la **diferencia en log-verosimilitud** entre estos dos modelos:
 
@@ -378,7 +378,7 @@ La diagnosis de GLMs implica evaluar los supuestos del modelo y detectar problem
 
 En lugar de una simple lista de comprobación, abordaremos el diagnóstico respondiendo a tres preguntas clave que un analista se haría, utilizando diferentes tipos de **residuos** para obtener las respuestas.
 
-### Tipos de Residuos en GLMs
+### Tipos de residuos en GLMs
 La elección del tipo de residuo apropiado es crucial. Los residuos "crudos" ($y_i - \hat{\mu}_i$) no son homocedásticos, por lo que se utilizan versiones estandarizadas. Los más importantes son:
 
 - **Residuos Pearson:** Estandarizan el residuo crudo dividiendo por la desviación estándar predicha por el modelo. Son un análogo directo a los residuos estandarizados en regresión lineal.
@@ -1121,7 +1121,7 @@ summary(modelo_inversa_gauss)
 
 
 ::: {.callout-warning title="¿Qué GLM debo usar?"}
-La elección del modelo correcto depende casi exclusivamente de la naturaleza de tu variable respuesta ($Y$). Aquí tienes una guía rápida:
+La elección del modelo correcto depende casi exclusivamente de la naturaleza de tu variable respuesta ($Y$). Aquí se muestra una guía rápida:
 
 - **¿Tu variable respuesta es binaria (Sí/No, 0/1, Éxito/Fracaso)?**
   - Usa **Regresión Logística**.

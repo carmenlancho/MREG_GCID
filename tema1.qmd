@@ -349,7 +349,7 @@ $$
     \beta_0 \sum_{i=1}^n x_i + \beta_1 \sum_{i=1}^n x_i^2 = \sum_{i=1}^n x_i y_i. \tag{2}
    $$
 
-**Resolución del Sistema de Ecuaciones**
+**Resolución del sistema de ecuaciones**
 
 El sistema está dado por las ecuaciones (1) y (2):
 
@@ -573,7 +573,7 @@ $\text{SST} = \text{SSR} + \text{SSE}$.
 
 Para poder comparar estas sumas de cuadrados de forma justa, las
 estandarizamos dividiéndolas por sus respectivos **grados de libertad**,
-obteniendo así las **Medias Cuadráticas** (MS):
+obteniendo así las **Medias cuadráticas** (MS):
 
 $$
 \text{MSR} = \frac{\text{SSR}}{1} \quad \quad \quad \text{MSE} = \frac{\text{SSE}}{n-2}
@@ -925,7 +925,7 @@ pred_indiv <- predict(modelo_estudio, newdata = dato_nuevo, interval = "predicti
     **`r round(pred_indiv[1, "upr"], 2)`**.
 :::
 
-## Diagnóstico del Modelo
+## Diagnóstico del modelo
 
 Una vez que hemos ajustado un modelo y evaluado su significancia, el
 trabajo no ha terminado. Un paso crucial, a menudo subestimado, es el
@@ -1063,7 +1063,7 @@ residuos dibujan un **patrón parabólico** perfecto (una "U" invertida).
 La línea roja de tendencia, en lugar de ser plana, sigue fielmente esta
 curva.
 
-**Test de Ramsey RESET para Linealidad**
+**Test de Ramsey RESET para linealidad**
 
 Además del diagnóstico visual, podemos usar el test de Ramsey RESET
 (Regression Equation Specification Error Test) para detectar violaciones
@@ -1142,7 +1142,7 @@ identificación de observaciones influyentes.
 La heteroscedasticidad se detecta principalmente buscando patrones en la
 dispersión de los residuos.
 
--   **Gráfico de Residuos vs. Valores Ajustados:** Como en la prueba de
+-   **Gráfico de residuos vs. valores ajustados:** Como en la prueba de
     linealidad, este gráfico es nuestra primera herramienta. Aquí no
     buscamos patrones en la media de los residuos (que debe ser cero),
     sino en su **dispersión**. La señal de alarma inequívoca de

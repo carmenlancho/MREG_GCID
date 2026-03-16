@@ -378,9 +378,9 @@ Una relación simbiótica
 <h3 data-number="1.2.3" class="anchored" data-anchor-id="el-término-de-error-aleatorio"><span class="header-section-number">1.2.3</span> El término de error aleatorio</h3>
 <p>Este componente, a menudo subestimado, es conceptualmente crucial. Simboliza la variabilidad intrínseca de la variable de respuesta que <strong>no es capturada o explicada</strong> por las variables predictoras incluidas explícitamente en el modelo. El término de error <span class="math inline">\(\epsilon\)</span> no es un simple “error” en el sentido de equivocación; es un componente estocástico que amalgama múltiples fuentes de variabilidad:</p>
 <ul>
-<li><strong>Variables Omitidas</strong>: Ningún modelo es perfecto. Siempre habrá factores que influyen en <span class="math inline">\(Y\)</span> pero que no han sido medidos o incluidos en el modelo (variables latentes).</li>
-<li><strong>Error de Medición</strong>: Las mediciones de <span class="math inline">\(Y\)</span> (y también de <span class="math inline">\(X\)</span>) pueden no ser perfectamente precisas.</li>
-<li><strong>Aleatoriedad Intrínseca</strong>: Muchos fenómenos naturales y sociales tienen un componente de variabilidad irreducible. Dos individuos con idénticos valores en todas las variables predictoras pueden, aun así, tener valores distintos en la variable de respuesta.</li>
+<li><strong>Variables omitidas</strong>: Ningún modelo es perfecto. Siempre habrá factores que influyen en <span class="math inline">\(Y\)</span> pero que no han sido medidos o incluidos en el modelo (variables latentes).</li>
+<li><strong>Error de medición</strong>: Las mediciones de <span class="math inline">\(Y\)</span> (y también de <span class="math inline">\(X\)</span>) pueden no ser perfectamente precisas.</li>
+<li><strong>Aleatoriedad intrínseca</strong>: Muchos fenómenos naturales y sociales tienen un componente de variabilidad irreducible. Dos individuos con idénticos valores en todas las variables predictoras pueden, aun así, tener valores distintos en la variable de respuesta.</li>
 </ul>
 <p>Formalmente, la relación fundamental de la regresión se expresa como la descomposición de la variable de respuesta en una parte sistemática y una parte aleatoria:</p>
 <p><span class="math display">\[Y = \underbrace{f(X_1, \ldots, X_k)}_{\text{Componente Sistemática}} + \underbrace{\epsilon}_{\text{Componente Aleatoria}}\]</span></p>
@@ -568,7 +568,7 @@ Galton también estudió el grado de relación entre variables, precursor del co
 <li><p><strong>Regresión a la media:</strong><br>
 El término y la idea detrás de “regresión a la media” surgieron de estos estudios y son hoy fundamentales en estadística y genética.</p></li>
 </ol>
-<p><strong>Ejemplo Gráfico</strong></p>
+<p><strong>Ejemplo gráfico</strong></p>
 <p>Galton representó sus datos en gráficos de dispersión, mostrando cómo los puntos (pares de estatura media parental y estatura de los hijos) se agrupan alrededor de la recta de regresión, ilustrando la tendencia general de la relación.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar los paquetes necesarios</span></span>

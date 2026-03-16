@@ -271,7 +271,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#diagnosis-de-glms" id="toc-diagnosis-de-glms" class="nav-link" data-scroll-target="#diagnosis-de-glms"><span class="header-section-number">6.4</span> Diagnosis de GLMs</a>
   <ul class="collapse">
-  <li><a href="#tipos-de-residuos-en-glms" id="toc-tipos-de-residuos-en-glms" class="nav-link" data-scroll-target="#tipos-de-residuos-en-glms"><span class="header-section-number">6.4.1</span> Tipos de Residuos en GLMs</a></li>
+  <li><a href="#tipos-de-residuos-en-glms" id="toc-tipos-de-residuos-en-glms" class="nav-link" data-scroll-target="#tipos-de-residuos-en-glms"><span class="header-section-number">6.4.1</span> Tipos de residuos en GLMs</a></li>
   <li><a href="#la-forma-del-modelo-es-correcta-linealidad-y-enlace" id="toc-la-forma-del-modelo-es-correcta-linealidad-y-enlace" class="nav-link" data-scroll-target="#la-forma-del-modelo-es-correcta-linealidad-y-enlace"><span class="header-section-number">6.4.2</span> ¿La forma del modelo es correcta? (Linealidad y Enlace)</a></li>
   <li><a href="#la-distribución-que-elegimos-es-la-correcta-varianza-y-normalidad" id="toc-la-distribución-que-elegimos-es-la-correcta-varianza-y-normalidad" class="nav-link" data-scroll-target="#la-distribución-que-elegimos-es-la-correcta-varianza-y-normalidad"><span class="header-section-number">6.4.3</span> ¿La distribución que elegimos es la correcta? (Varianza y Normalidad)</a></li>
   <li><a href="#hay-observaciones-que-distorsionan-el-modelo-atípicos-e-influyentes" id="toc-hay-observaciones-que-distorsionan-el-modelo-atípicos-e-influyentes" class="nav-link" data-scroll-target="#hay-observaciones-que-distorsionan-el-modelo-atípicos-e-influyentes"><span class="header-section-number">6.4.4</span> ¿Hay observaciones que distorsionan el modelo? (Atípicos e Influyentes)</a></li>
@@ -349,20 +349,20 @@ window.Quarto = {
 <h3 data-number="6.1.2" class="anchored" data-anchor-id="componentes-de-un-modelo-lineal-generalizado"><span class="header-section-number">6.1.2</span> Componentes de un modelo lineal generalizado</h3>
 <p>Un GLM se define por tres componentes clave:</p>
 <ol type="1">
-<li><p><strong>Componente Aleatorio:</strong></p>
+<li><p><strong>Componente aleatorio:</strong></p>
 <p>Este componente describe la distribución de la variable dependiente. En la regresión lineal, la variable dependiente sigue una distribución normal. En los GLM, puede seguir otras distribuciones de la <strong>familia exponencial</strong>, como:</p>
 <ul>
 <li><strong>Distribución Binomial:</strong> Para variables categóricas binarias (0/1, éxito/fracaso).</li>
 <li><strong>Distribución de Poisson:</strong> Para datos de conteo (número de eventos).</li>
 <li><strong>Distribución Gamma:</strong> Para variables continuas y positivas (como costos o tiempos).</li>
 </ul></li>
-<li><p><strong>Componente Sistemático:</strong><br>
+<li><p><strong>Componente sistemático:</strong><br>
 Este componente describe cómo las variables independientes se combinan linealmente en el modelo. Se define como:</p>
 <p><span class="math display">\[
 \eta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
 \]</span></p>
 <p>Donde <span class="math inline">\(\eta\)</span> es el <strong>predictor lineal</strong> y <span class="math inline">\(\boldsymbol{\beta}\)</span> representa los coeficientes del modelo.</p></li>
-<li><p><strong>Función de Enlace:</strong><br>
+<li><p><strong>Función de enlace:</strong><br>
 La función de enlace conecta el componente sistemático con la media de la variable dependiente. Mientras que en la regresión lineal la relación es directa (<span class="math inline">\(y = \eta\)</span>), en los GLM se utiliza una función de enlace <span class="math inline">\(g(\mu)\)</span> para transformar la media <span class="math inline">\(\mu\)</span> y ajustar diferentes tipos de datos.</p>
 <p><span class="math display">\[
 g(\mu) = \eta
@@ -407,7 +407,7 @@ Aplicaciones
 </ul>
 <p><strong>Regresión Binomial Negativa (para conteos con sobredispersión):</strong></p>
 <ul>
-<li><strong>Salud Pública:</strong> Modelado del número de visitas al médico o incidentes de una enfermedad en una población.</li>
+<li><strong>Salud pública:</strong> Modelado del número de visitas al médico o incidentes de una enfermedad en una población.</li>
 </ul>
 <p><strong>Modelos Gamma (para variables continuas positivas):</strong></p>
 <ul>
@@ -450,7 +450,7 @@ Aplicaciones
 <td>Relación transformada mediante una función de enlace</td>
 </tr>
 <tr class="even">
-<td><strong>Función de Enlace</strong></td>
+<td><strong>Función de enlace</strong></td>
 <td>Identidad (<span class="math inline">\(g(\mu) = \mu\)</span>)</td>
 <td>Logit, logarítmica, inversa, etc.</td>
 </tr>
@@ -460,8 +460,8 @@ Aplicaciones
 <p>Las ventajas principales de los GLM son:</p>
 <ul>
 <li><p><strong>Flexibilidad:</strong> Los GLM permiten modelar diferentes tipos de variables dependientes, lo que amplía significativamente el rango de problemas que se pueden abordar.</p></li>
-<li><p><strong>Interpretación Coherente:</strong> Aunque se utilizan funciones de enlace, los coeficientes de los GLM pueden interpretarse de manera similar a los modelos lineales, proporcionando información sobre el impacto de cada variable independiente.</p></li>
-<li><p><strong>Evaluación Estadística Robusta:</strong> Los GLM permiten la realización de pruebas de hipótesis, la construcción de intervalos de confianza y la evaluación de la bondad del ajuste mediante medidas ya conocidas como el AIC o el BIC.</p></li>
+<li><p><strong>Interpretación coherente:</strong> Aunque se utilizan funciones de enlace, los coeficientes de los GLM pueden interpretarse de manera similar a los modelos lineales, proporcionando información sobre el impacto de cada variable independiente.</p></li>
+<li><p><strong>Evaluación estadística robusta:</strong> Los GLM permiten la realización de pruebas de hipótesis, la construcción de intervalos de confianza y la evaluación de la bondad del ajuste mediante medidas ya conocidas como el AIC o el BIC.</p></li>
 </ul>
 <p>Los <strong>Modelos Lineales Generalizados</strong> amplían el alcance de la regresión lineal clásica, proporcionando herramientas para modelar una amplia variedad de tipos de datos, desde variables binarias hasta datos de conteo y variables continuas no normales. A través del uso de funciones de enlace y distribuciones flexibles, los GLM permiten resolver problemas complejos del mundo real en campos tan diversos como la medicina, el marketing, la ingeniería y las ciencias sociales.</p>
 <p>En las próximas secciones, exploraremos en detalle cómo aplicar estos modelos específicos, como la <strong>regresión logística</strong> y la <strong>regresión de Poisson</strong>, y cómo interpretar sus resultados en diferentes contextos.</p>
@@ -670,8 +670,8 @@ Log-likelihood final: -99.23522 </code></pre>
 <p>La <strong>deviance</strong> (o <strong>desviación</strong>) es la medida principal de bondad de ajuste en los <strong>Modelos Lineales Generalizados</strong>. Conceptualmente, representa una generalización de la suma de cuadrados residuales de la regresión lineal para distribuciones no normales, pero su interpretación y cálculo son fundamentalmente diferentes.</p>
 <p>La deviance se basa en el principio de <strong>máxima verosimilitud</strong> y mide qué tan bien el modelo propuesto se ajusta a los datos comparado con el mejor ajuste posible. Para entender este concepto, es importante distinguir entre dos tipos de modelos:</p>
 <ol type="1">
-<li><p><strong>Modelo Saturado</strong>: Un modelo hipotético que tiene tantos parámetros como observaciones, por lo que puede predecir perfectamente cada valor observado. Este modelo representa el “ajuste perfecto” teórico.</p></li>
-<li><p><strong>Modelo Propuesto</strong>: El modelo que estamos evaluando, con un número limitado de parámetros basado en nuestras variables predictoras.</p></li>
+<li><p><strong>Modelo saturado</strong>: Un modelo hipotético que tiene tantos parámetros como observaciones, por lo que puede predecir perfectamente cada valor observado. Este modelo representa el “ajuste perfecto” teórico.</p></li>
+<li><p><strong>Modelo propuesto</strong>: El modelo que estamos evaluando, con un número limitado de parámetros basado en nuestras variables predictoras.</p></li>
 </ol>
 <p>La deviance mide la <strong>diferencia en log-verosimilitud</strong> entre estos dos modelos:</p>
 <p><span class="math display">\[
@@ -773,7 +773,7 @@ Model 2: am ~ wt + disp
 <p>La diagnosis de GLMs implica evaluar los supuestos del modelo y detectar problemas potenciales que puedan afectar la validez de las inferencias. A diferencia de la regresión lineal, donde los residuos ordinarios proporcionan información diagnóstica directa, los GLMs requieren herramientas especializadas debido a la heterocedasticidad inherente y las diferentes distribuciones subyacentes.</p>
 <p>En lugar de una simple lista de comprobación, abordaremos el diagnóstico respondiendo a tres preguntas clave que un analista se haría, utilizando diferentes tipos de <strong>residuos</strong> para obtener las respuestas.</p>
 <section id="tipos-de-residuos-en-glms" class="level3" data-number="6.4.1">
-<h3 data-number="6.4.1" class="anchored" data-anchor-id="tipos-de-residuos-en-glms"><span class="header-section-number">6.4.1</span> Tipos de Residuos en GLMs</h3>
+<h3 data-number="6.4.1" class="anchored" data-anchor-id="tipos-de-residuos-en-glms"><span class="header-section-number">6.4.1</span> Tipos de residuos en GLMs</h3>
 <p>La elección del tipo de residuo apropiado es crucial. Los residuos “crudos” (<span class="math inline">\(y_i - \hat{\mu}_i\)</span>) no son homocedásticos, por lo que se utilizan versiones estandarizadas. Los más importantes son:</p>
 <ul>
 <li><p><strong>Residuos Pearson:</strong> Estandarizan el residuo crudo dividiendo por la desviación estándar predicha por el modelo. Son un análogo directo a los residuos estandarizados en regresión lineal. <span class="math display">\[
@@ -1756,7 +1756,7 @@ Number of Fisher Scoring iterations: 5</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>La elección del modelo correcto depende casi exclusivamente de la naturaleza de tu variable respuesta (<span class="math inline">\(Y\)</span>). Aquí tienes una guía rápida:</p>
+<p>La elección del modelo correcto depende casi exclusivamente de la naturaleza de tu variable respuesta (<span class="math inline">\(Y\)</span>). Aquí se muestra una guía rápida:</p>
 <ul>
 <li><strong>¿Tu variable respuesta es binaria (Sí/No, 0/1, Éxito/Fracaso)?</strong>
 <ul>

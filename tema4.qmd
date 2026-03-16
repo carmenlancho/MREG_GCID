@@ -611,24 +611,24 @@ Esta estrategia es la más intuitiva: parte de la nada y construye el modelo pie
 **El algoritmo**
 
 1.  **Inicio**: Se comienza con el **modelo nulo**, que solo contiene el intercepto ($Y \sim 1$).
-2.  **Primer Paso**: Se ajustan $p$ modelos de regresión simple, uno para cada una de las $p$ variables predictoras disponibles. Se elige la variable que mejor explica la respuesta (la que tiene el p-valor más bajo en su test t, o la que produce el AIC/BIC más bajo). Esta variable se convierte en el primer predictor del modelo.
-3.  **Pasos Siguientes**: Se ajustan $p-1$ nuevos modelos, cada uno de los cuales contiene la(s) variable(s) ya seleccionada(s) más una de las variables restantes. De nuevo, se selecciona y se añade la variable que produce la mayor mejora en el criterio elegido.
+2.  **Primer paso**: Se ajustan $p$ modelos de regresión simple, uno para cada una de las $p$ variables predictoras disponibles. Se elige la variable que mejor explica la respuesta (la que tiene el p-valor más bajo en su test t, o la que produce el AIC/BIC más bajo). Esta variable se convierte en el primer predictor del modelo.
+3.  **Pasos siguientes**: Se ajustan $p-1$ nuevos modelos, cada uno de los cuales contiene la(s) variable(s) ya seleccionada(s) más una de las variables restantes. De nuevo, se selecciona y se añade la variable que produce la mayor mejora en el criterio elegido.
 4.  **Finalización**: El proceso se repite y se detiene cuando ninguna de las variables restantes mejora el modelo de forma significativa al ser añadida (por ejemplo, ninguna tiene un p-valor por debajo de un umbral predefinido, o el AIC/BIC del modelo deja de disminuir).
 
-**Ventajas y Limitaciones**
+**Ventajas y limitaciones**
 
 * **Ventaja**: Es computacionalmente muy eficiente. Puede aplicarse en situaciones con un número de predictores muy grande, incluso cuando hay más predictores que observaciones ($p > n$).
-* **Limitación**: Su principal debilidad es su **"miopía"**. Una variable seleccionada en una etapa temprana se queda en el modelo para siempre. Sin embargo, es posible que esa variable se vuelva redundante una vez que se añadan otros predictores. El método *forward* no puede rectificar decisiones pasadas, por lo que no garantiza encontrar el mejor modelo posible.
+* **Limitación**: Su principal debilidad es su "miopía". Una variable seleccionada en una etapa temprana se queda en el modelo para siempre. Sin embargo, es posible que esa variable se vuelva redundante una vez que se añadan otros predictores. El método *forward* no puede rectificar decisiones pasadas, por lo que no garantiza encontrar el mejor modelo posible.
 
 ### Eliminación regresiva (Backward Elimination)
 
-Esta estrategia adopta el enfoque opuesto: empieza con todo y va eliminando lo que no es útil, como un escultor que retira el mármol sobrante. 
+Esta estrategia adopta el enfoque opuesto: empieza con todo y va eliminando lo que no es útil. 
 
 **El algoritmo**
 
 1.  **Inicio**: Se comienza con el **modelo completo**, que incluye todas las $p$ variables predictoras disponibles ($Y \sim X_1 + X_2 + \dots + X_p$).
-2.  **Primer Paso**: Se ajusta el modelo completo y se examina la significancia de cada predictor. Se identifica la variable **menos significativa**, es decir, aquella con el p-valor más alto en su test t (o la que, al ser eliminada, produce la menor disminución en la calidad del modelo según AIC/BIC).
-3.  **Pasos Siguientes**: Si el p-valor de esa variable supera un umbral de permanencia (p. ej., $\alpha_{out} = 0.10$), se elimina del modelo. A continuación, se vuelve a ajustar el modelo con las $p-1$ variables restantes.
+2.  **Primer paso**: Se ajusta el modelo completo y se examina la significancia de cada predictor. Se identifica la variable **menos significativa**, es decir, aquella con el p-valor más alto en su test t (o la que, al ser eliminada, produce la menor disminución en la calidad del modelo según AIC/BIC).
+3.  **Pasos siguientes**: Si el p-valor de esa variable supera un umbral de permanencia (p. ej., $\alpha_{out} = 0.10$), se elimina del modelo. A continuación, se vuelve a ajustar el modelo con las $p-1$ variables restantes.
 4.  **Finalización**: El proceso de identificar y eliminar la variable menos significativa se repite hasta que todas las variables que quedan en el modelo son estadísticamente significativas (es decir, todas tienen un p-valor por debajo del umbral de permanencia).
 
 **Ventajas y limitaciones**
@@ -641,15 +641,15 @@ Esta estrategia adopta el enfoque opuesto: empieza con todo y va eliminando lo q
 
 Este método es un híbrido que intenta combinar lo mejor de las dos estrategias anteriores, permitiendo un proceso de "prueba y error" más flexible.
 
-**El Algoritmo**
+**El algoritmo**
 
 La selección *stepwise* es esencialmente una selección *forward* con un añadido crucial: en cada paso, después de añadir una nueva variable, se realiza una **verificación hacia atrás** para comprobar si alguna de las variables que ya estaban en el modelo se ha vuelto redundante.
 
-1.  **Paso Adelante (Forward)**: Al igual que en la selección progresiva, se añade la variable que más mejora el modelo.
-2.  **Paso Atrás (Backward)**: Después de añadir esa variable, se examinan **todas las variables ya incluidas** en el modelo. Si alguna de ellas ha perdido su significancia (su p-valor ha aumentado por encima de un umbral de eliminación), se elimina.
+1.  **Paso adelante (Forward)**: Al igual que en la selección progresiva, se añade la variable que más mejora el modelo.
+2.  **Paso atrás (Backward)**: Después de añadir esa variable, se examinan **todas las variables ya incluidas** en el modelo. Si alguna de ellas ha perdido su significancia (su p-valor ha aumentado por encima de un umbral de eliminación), se elimina.
 3.  **Repetición**: El proceso continúa, alternando pasos hacia adelante y hacia atrás, hasta que se alcanza un punto de equilibrio en el que ninguna variable puede ser añadida ni eliminada según los umbrales establecidos.
 
-**Ventajas y Limitaciones**
+**Ventajas y limitaciones**
 
 * **Ventaja**: Es más robusto que los métodos *forward* o *backward* puros, ya que puede corregir decisiones anteriores. Una variable que fue importante al principio puede ser eliminada más tarde si otra la hace redundante.
 * **Limitación**: A pesar de su flexibilidad, sigue siendo un algoritmo "codicioso" (*greedy*) que no explora todo el espacio de modelos. Por tanto, tampoco garantiza encontrar el mejor modelo global.
