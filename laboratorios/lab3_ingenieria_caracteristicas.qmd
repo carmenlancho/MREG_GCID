@@ -948,42 +948,4 @@ sapply(datos_cat_ejercicio[,1:3], table)
 
 ```
 
-### Ejercicio 3: Interacciones en contexto real
-
-```{r ejercicio_interacciones}
-# Datos de marketing con múltiples interacciones potenciales
-set.seed(777)
-n <- 250
-
-marketing_data <- data.frame(
-  precio = runif(n, 20, 100),
-  descuento = runif(n, 0, 0.3),
-  calidad = runif(n, 1, 5),
-  temporada = sample(c("Alta", "Media", "Baja"), n, replace = TRUE, prob = c(0.3, 0.4, 0.3)),
-  competencia = runif(n, 1, 10),
-  canal = sample(c("Online", "Tienda", "Híbrido"), n, replace = TRUE)
-)
-
-# Variable respuesta con interacciones complejas
-# Interacción precio-descuento, calidad-temporada, etc.
-marketing_data$ventas <- 100 + 
-  (-2 * marketing_data$precio) + 
-  (500 * marketing_data$descuento) +
-  (30 * marketing_data$calidad) +
-  # Interacciones
-  (1.5 * marketing_data$precio * marketing_data$descuento) +  # Descuento mitiga sensibilidad precio
-  (ifelse(marketing_data$temporada == "Alta", 20, 0) * marketing_data$calidad) +  # Calidad importa más en temporada alta
-  (-5 * marketing_data$competencia) +
-  rnorm(n, 0, 30)
-
-cat("=== EJERCICIO 3: INTERACCIONES COMPLEJAS ===\n")
-cat("Tareas a realizar:\n")
-cat("1. Identificar potenciales interacciones usando conocimiento del dominio\n")
-cat("2. Explorar visualmente las interacciones\n")
-cat("3. Probar diferentes especificaciones de modelo\n")
-cat("4. Validar las interacciones estadísticamente\n")
-cat("5. Interpretar el modelo final en términos de negocio\n\n")
-
-
-```
 
