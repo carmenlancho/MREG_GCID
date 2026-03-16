@@ -307,7 +307,7 @@ window.Quarto = {
 </header>
 
 
-<p>En los modelos de regresión, especialmente cuando se trabaja con conjuntos de datos que incluyen un gran número de variables predictoras, es común enfrentarse al desafío ntficar qué variables son realmente relevantes para explicar la variable respuesta. La inclusión de demasiadas variables en un modelo puede llevar a problemas como el sobreajuste, pérdida de interpretabilidad y complejidad innecesaria, mientras que la exclusión de variables importantes puede resultar en modelos subóptimos.</p>
+<p>En los modelos de regresión, especialmente cuando se trabaja con conjuntos de datos que incluyen un gran número de variables predictoras, es común enfrentarse al desafío de identficar qué variables son realmente relevantes para explicar la variable respuesta. La inclusión de demasiadas variables en un modelo puede llevar a problemas como el sobreajuste, pérdida de interpretabilidad y complejidad innecesaria, mientras que la exclusión de variables importantes puede resultar en modelos subóptimos.</p>
 <p>Este tema aborda uno de los aspectos más críticos en la construcción de modelos de regresión: cómo seleccionar el subconjunto óptimo de variables predictoras y cómo validar la calidad del modelo resultante. Una vez realizado el análisis exploratorio y el ajuste inicial del modelo, surge la necesidad crítica de optimizar la selección de variables. Cuando se dispone de <span class="math inline">\(p\)</span> variables explicativas, es posible construir hasta <span class="math inline">\(2^p\)</span> modelos diferentes considerando todas las combinaciones posibles. Sin embargo, explorar de manera exhaustiva todos estos modelos puede ser computacionalmente inviable cuando <span class="math inline">\(p\)</span> es grande.</p>
 <p>Para superar este desafío, en este tema nos enfocaremos en cinco enfoques principales:</p>
 <ol type="1">
@@ -321,7 +321,7 @@ window.Quarto = {
 <p>Cada enfoque tiene sus propias ventajas y limitaciones, siendo apropiados para diferentes situaciones según el tamaño del dataset, el número de variables y los objetivos del análisis. El objetivo es presentar las técnicas más relevantes para la selección de variables y regularización, entender sus fundamentos teóricos, y aplicarlas a casos prácticos, culminando con métodos robustos de validación que aseguren la calidad y generalización del modelo final.</p>
 <section id="proceso-completo-de-construcción-y-optimización-del-modelo" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="proceso-completo-de-construcción-y-optimización-del-modelo"><span class="header-section-number">5.1</span> Proceso completo de construcción y optimización del modelo</h2>
-<p>La construcción de un modelo de regresión múltiple es un proceso sistemático que busca explicar la relación entre una variable respuesta (<span class="math inline">\(Y\)</span>) y múltiples variables predictoras (<span class="math inline">\(X_1, X_2, \dots, X_k\)</span>). Este proceso consta de varias etapas clave <span class="citation" data-cites="kutner2005applied">(<a href="references.html#ref-kutner2005applied" role="doc-biblioref">Kutner et&nbsp;al. 2005</a>)</span>, que en este tema nos enfocaremos particularmente en las etapas de reducción de variables y validación:</p>
+<p>La construcción de un modelo de regresión múltiple es un proceso sistemático que busca explicar la relación entre una variable respuesta (<span class="math inline">\(Y\)</span>) y múltiples variables predictoras (<span class="math inline">\(X_1, X_2, \dots, X_k\)</span>). Este proceso consta de varias etapas clave <span class="citation" data-cites="kutner2005applied">(<a href="references.html#ref-kutner2005applied" role="doc-biblioref">Kutner et&nbsp;al. 2005</a>)</span>, en este tema nos enfocaremos particularmente en las etapas de reducción de variables y validación:</p>
 <ol type="1">
 <li><strong>Definición del problema y variables de interés:</strong>
 <ul>
@@ -337,7 +337,7 @@ window.Quarto = {
 <li><strong>Fiabilidad:</strong> Asegurar que los datos sean consistentes y puedan reproducirse bajo condiciones similares.</li>
 <li><strong>Validez:</strong> Garantizar que los datos recojan realmente la información necesaria para responder a las preguntas de investigación.</li>
 <li><strong>Ética:</strong> Asegurar la privacidad y el consentimiento informado de los participantes.</li>
-<li><strong>Control de Sesgos:</strong> Diseñar el estudio de manera que se minimicen los sesgos que puedan distorsionar los resultados.</li>
+<li><strong>Control de sesgos:</strong> Diseñar el estudio de manera que se minimicen los sesgos que puedan distorsionar los resultados.</li>
 </ul></li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled" title="Tipos de experimentos">
@@ -358,7 +358,7 @@ Tipos de experimentos
 <ul>
 <li>Los experimentos controlados son diseñados de manera que los investigadores manipulan deliberadamente una o más variables independientes (llamadas factores o variables controladas) para observar su efecto en la variable dependiente.</li>
 <li>Incluyen la aleatorización de sujetos entre grupos (por ejemplo, grupos de control y tratamiento) para minimizar sesgos y asegurar comparabilidad.</li>
-<li>En muchas ocasiones la información suplementaria no se puede incorporar en el diseño del experimento. A esas variables, no controladas, se les suel llamar covariables.</li>
+<li>En muchas ocasiones la información suplementaria no se puede incorporar en el diseño del experimento. A esas variables, no controladas, se les suele llamar covariables.</li>
 <li><strong>Ejemplo:</strong> Un estudio clínico donde se prueba un nuevo medicamento y se compara su efecto con un placebo.</li>
 </ul></li>
 <li><strong>Estudios observacionales exploratorios:</strong>
@@ -374,7 +374,7 @@ Tipos de experimentos
 <li><strong>Estudios observacionales confirmatorios:</strong>
 <ul>
 <li>En este enfoque, los datos se recogen para testear (confirmar o no) hipótesis derivadas de estudios previos o de ideas que pueden tener los investigadores.</li>
-<li>En este contexto, las variables que aparecen involucradas en la hipótesis que se quiere confirmar se denominan variables primarias, y las variables explicativas que se sabe inluyen en la respuesta se llaman variables de control (en Epidemiología nos referimos a ellas como factores de riesgo)</li>
+<li>En este contexto, las variables que aparecen involucradas en la hipótesis que se quiere confirmar se denominan variables primarias, y las variables explicativas que se sabe inluyen en la respuesta se llaman variables de control (en Epidemiología se denotan factores de riesgo)</li>
 <li><strong>Ejemplo:</strong> Un equipo de investigadores, basándose en estudios previos, plantea la hipótesis de que existe una relación positiva entre el hábito de fumar (variable explicativa principal) y la incidencia de cáncer de pulmón (variable respuesta). Para confirmar esta hipótesis, realizan un estudio observacional en el que recopilan datos de una población durante un periodo determinado. Dado que no es ético inducir a las personas a fumar para realizar un experimento controlado, este estudio se realiza de forma observacional. Los datos se analizan para evaluar la asociación entre las variables, permitiendo confirmar (o refutar) la hipótesis planteada con un diseño adecuado y controlando los posibles factores de confusión.</li>
 </ul></li>
 <li><strong>Encuestas y cuestionarios:</strong>
@@ -436,7 +436,7 @@ Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \varepsilon,
 </ul></li>
 <li><strong>Validación del modelo:</strong>
 <ul>
-<li>Evaluar el rendimientodel modelo con datos de validación o mediante técnicas como validación cruzada para garantizar su capacidad predictiva en nuevos conjuntos de datos.</li>
+<li>Evaluar el rendimiento del modelo con datos de validación o mediante técnicas como validación cruzada para garantizar su capacidad predictiva en nuevos conjuntos de datos.</li>
 </ul></li>
 </ol>
 </section>
@@ -586,8 +586,6 @@ Ejemplo de filtrado inicial
 </div>
 <p>El proceso de filtrado se implementa secuencialmente: (1) eliminar variables constantes o con varianza cercana a cero, (2) eliminar variables con correlación muy baja con la variable respuesta, (3) identificar grupos de variables multicolineales y retener solo la más relevante de cada grupo, y (4) calcular VIF y eliminar variables con valores muy altos. Este filtrado inicial típicamente reduce el conjunto de variables candidatas, facilitando significativamente los pasos posteriores de selección.</p>
 <p>Es importante considerar que este filtrado no es definitivo, ya que variables eliminadas en esta etapa pueden ser importantes en combinaciones específicas. Además, está basado en relaciones lineales y puede omitir relaciones no lineales importantes. Por tanto, requiere validación posterior del modelo resultante y los umbrales deben ajustarse según el dominio de aplicación específico.</p>
-<p>¡Claro! El contenido que tienes es excelente y muy completo. Para hacerlo menos esquemático, lo he reescrito en un formato más narrativo, conectando las ideas en párrafos fluidos. La idea es transformar las listas y tablas en una explicación discursiva, como si lo estuvieras contando en una clase, lo que se adapta mejor al formato de un libro.</p>
-<p>Aquí tienes la propuesta:</p>
 </section>
 <section id="criterios-de-bondad-de-ajuste" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="criterios-de-bondad-de-ajuste"><span class="header-section-number">5.3</span> Criterios de Bondad de Ajuste</h2>

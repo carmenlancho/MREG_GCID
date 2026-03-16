@@ -1,6 +1,6 @@
 # Selección de variables, regularización y validación {#sec-tema2}
 
-En los modelos de regresión, especialmente cuando se trabaja con conjuntos de datos que incluyen un gran número de variables predictoras, es común enfrentarse al desafío ntficar qué variables son realmente relevantes para explicar la variable respuesta. La inclusión de demasiadas variables en un modelo puede llevar a problemas como el sobreajuste, pérdida de interpretabilidad y complejidad innecesaria, mientras que la exclusión de variables importantes puede resultar en modelos subóptimos.
+En los modelos de regresión, especialmente cuando se trabaja con conjuntos de datos que incluyen un gran número de variables predictoras, es común enfrentarse al desafío de identficar qué variables son realmente relevantes para explicar la variable respuesta. La inclusión de demasiadas variables en un modelo puede llevar a problemas como el sobreajuste, pérdida de interpretabilidad y complejidad innecesaria, mientras que la exclusión de variables importantes puede resultar en modelos subóptimos.
 
 Este tema aborda uno de los aspectos más críticos en la construcción de modelos de regresión: cómo seleccionar el subconjunto óptimo de variables predictoras y cómo validar la calidad del modelo resultante. Una vez realizado el análisis exploratorio y el ajuste inicial del modelo, surge la necesidad crítica de optimizar la selección de variables. Cuando se dispone de $p$ variables explicativas, es posible construir hasta $2^p$ modelos diferentes considerando todas las combinaciones posibles. Sin embargo, explorar de manera exhaustiva todos estos modelos puede ser computacionalmente inviable cuando $p$ es grande.
 
@@ -22,7 +22,7 @@ Cada enfoque tiene sus propias ventajas y limitaciones, siendo apropiados para d
 
 ## Proceso completo de construcción y optimización del modelo
 
-La construcción de un modelo de regresión múltiple es un proceso sistemático que busca explicar la relación entre una variable respuesta ($Y$) y múltiples variables predictoras ($X_1, X_2, \dots, X_k$). Este proceso consta de varias etapas clave [@kutner2005applied], que en este tema nos enfocaremos particularmente en las etapas de reducción de variables y validación:
+La construcción de un modelo de regresión múltiple es un proceso sistemático que busca explicar la relación entre una variable respuesta ($Y$) y múltiples variables predictoras ($X_1, X_2, \dots, X_k$). Este proceso consta de varias etapas clave [@kutner2005applied], en este tema nos enfocaremos particularmente en las etapas de reducción de variables y validación:
 
 1.  **Definición del problema y variables de interés:**
     -   Identificar claramente el objetivo del análisis, ya sea realizar predicciones, evaluar relaciones o controlar por efectos de variables confusoras.
@@ -34,7 +34,7 @@ La construcción de un modelo de regresión múltiple es un proceso sistemático
     -   **Fiabilidad:** Asegurar que los datos sean consistentes y puedan reproducirse bajo condiciones similares.
     -   **Validez:** Garantizar que los datos recojan realmente la información necesaria para responder a las preguntas de investigación.
     -   **Ética:** Asegurar la privacidad y el consentimiento informado de los participantes.
-    -   **Control de Sesgos:** Diseñar el estudio de manera que se minimicen los sesgos que puedan distorsionar los resultados.
+    -   **Control de sesgos:** Diseñar el estudio de manera que se minimicen los sesgos que puedan distorsionar los resultados.
 
 ::: {.callout-note collapse="true" title="Tipos de experimentos"}
 La elección del tipo de experimento o método de recogida de datos dependerá de la naturaleza del problema a investigar, los recursos disponibles y las limitaciones del estudio. Una correcta planificación y ejecución de esta etapa sienta las bases para un análisis robusto y confiable.
@@ -42,7 +42,7 @@ La elección del tipo de experimento o método de recogida de datos dependerá d
 1.  **Experimentos controlados:**
     -   Los experimentos controlados son diseñados de manera que los investigadores manipulan deliberadamente una o más variables independientes (llamadas factores o variables controladas) para observar su efecto en la variable dependiente.
     -   Incluyen la aleatorización de sujetos entre grupos (por ejemplo, grupos de control y tratamiento) para minimizar sesgos y asegurar comparabilidad.
-    -   En muchas ocasiones la información suplementaria no se puede incorporar en el diseño del experimento. A esas variables, no controladas, se les suel llamar covariables.
+    -   En muchas ocasiones la información suplementaria no se puede incorporar en el diseño del experimento. A esas variables, no controladas, se les suele llamar covariables.
     -   **Ejemplo:** Un estudio clínico donde se prueba un nuevo medicamento y se compara su efecto con un placebo.
 2.  **Estudios observacionales exploratorios:**
     -   En este enfoque, los datos se recogen sin intervenir ni manipular las condiciones. Los investigadores observan y registran los fenómenos tal como ocurren en la naturaleza.
@@ -52,7 +52,7 @@ La elección del tipo de experimento o método de recogida de datos dependerá d
     -   **Ejemplo:** Investigar los hábitos alimenticios y su asociación con enfermedades cardiovasculares en una población.
 3.  **Estudios observacionales confirmatorios:**
     -   En este enfoque, los datos se recogen para testear (confirmar o no) hipótesis derivadas de estudios previos o de ideas que pueden tener los investigadores.
-    -   En este contexto, las variables que aparecen involucradas en la hipótesis que se quiere confirmar se denominan variables primarias, y las variables explicativas que se sabe inluyen en la respuesta se llaman variables de control (en Epidemiología nos referimos a ellas como factores de riesgo)
+    -   En este contexto, las variables que aparecen involucradas en la hipótesis que se quiere confirmar se denominan variables primarias, y las variables explicativas que se sabe inluyen en la respuesta se llaman variables de control (en Epidemiología se denotan factores de riesgo)
     -   **Ejemplo:** Un equipo de investigadores, basándose en estudios previos, plantea la hipótesis de que existe una relación positiva entre el hábito de fumar (variable explicativa principal) y la incidencia de cáncer de pulmón (variable respuesta). Para confirmar esta hipótesis, realizan un estudio observacional en el que recopilan datos de una población durante un periodo determinado. Dado que no es ético inducir a las personas a fumar para realizar un experimento controlado, este estudio se realiza de forma observacional. Los datos se analizan para evaluar la asociación entre las variables, permitiendo confirmar (o refutar) la hipótesis planteada con un diseño adecuado y controlando los posibles factores de confusión.
 4.  **Encuestas y cuestionarios:**
     -   Las encuestas son una técnica común para recoger datos de manera estructurada sobre actitudes, opiniones, comportamientos o características demográficas.
@@ -91,7 +91,7 @@ La elección del tipo de experimento o método de recogida de datos dependerá d
 7.  **Reducción de variables:**
     -   En análisis de regresión, especialmente cuando se trabaja con conjuntos de datos de alta dimensionalidad, es común enfrentar situaciones en las que el número de variables explicativas es muy grande. Esto puede llevar a problemas como el sobreajuste, dificultades en la interpretación del modelo y una mayor complejidad computacional. Por ello, reducir el número de variables explicativas, sin perder información relevante, se convierte en un paso crucial para construir modelos más eficientes y robustos.
 8.  **Validación del modelo:**
-    -   Evaluar el rendimientodel modelo con datos de validación o mediante técnicas como validación cruzada para garantizar su capacidad predictiva en nuevos conjuntos de datos.
+    -   Evaluar el rendimiento del modelo con datos de validación o mediante técnicas como validación cruzada para garantizar su capacidad predictiva en nuevos conjuntos de datos.
 
 ## Filtrado basado en información básica
 
@@ -261,9 +261,6 @@ El proceso de filtrado se implementa secuencialmente: (1) eliminar variables con
 
 Es importante considerar que este filtrado no es definitivo, ya que variables eliminadas en esta etapa pueden ser importantes en combinaciones específicas. Además, está basado en relaciones lineales y puede omitir relaciones no lineales importantes. Por tanto, requiere validación posterior del modelo resultante y los umbrales deben ajustarse según el dominio de aplicación específico.
 
-¡Claro! El contenido que tienes es excelente y muy completo. Para hacerlo menos esquemático, lo he reescrito en un formato más narrativo, conectando las ideas en párrafos fluidos. La idea es transformar las listas y tablas en una explicación discursiva, como si lo estuvieras contando en una clase, lo que se adapta mejor al formato de un libro.
-
-Aquí tienes la propuesta:
 
 ## Criterios de Bondad de Ajuste
 
