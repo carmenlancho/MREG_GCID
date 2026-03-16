@@ -261,7 +261,7 @@ window.Quarto = {
   <li><a href="#criterio-de-información-de-akaike" id="toc-criterio-de-información-de-akaike" class="nav-link" data-scroll-target="#criterio-de-información-de-akaike"><span class="header-section-number">5.3.1</span> Criterio de Información de Akaike</a></li>
   <li><a href="#criterio-de-información-bayesiano" id="toc-criterio-de-información-bayesiano" class="nav-link" data-scroll-target="#criterio-de-información-bayesiano"><span class="header-section-number">5.3.2</span> Criterio de Información Bayesiano</a></li>
   <li><a href="#estadístico-cp-de-mallows" id="toc-estadístico-cp-de-mallows" class="nav-link" data-scroll-target="#estadístico-cp-de-mallows"><span class="header-section-number">5.3.3</span> Estadístico Cp de Mallows</a></li>
-  <li><a href="#cuándo-usar-cada-criterio" id="toc-cuándo-usar-cada-criterio" class="nav-link" data-scroll-target="#cuándo-usar-cada-criterio"><span class="header-section-number">5.3.4</span> ¿Cuándo Usar Cada Criterio?</a></li>
+  <li><a href="#cuándo-usar-cada-criterio" id="toc-cuándo-usar-cada-criterio" class="nav-link" data-scroll-target="#cuándo-usar-cada-criterio"><span class="header-section-number">5.3.4</span> ¿Cuándo usar cada criterio?</a></li>
   </ul></li>
   <li><a href="#métodos-de-selección-exhaustiva" id="toc-métodos-de-selección-exhaustiva" class="nav-link" data-scroll-target="#métodos-de-selección-exhaustiva"><span class="header-section-number">5.4</span> Métodos de selección exhaustiva</a></li>
   <li><a href="#métodos-automáticos-paso-a-paso" id="toc-métodos-automáticos-paso-a-paso" class="nav-link" data-scroll-target="#métodos-automáticos-paso-a-paso"><span class="header-section-number">5.5</span> Métodos automáticos paso a paso</a>
@@ -275,11 +275,11 @@ window.Quarto = {
   <li><a href="#ridge-regression" id="toc-ridge-regression" class="nav-link" data-scroll-target="#ridge-regression"><span class="header-section-number">5.6.1</span> Ridge regression</a></li>
   <li><a href="#regresión-lasso" id="toc-regresión-lasso" class="nav-link" data-scroll-target="#regresión-lasso"><span class="header-section-number">5.6.2</span> Regresión Lasso</a></li>
   <li><a href="#elastic-net" id="toc-elastic-net" class="nav-link" data-scroll-target="#elastic-net"><span class="header-section-number">5.6.3</span> Elastic Net</a></li>
-  <li><a href="#comparación-de-los-métodos-de-regularización" id="toc-comparación-de-los-métodos-de-regularización" class="nav-link" data-scroll-target="#comparación-de-los-métodos-de-regularización"><span class="header-section-number">5.6.4</span> Comparación de los métodos de Regularización</a></li>
+  <li><a href="#comparación-de-los-métodos-de-regularización" id="toc-comparación-de-los-métodos-de-regularización" class="nav-link" data-scroll-target="#comparación-de-los-métodos-de-regularización"><span class="header-section-number">5.6.4</span> Comparación de los métodos de regularización</a></li>
   </ul></li>
-  <li><a href="#validación-del-modelo" id="toc-validación-del-modelo" class="nav-link" data-scroll-target="#validación-del-modelo"><span class="header-section-number">5.7</span> Validación del Modelo</a>
+  <li><a href="#validación-del-modelo" id="toc-validación-del-modelo" class="nav-link" data-scroll-target="#validación-del-modelo"><span class="header-section-number">5.7</span> Validación del modelo</a>
   <ul class="collapse">
-  <li><a href="#estrategias-de-validación" id="toc-estrategias-de-validación" class="nav-link" data-scroll-target="#estrategias-de-validación"><span class="header-section-number">5.7.1</span> Estrategias de Validación</a></li>
+  <li><a href="#estrategias-de-validación" id="toc-estrategias-de-validación" class="nav-link" data-scroll-target="#estrategias-de-validación"><span class="header-section-number">5.7.1</span> Estrategias de validación</a></li>
   <li><a href="#métricas-de-rendimiento" id="toc-métricas-de-rendimiento" class="nav-link" data-scroll-target="#métricas-de-rendimiento"><span class="header-section-number">5.7.2</span> Métricas de rendimiento</a></li>
   </ul></li>
   </ul>
@@ -704,9 +704,119 @@ Visualización del Cp de Mallows
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-tip callout-titled" title="¿De dónde viene el Cp de Mallows?">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+¿De dónde viene el Cp de Mallows?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Derivación de <span class="math inline">\(\mathbb{E}[SSE_p]\)</span> con la matriz sombrero</strong></p>
+<p>Sea el submodelo candidato</p>
+<p><span class="math display">\[y = X_p \beta + \varepsilon, \qquad \varepsilon \sim (0,\sigma^2 I).\]</span></p>
+<p>Aquí <span class="math inline">\(X_p\)</span> incluye la columna de unos, así que tiene <span class="math inline">\(p+1\)</span> columnas en total.</p>
+<p>La matriz sombrero <span class="math inline">\(H\)</span> del submodelo es</p>
+<p><span class="math display">\[H_p = X_p (X_p'X_p)^{-1} X_p'.\]</span></p>
+<p>Entonces los valores ajustados son</p>
+<p><span class="math display">\[\hat y = H_p y\]</span></p>
+<p>y los residuos son</p>
+<p><span class="math display">\[e = y - \hat y = (I - H_p)y.\]</span></p>
+<p>Por tanto,</p>
+<p><span class="math display">\[SSE_p = e'e = y'(I-H_p)y.\]</span></p>
+<p><strong>Esperanza de <span class="math inline">\(SSE_p\)</span>:</strong></p>
+<p>Supongamos que el submodelo es correcto, es decir,</p>
+<p><span class="math display">\[\mathbb{E}[y] = X_p \beta = \mu.\]</span></p>
+<p>Entonces</p>
+<p><span class="math display">\[y = \mu + \varepsilon.\]</span></p>
+<p>Sustituyendo en <span class="math inline">\(SSE_p\)</span>,</p>
+<p><span class="math display">\[SSE_p = (\mu+\varepsilon)'(I-H_p)(\mu+\varepsilon).\]</span></p>
+<p>Desarrollando,</p>
+<p><span class="math display">\[SSE_p
+= \mu'(I-H_p)\mu
++ 2\mu'(I-H_p)\varepsilon
++ \varepsilon'(I-H_p)\varepsilon.\]</span></p>
+<p>Tomando esperanza,</p>
+<p><span class="math display">\[\mathbb{E}[SSE_p]
+=
+\mu'(I-H_p)\mu
++ 2\mu'(I-H_p)\mathbb{E}[\varepsilon]
++ \mathbb{E}\!\left[\varepsilon'(I-H_p)\varepsilon\right].\]</span></p>
+<p>Como el modelo es correcto, se tiene que <span class="math inline">\(\mu \in \mathrm{col}(X_p)\)</span>, luego</p>
+<p><span class="math display">\[H_p \mu = \mu
+\quad \Longrightarrow \quad
+(I-H_p)\mu = 0.\]</span></p>
+<p>Por tanto, los dos primeros términos desaparecen y queda</p>
+<p><span class="math display">\[\mathbb{E}[SSE_p]
+=
+\mathbb{E}\!\left[\varepsilon'(I-H_p)\varepsilon\right].\]</span></p>
+<p>Usamos el resultado</p>
+<p><span class="math display">\[\mathbb{E}[\varepsilon'A\varepsilon] = \sigma^2 \operatorname{tr}(A),\]</span></p>
+<p>válido cuando <span class="math inline">\(\mathbb{E}[\varepsilon]=0\)</span> y <span class="math inline">\(\operatorname{Var}(\varepsilon)=\sigma^2 I\)</span>. Así,</p>
+<p><span class="math display">\[\mathbb{E}[SSE_p]
+=
+\sigma^2 \operatorname{tr}(I-H_p).\]</span></p>
+<p>Ahora,</p>
+<p><span class="math display">\[\operatorname{tr}(I) = n,
+\qquad
+\operatorname{tr}(H_p) = \operatorname{rank}(H_p) = p+1,\]</span></p>
+<p>porque <span class="math inline">\(H_p\)</span> proyecta sobre el espacio columna de <span class="math inline">\(X_p\)</span>, cuya dimensión es <span class="math inline">\(p+1\)</span>.</p>
+<p>Luego,</p>
+<p><span class="math display">\[\mathbb{E}[SSE_p]
+=
+\sigma^2 \bigl(n-(p+1)\bigr).\]</span></p>
+<p>Es decir,</p>
+<p><span class="math display">\[\mathbb{E}[SSE_p] = (n-p-1)\sigma^2\]</span></p>
+<p><strong>Consecuencia para <span class="math inline">\(C_p\)</span></strong></p>
+<p>Con la notación</p>
+<p><span class="math display">\[C_p = \frac{SSE_p}{MSE_{\text{full}}} - n + 2(p+1),\]</span></p>
+<p>y usando que <span class="math inline">\(MSE_{\text{full}} \approx \sigma^2\)</span>, se obtiene</p>
+<p><span class="math display">\[\mathbb{E}[C_p]
+\approx
+\frac{(n-p-1)\sigma^2}{\sigma^2} - n + 2(p+1)
+= p+1.\]</span></p>
+<p>Por tanto, se espera que</p>
+<p><span class="math display">\[C_p \approx p+1\]</span></p>
+<p>cuando el submodelo es adecuado.</p>
+<p><strong>¿Qué pasa si el submodelo está sesgado?</strong></p>
+<p>Si el submodelo no contiene la media verdadera, entonces</p>
+<p><span class="math display">\[(I-H_p)\mu \neq 0,\]</span></p>
+<p>y el primer término ya no desaparece. En ese caso,</p>
+<p><span class="math display">\[\mathbb{E}[SSE_p]
+=
+\mu'(I-H_p)\mu + \sigma^2(n-p-1),\]</span></p>
+<p>donde</p>
+<p><span class="math display">\[\mu'(I-H_p)\mu \ge 0\]</span></p>
+<p>representa el sesgo por mala especificación.</p>
+<p>Entonces, usando</p>
+<p><span class="math display">\[C_p = \frac{SSE_p}{MSE_{\text{full}}} - n + 2(p+1)\]</span></p>
+<p>y <span class="math inline">\(MSE_{\text{full}} \approx \sigma^2\)</span>, se obtiene</p>
+<p><span class="math display">\[\mathbb{E}[C_p]
+\approx
+\frac{\mu'(I-H_p)\mu + \sigma^2(n-p-1)}{\sigma^2} - n + 2(p+1).\]</span></p>
+<p>Simplificando,</p>
+<p><span class="math display">\[\mathbb{E}[C_p]
+\approx
+\frac{\mu'(I-H_p)\mu}{\sigma^2} + (n-p-1) - n + 2(p+1)\]</span></p>
+<p>y por tanto</p>
+<p><span class="math display">\[\mathbb{E}[C_p]
+\approx
+p+1 + \frac{\mu'(I-H_p)\mu}{\sigma^2}.\]</span></p>
+<p>Como</p>
+<p><span class="math display">\[\mu'(I-H_p)\mu \ge 0,\]</span></p>
+<p>se sigue que típicamente</p>
+<p><span class="math display">\[C_p &gt; p+1.\]</span></p>
+<p>Esto explica por qué valores claramente mayores que <span class="math inline">\(p+1\)</span> sugieren que el submodelo está sesgado, es decir, que probablemente faltan variables.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="cuándo-usar-cada-criterio" class="level3" data-number="5.3.4">
-<h3 data-number="5.3.4" class="anchored" data-anchor-id="cuándo-usar-cada-criterio"><span class="header-section-number">5.3.4</span> ¿Cuándo Usar Cada Criterio?</h3>
+<h3 data-number="5.3.4" class="anchored" data-anchor-id="cuándo-usar-cada-criterio"><span class="header-section-number">5.3.4</span> ¿Cuándo usar cada criterio?</h3>
 <p>La existencia de varios criterios plantea una pregunta natural: ¿cuál debemos usar? La respuesta depende en gran medida del objetivo final de nuestro análisis.</p>
 <p>Si el <strong>objetivo principal es la predicción</strong>, el <strong>AIC</strong> suele ser la opción preferida. Su diseño para minimizar el error de predicción lo hace ideal en contextos de pronóstico, donde el rendimiento en datos nuevos es lo más importante. Su penalización más moderada permite incluir variables que, aunque no sean “verdaderas” en un sentido causal, ayudan a mejorar la precisión de las predicciones.</p>
 <p>Por otro lado, si el <strong>objetivo es la explicación o la inferencia</strong> —es decir, identificar el modelo más parsimonioso que probablemente representa el verdadero proceso generador de los datos—, el <strong>BIC</strong> es la elección más sólida. Su penalización más fuerte protege de forma más robusta contra el sobreajuste y, en muestras grandes, su propiedad de consistencia le da una base teórica más fuerte para la selección del “modelo verdadero”.</p>
@@ -718,7 +828,7 @@ Visualización del Cp de Mallows
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-El Principio de Parsimonia en la Selección de Modelos
+El principio de parsimonia en la selección de modelos
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -733,7 +843,7 @@ El Principio de Parsimonia en la Selección de Modelos
 <p>A diferencia de los métodos automáticos, los métodos de selección exhaustiva no dependen de un proceso iterativo de adición o eliminación de variables. En cambio, buscan exhaustivamente (o mediante aproximaciones computacionalmente más eficientes) entre todas las posibles combinaciones de variables, lo que garantiza un análisis completo de las interacciones y relevancias potenciales.</p>
 <p>El método más conocido dentro de este enfoque es la <strong>selección del mejor subconjunto (Best Subset Selection)</strong>, que evalúa todos los subconjuntos posibles de variables y selecciona el mejor para cada tamaño específico. Es el enfoque más completo pero también el más exigente computacionalmente. Para un conjunto de <span class="math inline">\(p\)</span> variables predictoras, este método construye todos los modelos posibles que incluyen <span class="math inline">\(k\)</span> variables, donde <span class="math inline">\(k = 1, 2, ..., p\)</span>, seleccionando el mejor modelo de cada tamaño según el criterio elegido.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo de selección exhaustiva">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -742,7 +852,7 @@ Ejemplo de selección exhaustiva
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejemplo de Best Subset Selection maximizando R² ajustado</span></span>
@@ -767,8 +877,6 @@ Ejemplo de selección exhaustiva
 </div>
 <p>Esta aproximación presenta importantes <strong>ventajas</strong>: garantiza encontrar el mejor subconjunto según el criterio elegido (optimalidad garantizada), examina todas las posibles combinaciones de variables ofreciendo una evaluación completa, y proporciona un estándar sólido para comparar otros métodos de selección. Sin embargo, también tiene <strong>limitaciones</strong> significativas: la complejidad computacional crece exponencialmente ya que con <span class="math inline">\(p\)</span> variables se generan <span class="math inline">\(2^p\)</span> modelos posibles, lo que hace que sea impracticable para <span class="math inline">\(p\)</span> grande (típicamente <span class="math inline">\(p &gt; 15-20\)</span>). Además, sin una validación cruzada adecuada, puede seleccionar modelos sobreajustados.</p>
 <p>Estos métodos son especialmente útiles cuando el número de predictores no es demasiado grande, ya que el esfuerzo computacional crece exponencialmente con el número de variables. Aunque el costo computacional puede ser elevado en datasets amplios, los métodos de selección exhaustiva proporcionan una referencia sólida y transparente para evaluar qué variables son fundamentales en el modelo, siendo particularmente valiosos en estudios donde la interpretabilidad y la certeza sobre la selección de variables son prioritarias.</p>
-<p>¡Perfecto! El texto que tienes es una excelente introducción. Ahora vamos a expandir cada uno de esos puntos para darles la profundidad teórica y práctica que necesitan en el libro, explicando el algoritmo de cada método, sus criterios de decisión y sus ventajas y limitaciones.</p>
-<p>Aquí tienes una propuesta para desarrollar esa sección.</p>
 </section>
 <section id="métodos-automáticos-paso-a-paso" class="level2" data-number="5.5">
 <h2 data-number="5.5" class="anchored" data-anchor-id="métodos-automáticos-paso-a-paso"><span class="header-section-number">5.5</span> Métodos automáticos paso a paso</h2>
@@ -777,7 +885,7 @@ Ejemplo de selección exhaustiva
 <section id="selección-progresiva-forward-selection" class="level3" data-number="5.5.1">
 <h3 data-number="5.5.1" class="anchored" data-anchor-id="selección-progresiva-forward-selection"><span class="header-section-number">5.5.1</span> Selección progresiva (Forward Selection)</h3>
 <p>Esta estrategia es la más intuitiva: parte de la nada y construye el modelo pieza por pieza, añadiendo en cada paso el predictor que aporta la mayor mejora.</p>
-<p><strong>El Algoritmo</strong></p>
+<p><strong>El algoritmo</strong></p>
 <ol type="1">
 <li><strong>Inicio</strong>: Se comienza con el <strong>modelo nulo</strong>, que solo contiene el intercepto (<span class="math inline">\(Y \sim 1\)</span>).</li>
 <li><strong>Primer Paso</strong>: Se ajustan <span class="math inline">\(p\)</span> modelos de regresión simple, uno para cada una de las <span class="math inline">\(p\)</span> variables predictoras disponibles. Se elige la variable que mejor explica la respuesta (la que tiene el p-valor más bajo en su test t, o la que produce el AIC/BIC más bajo). Esta variable se convierte en el primer predictor del modelo.</li>
@@ -793,14 +901,14 @@ Ejemplo de selección exhaustiva
 <section id="eliminación-regresiva-backward-elimination" class="level3" data-number="5.5.2">
 <h3 data-number="5.5.2" class="anchored" data-anchor-id="eliminación-regresiva-backward-elimination"><span class="header-section-number">5.5.2</span> Eliminación regresiva (Backward Elimination)</h3>
 <p>Esta estrategia adopta el enfoque opuesto: empieza con todo y va eliminando lo que no es útil, como un escultor que retira el mármol sobrante.</p>
-<p><strong>El Algoritmo</strong></p>
+<p><strong>El algoritmo</strong></p>
 <ol type="1">
 <li><strong>Inicio</strong>: Se comienza con el <strong>modelo completo</strong>, que incluye todas las <span class="math inline">\(p\)</span> variables predictoras disponibles (<span class="math inline">\(Y \sim X_1 + X_2 + \dots + X_p\)</span>).</li>
 <li><strong>Primer Paso</strong>: Se ajusta el modelo completo y se examina la significancia de cada predictor. Se identifica la variable <strong>menos significativa</strong>, es decir, aquella con el p-valor más alto en su test t (o la que, al ser eliminada, produce la menor disminución en la calidad del modelo según AIC/BIC).</li>
 <li><strong>Pasos Siguientes</strong>: Si el p-valor de esa variable supera un umbral de permanencia (p.&nbsp;ej., <span class="math inline">\(\alpha_{out} = 0.10\)</span>), se elimina del modelo. A continuación, se vuelve a ajustar el modelo con las <span class="math inline">\(p-1\)</span> variables restantes.</li>
 <li><strong>Finalización</strong>: El proceso de identificar y eliminar la variable menos significativa se repite hasta que todas las variables que quedan en el modelo son estadísticamente significativas (es decir, todas tienen un p-valor por debajo del umbral de permanencia).</li>
 </ol>
-<p><strong>Ventajas y Limitaciones</strong></p>
+<p><strong>Ventajas y limitaciones</strong></p>
 <ul>
 <li><strong>Ventaja</strong>: Generalmente se considera superior al método <em>forward</em> porque empieza evaluando el efecto de cada variable en presencia de todas las demás. Esto proporciona un contexto inicial más completo.</li>
 <li><strong>Limitación</strong>: No se puede utilizar si el número de predictores es mayor que el número de observaciones (<span class="math inline">\(p &gt; n\)</span>), ya que es imposible ajustar el modelo completo inicial. Además, al igual que el método <em>forward</em>, una vez que una variable es eliminada, no puede volver a entrar, lo que podría llevar a eliminar por error una variable que es importante en combinación con un subconjunto más pequeño de predictores.</li>
@@ -902,7 +1010,7 @@ Aviso
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Propiedades Clave">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -911,7 +1019,7 @@ Propiedades Clave
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <ul>
 <li><p><strong>Manejo de la multicolinealidad:</strong> La regularización reduce la sensibilidad del modelo cuando los predictores están altamente correlacionados.</p></li>
@@ -922,7 +1030,7 @@ Propiedades Clave
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -931,7 +1039,7 @@ Ejemplo
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar librerías</span></span>
@@ -1013,7 +1121,7 @@ SSE_{\text{lasso}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \la
 </ul>
 <p>Al igual que en el método <em>Ridge</em>, la selección óptima de <span class="math inline">\(\lambda\)</span> se realiza generalmente mediante <strong>validación cruzada</strong>.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Propiedades Clave">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1022,7 +1130,7 @@ Propiedades Clave
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse show">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <ul>
 <li><strong>Selección de variables automática:</strong> Lasso no solo regulariza, sino que también selecciona las variables más importantes eliminando aquellas menos relevantes.</li>
@@ -1034,7 +1142,7 @@ Propiedades Clave
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1043,7 +1151,7 @@ Ejemplo
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo Lasso</span></span>
@@ -1086,7 +1194,7 @@ V10         -0.392 -0.390 -0.427</code></pre>
 </div>
 </div>
 </div>
-<p><strong>Consideraciones Importantes</strong></p>
+<p><strong>Consideraciones importantes</strong></p>
 <p>La regresión Lasso es una poderosa técnica de regularización que no solo mejora la estabilidad del modelo en presencia de muchas variables predictoras, sino que también realiza una selección automática de las más relevantes. Su capacidad para reducir coeficientes a cero la convierte en una herramienta esencial en el análisis de datos de alta dimensión.</p>
 <ul>
 <li><strong>Lasso puede eliminar demasiadas variables si</strong> <span class="math inline">\(\lambda\)</span> es demasiado grande, lo que puede llevar a la pérdida de información importante.</li>
@@ -1117,17 +1225,17 @@ SSE_{\text{Elastic Net}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2
 <p><span class="math display">\[
 \hat{\boldsymbol{\beta}}_{\text{EN}} = \arg \min_{\boldsymbol{\beta}} \left( \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \lambda \left( \alpha \sum_{j=1}^{p} |\beta_j| + (1 - \alpha) \sum_{j=1}^{p} \beta_j^2 \right) \right)
 \]</span></p>
-<div class="callout callout-style-default callout-note callout-titled" title="Propiedades Clave">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout callout-style-default callout-note callout-titled" title="Propiedades clave">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Propiedades Clave
+Propiedades clave
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <ul>
 <li><p><strong>Manejo de la Multicolinealidad:</strong> A diferencia de Lasso, que selecciona solo una de las variables correlacionadas y elimina las demás, Elastic Net distribuye la penalización entre todas las variables correlacionadas, evitando una selección arbitraria.</p></li>
@@ -1138,7 +1246,7 @@ Propiedades Clave
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1147,7 +1255,7 @@ Ejemplo
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo Elastic Net</span></span>
@@ -1198,7 +1306,7 @@ V10          -0.414 -0.392 -0.390 -0.427</code></pre>
 <p>La regresión Elastic Net combina lo mejor de Ridge y Lasso, ofreciendo un método de regularización robusto para modelos con muchas variables predictoras y posible multicolinealidad. Su capacidad para seleccionar variables sin eliminar información clave lo convierte en una opción ideal para modelos complejos y de alta dimensionalidad.</p>
 </section>
 <section id="comparación-de-los-métodos-de-regularización" class="level3" data-number="5.6.4">
-<h3 data-number="5.6.4" class="anchored" data-anchor-id="comparación-de-los-métodos-de-regularización"><span class="header-section-number">5.6.4</span> Comparación de los métodos de Regularización</h3>
+<h3 data-number="5.6.4" class="anchored" data-anchor-id="comparación-de-los-métodos-de-regularización"><span class="header-section-number">5.6.4</span> Comparación de los métodos de regularización</h3>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -1246,12 +1354,12 @@ V10          -0.414 -0.392 -0.390 -0.427</code></pre>
 </section>
 </section>
 <section id="validación-del-modelo" class="level2" data-number="5.7">
-<h2 data-number="5.7" class="anchored" data-anchor-id="validación-del-modelo"><span class="header-section-number">5.7</span> Validación del Modelo</h2>
+<h2 data-number="5.7" class="anchored" data-anchor-id="validación-del-modelo"><span class="header-section-number">5.7</span> Validación del modelo</h2>
 <p>Hemos ajustado un modelo, interpretado sus coeficientes y evaluado su significancia estadística. Pero, ¿cómo podemos estar seguros de que funcionará bien en el futuro, con datos que nunca ha visto? Esta es la pregunta fundamental que la <strong>validación del modelo</strong> busca responder.</p>
 <p>Imagina que estás preparando un examen. Si solo memorizas las respuestas de los exámenes de años anteriores (tus <strong>datos de entrenamiento</strong>), puede que saques una nota perfecta en ellos. Sin embargo, cuando te enfrentes al examen real con preguntas nuevas (los <strong>datos de prueba</strong>), es probable que tu rendimiento sea decepcionante. Esto, en esencia, es el <strong>sobreajuste</strong> (<em>overfitting</em>): un modelo que se aprende los datos de entrenamiento “de memoria”, incluyendo su ruido y peculiaridades, pero que pierde su capacidad de <strong>generalizar</strong> a nuevas observaciones.</p>
 <p>La validación es el proceso de simular este “examen final” para obtener una estimación honesta del rendimiento predictivo de nuestro modelo en el mundo real <span class="citation" data-cites="james2013introduction">(<a href="references.html#ref-james2013introduction" role="doc-biblioref">James et&nbsp;al. 2013</a>)</span>. Se compone de dos elementos clave: las <strong>estrategias de validación</strong>, que nos dicen cómo simular el examen, y las <strong>métricas de evaluación</strong>, que nos dicen cómo calificarlo.</p>
 <section id="estrategias-de-validación" class="level3" data-number="5.7.1">
-<h3 data-number="5.7.1" class="anchored" data-anchor-id="estrategias-de-validación"><span class="header-section-number">5.7.1</span> Estrategias de Validación</h3>
+<h3 data-number="5.7.1" class="anchored" data-anchor-id="estrategias-de-validación"><span class="header-section-number">5.7.1</span> Estrategias de validación</h3>
 <p>Para evaluar la capacidad de generalización, necesitamos probar el modelo en datos que no se usaron para entrenarlo. Las siguientes estrategias nos permiten hacer precisamente eso.</p>
 <div class="callout callout-style-default callout-warning callout-titled" title="El primer paso no negociable: La partición inicial">
 <div class="callout-header d-flex align-content-center">
@@ -1361,13 +1469,13 @@ Guía para seleccionar estrategia de validación
 <p><span class="math display">\[MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|\]</span></p>
 <p>A diferencia del RMSE, el MAE no eleva los errores al cuadrado, por lo que <strong>trata todos los errores de forma proporcional a su magnitud</strong>. Un error de 10 unidades es simplemente el doble de malo que un error de 5. Esto hace que el MAE sea <strong>más robusto frente a valores atípicos</strong> y, para muchos, más fácil de interpretar como “el error promedio” que cometemos en nuestras predicciones.</p>
 <p>En resumen, la validación nos obliga a confrontar nuestro modelo con la realidad de datos nuevos. Usando una estrategia robusta como la <strong>validación cruzada</strong> para calcular una métrica interpretable como el <strong>RMSE</strong> o el <strong>MAE</strong>, podemos obtener una estimación fiable de su rendimiento predictivo y construir modelos en los que realmente podamos confiar. Claro, aquí tienes ese contenido reorganizado y resumido dentro de un recuadro (<code>callout</code>), ideal para destacar esta idea clave en tu libro.</p>
-<div class="callout callout-style-default callout-important callout-titled" title="Interpretando el Error">
+<div class="callout callout-style-default callout-important callout-titled" title="Interpretando el error">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Interpretando el Error
+Interpretando el error
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1388,7 +1496,7 @@ Interpretando el Error
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="La maldición del sobreajuste">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1397,15 +1505,15 @@ La maldición del sobreajuste
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Para ilustrar por qué la validación es indispensable, realizaremos un experimento controlado. Crearemos un conjunto de datos donde <strong>conocemos la verdad</strong>: sabemos exactamente qué variables influyen en la respuesta y cuáles son puro ruido. Luego, compararemos dos modelos:</p>
 <ol type="1">
-<li><strong>Modelo Completo</strong>: Un modelo que incluye todas las variables disponibles, tanto las útiles como las de ruido.</li>
-<li><strong>Modelo Correcto</strong>: Un modelo que incluye únicamente las variables que realmente tienen un efecto sobre la respuesta.</li>
+<li><strong>Modelo completo</strong>: Un modelo que incluye todas las variables disponibles, tanto las útiles como las de ruido.</li>
+<li><strong>Modelo correcto</strong>: Un modelo que incluye únicamente las variables que realmente tienen un efecto sobre la respuesta.</li>
 </ol>
 <p>El objetivo es ver cuál de los dos modelos predice mejor en datos “no vistos”, utilizando la validación cruzada para simular este escenario.</p>
-<p><strong>1. Simulación de Datos</strong></p>
+<p><strong>1. Simulación de datos</strong></p>
 <p>Creamos un dataset con 100 observaciones. La variable <code>y</code> dependerá de <code>X1</code>, <code>X2</code> y <code>X3</code>. Las variables <code>X4</code> a <code>X10</code> no tendrán ninguna relación real con <code>y</code>; serán <strong>predictores de ruido</strong>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar la librería 'caret', que simplifica enormemente el proceso de validación</span></span>
@@ -1431,7 +1539,7 @@ La maldición del sobreajuste
 <span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>datos_modelado <span class="ot">&lt;-</span> datos[indices_modelado, ]</span>
 <span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>datos_prueba_final <span class="ot">&lt;-</span> datos[<span class="sc">-</span>indices_modelado, ]</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>2. Ajuste y Evaluación de Modelos con Validación Cruzada</strong></p>
+<p><strong>2. Ajuste y evaluación de modelos con validación cruzada</strong></p>
 <p>Usaremos la función <code>train()</code> del paquete <code>caret</code>, que es una herramienta increíblemente potente para ajustar y validar modelos. Configuraremos una <strong>validación cruzada de 10 particiones (10-fold CV)</strong> para estimar el error de predicción (RMSE) de nuestros dos modelos.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurar el método de validación cruzada de 10 particiones</span></span>
@@ -1484,12 +1592,12 @@ CORRECTO 0.5019737 0.7988599 0.8513481 0.8017851 0.9048191 0.9385882    0</code>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>rmse_correcto <span class="ot">&lt;-</span> <span class="fu">round</span>(resumen_cv<span class="sc">$</span>statistics<span class="sc">$</span>RMSE[<span class="st">"CORRECTO"</span>, <span class="st">"Mean"</span>], <span class="dv">3</span>)</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>rmse_completo <span class="ot">&lt;-</span> <span class="fu">round</span>(resumen_cv<span class="sc">$</span>statistics<span class="sc">$</span>RMSE[<span class="st">"COMPLETO"</span>, <span class="st">"Mean"</span>], <span class="dv">3</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>3. Análisis de Resultados</strong></p>
-<p>Al comparar el <strong>RMSE</strong> promedio obtenido en la validación cruzada, la conclusión es clara: el <strong>Modelo Correcto</strong> (2.02) es consistentemente <strong>mejor</strong> (menor error) que el <strong>Modelo Completo</strong> (2.117).</p>
-<p>El <strong>Modelo Completo</strong> sufre de <strong>sobreajuste</strong>. Al incluir las 7 variables de ruido, se esfuerza por encontrar patrones en datos puramente aleatorios. “Aprende” estas relaciones falsas en los datos de entrenamiento, pero falla al predecir en datos nuevos. El <strong>Modelo Correcto</strong>, al ser más parsimonioso, captura la estructura fundamental y generaliza mejor.</p>
+<p><strong>3. Análisis de resultados</strong></p>
+<p>Al comparar el <strong>RMSE</strong> promedio obtenido en la validación cruzada, la conclusión es clara: el <strong>Modelo correcto</strong> (2.02) es consistentemente <strong>mejor</strong> (menor error) que el <strong>Modelo completo</strong> (2.117).</p>
+<p>El <strong>Modelo completo</strong> sufre de <strong>sobreajuste</strong>. Al incluir las 7 variables de ruido, se esfuerza por encontrar patrones en datos puramente aleatorios. “Aprende” estas relaciones falsas en los datos de entrenamiento, pero falla al predecir en datos nuevos. El <strong>Modelo correcto</strong>, al ser más parsimonioso, captura la estructura fundamental y generaliza mejor.</p>
 <p>Este ejemplo demuestra la lección más importante del modelado: <strong>un buen ajuste en los datos de entrenamiento no garantiza un buen rendimiento predictivo</strong>. La validación es el único método fiable para estimar la verdadera calidad de un modelo.</p>
-<p><strong>4. El Veredicto Final en el Conjunto de Prueba</strong></p>
-<p>La validación cruzada nos ha servido como un juez imparcial para comparar nuestros modelos candidatos y seleccionar el <code>Modelo Correcto</code> como el claro ganador. Ahora, para obtener una estimación final y no sesgada de su rendimiento en el mundo real, tomamos ese modelo elegido y lo enfrentamos a los <code>datos_prueba_final</code>, el conjunto de datos que ha permanecido intacto durante todo el proceso.</p>
+<p><strong>4. El veredicto final en el conjunto de prueba</strong></p>
+<p>La validación cruzada nos ha servido como un juez imparcial para comparar nuestros modelos candidatos y seleccionar el <code>Modelo correcto</code> como el claro ganador. Ahora, para obtener una estimación final y no sesgada de su rendimiento en el mundo real, tomamos ese modelo elegido y lo enfrentamos a los <code>datos_prueba_final</code>, el conjunto de datos que ha permanecido intacto durante todo el proceso.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Usamos el modelo ganador (modelo_correcto) para predecir sobre los datos de prueba</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>predicciones_finales <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_correcto, <span class="at">newdata =</span> datos_prueba_final)</span>

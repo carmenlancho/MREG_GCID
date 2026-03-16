@@ -377,8 +377,174 @@ El análisis sugiere que el modelo más parsimonioso y con el mejor rendimiento 
 :::
 
 
+::: {.callout-tip title="¿De dónde viene el Cp de Mallows?" collapse="true"}
+**Derivación de $\mathbb{E}[SSE_p]$ con la matriz sombrero**
 
-### ¿Cuándo Usar Cada Criterio?
+Sea el submodelo candidato
+
+$$y = X_p \beta + \varepsilon, \qquad \varepsilon \sim (0,\sigma^2 I).$$
+
+Aquí $X_p$ incluye la columna de unos, así que tiene $p+1$ columnas en total.
+
+La matriz sombrero $H$ del submodelo es
+
+$$H_p = X_p (X_p'X_p)^{-1} X_p'.$$
+
+Entonces los valores ajustados son
+
+$$\hat y = H_p y$$
+
+y los residuos son
+
+$$e = y - \hat y = (I - H_p)y.$$
+
+Por tanto,
+
+$$SSE_p = e'e = y'(I-H_p)y.$$
+
+**Esperanza de $SSE_p$:**
+
+Supongamos que el submodelo es correcto, es decir,
+
+$$\mathbb{E}[y] = X_p \beta = \mu.$$
+
+Entonces
+
+$$y = \mu + \varepsilon.$$
+
+Sustituyendo en $SSE_p$,
+
+$$SSE_p = (\mu+\varepsilon)'(I-H_p)(\mu+\varepsilon).$$
+
+Desarrollando,
+
+$$SSE_p
+= \mu'(I-H_p)\mu
++ 2\mu'(I-H_p)\varepsilon
++ \varepsilon'(I-H_p)\varepsilon.$$
+
+Tomando esperanza,
+
+$$\mathbb{E}[SSE_p]
+=
+\mu'(I-H_p)\mu
++ 2\mu'(I-H_p)\mathbb{E}[\varepsilon]
++ \mathbb{E}\!\left[\varepsilon'(I-H_p)\varepsilon\right].$$
+
+Como el modelo es correcto, se tiene que $\mu \in \mathrm{col}(X_p)$, luego
+
+$$H_p \mu = \mu
+\quad \Longrightarrow \quad
+(I-H_p)\mu = 0.$$
+
+Por tanto, los dos primeros términos desaparecen y queda
+
+$$\mathbb{E}[SSE_p]
+=
+\mathbb{E}\!\left[\varepsilon'(I-H_p)\varepsilon\right].$$
+
+Usamos el resultado
+
+$$\mathbb{E}[\varepsilon'A\varepsilon] = \sigma^2 \operatorname{tr}(A),$$
+
+válido cuando $\mathbb{E}[\varepsilon]=0$ y $\operatorname{Var}(\varepsilon)=\sigma^2 I$. Así,
+
+$$\mathbb{E}[SSE_p]
+=
+\sigma^2 \operatorname{tr}(I-H_p).$$
+
+Ahora,
+
+$$\operatorname{tr}(I) = n,
+\qquad
+\operatorname{tr}(H_p) = \operatorname{rank}(H_p) = p+1,$$
+
+porque $H_p$ proyecta sobre el espacio columna de $X_p$, cuya dimensión es $p+1$.
+
+Luego,
+
+$$\mathbb{E}[SSE_p]
+=
+\sigma^2 \bigl(n-(p+1)\bigr).$$
+
+Es decir,
+
+$$\mathbb{E}[SSE_p] = (n-p-1)\sigma^2$$
+
+**Consecuencia para $C_p$**
+
+Con la notación
+
+$$C_p = \frac{SSE_p}{MSE_{\text{full}}} - n + 2(p+1),$$
+
+y usando que $MSE_{\text{full}} \approx \sigma^2$, se obtiene
+
+$$\mathbb{E}[C_p]
+\approx
+\frac{(n-p-1)\sigma^2}{\sigma^2} - n + 2(p+1)
+= p+1.$$
+
+Por tanto, se espera que
+
+$$C_p \approx p+1$$
+
+cuando el submodelo es adecuado.
+
+
+**¿Qué pasa si el submodelo está sesgado?**
+
+Si el submodelo no contiene la media verdadera, entonces
+
+$$(I-H_p)\mu \neq 0,$$
+
+y el primer término ya no desaparece. En ese caso,
+
+$$\mathbb{E}[SSE_p]
+=
+\mu'(I-H_p)\mu + \sigma^2(n-p-1),$$
+
+donde
+
+$$\mu'(I-H_p)\mu \ge 0$$
+
+representa el sesgo por mala especificación.
+
+Entonces, usando
+
+$$C_p = \frac{SSE_p}{MSE_{\text{full}}} - n + 2(p+1)$$
+
+y $MSE_{\text{full}} \approx \sigma^2$, se obtiene
+
+$$\mathbb{E}[C_p]
+\approx
+\frac{\mu'(I-H_p)\mu + \sigma^2(n-p-1)}{\sigma^2} - n + 2(p+1).$$
+
+Simplificando,
+
+$$\mathbb{E}[C_p]
+\approx
+\frac{\mu'(I-H_p)\mu}{\sigma^2} + (n-p-1) - n + 2(p+1)$$
+
+y por tanto
+
+$$\mathbb{E}[C_p]
+\approx
+p+1 + \frac{\mu'(I-H_p)\mu}{\sigma^2}.$$
+
+Como
+
+$$\mu'(I-H_p)\mu \ge 0,$$
+
+se sigue que típicamente
+
+$$C_p > p+1.$$
+
+Esto explica por qué valores claramente mayores que $p+1$ sugieren que el submodelo está sesgado, es decir, que probablemente faltan variables.
+
+:::
+
+
+### ¿Cuándo usar cada criterio?
 
 La existencia de varios criterios plantea una pregunta natural: ¿cuál debemos usar? La respuesta depende en gran medida del objetivo final de nuestro análisis.
 
@@ -391,7 +557,7 @@ El **Cp de Mallows** es especialmente valioso en un contexto más exploratorio, 
 Es común que estos criterios no coincidan en su selección. Cuando esto ocurre, no debe verse como un fracaso, sino como una indicación de que no existe un único modelo "mejor" de forma inequívoca. En tales casos, el juicio del analista es clave, y se pueden usar herramientas adicionales como la **validación cruzada** (*cross-validation*) para comparar el rendimiento predictivo de los modelos finalistas y tomar una decisión informada.
 
 ::: {.callout-important}
-## El Principio de Parsimonia en la Selección de Modelos
+## El principio de parsimonia en la selección de modelos
 
 El **principio de parsimonia**, también conocido como la "navaja de Occam", es un concepto fundamental que subyace a todos los criterios de bondad de ajuste. Este principio establece que, entre modelos que explican igualmente bien un fenómeno, **se debe preferir el más simple**.
 :::
@@ -430,9 +596,7 @@ Esta aproximación presenta importantes **ventajas**: garantiza encontrar el mej
 
 Estos métodos son especialmente útiles cuando el número de predictores no es demasiado grande, ya que el esfuerzo computacional crece exponencialmente con el número de variables. Aunque el costo computacional puede ser elevado en datasets amplios, los métodos de selección exhaustiva proporcionan una referencia sólida y transparente para evaluar qué variables son fundamentales en el modelo, siendo particularmente valiosos en estudios donde la interpretabilidad y la certeza sobre la selección de variables son prioritarias.
 
-¡Perfecto! El texto que tienes es una excelente introducción. Ahora vamos a expandir cada uno de esos puntos para darles la profundidad teórica y práctica que necesitan en el libro, explicando el algoritmo de cada método, sus criterios de decisión y sus ventajas y limitaciones.
 
-Aquí tienes una propuesta para desarrollar esa sección.
 
 ## Métodos automáticos paso a paso
 
@@ -444,7 +608,7 @@ El principio clave es construir un modelo de forma iterativa, tomando en cada pa
 
 Esta estrategia es la más intuitiva: parte de la nada y construye el modelo pieza por pieza, añadiendo en cada paso el predictor que aporta la mayor mejora. 
 
-**El Algoritmo**
+**El algoritmo**
 
 1.  **Inicio**: Se comienza con el **modelo nulo**, que solo contiene el intercepto ($Y \sim 1$).
 2.  **Primer Paso**: Se ajustan $p$ modelos de regresión simple, uno para cada una de las $p$ variables predictoras disponibles. Se elige la variable que mejor explica la respuesta (la que tiene el p-valor más bajo en su test t, o la que produce el AIC/BIC más bajo). Esta variable se convierte en el primer predictor del modelo.
@@ -460,14 +624,14 @@ Esta estrategia es la más intuitiva: parte de la nada y construye el modelo pie
 
 Esta estrategia adopta el enfoque opuesto: empieza con todo y va eliminando lo que no es útil, como un escultor que retira el mármol sobrante. 
 
-**El Algoritmo**
+**El algoritmo**
 
 1.  **Inicio**: Se comienza con el **modelo completo**, que incluye todas las $p$ variables predictoras disponibles ($Y \sim X_1 + X_2 + \dots + X_p$).
 2.  **Primer Paso**: Se ajusta el modelo completo y se examina la significancia de cada predictor. Se identifica la variable **menos significativa**, es decir, aquella con el p-valor más alto en su test t (o la que, al ser eliminada, produce la menor disminución en la calidad del modelo según AIC/BIC).
 3.  **Pasos Siguientes**: Si el p-valor de esa variable supera un umbral de permanencia (p. ej., $\alpha_{out} = 0.10$), se elimina del modelo. A continuación, se vuelve a ajustar el modelo con las $p-1$ variables restantes.
 4.  **Finalización**: El proceso de identificar y eliminar la variable menos significativa se repite hasta que todas las variables que quedan en el modelo son estadísticamente significativas (es decir, todas tienen un p-valor por debajo del umbral de permanencia).
 
-**Ventajas y Limitaciones**
+**Ventajas y limitaciones**
 
 * **Ventaja**: Generalmente se considera superior al método *forward* porque empieza evaluando el efecto de cada variable en presencia de todas las demás. Esto proporciona un contexto inicial más completo.
 * **Limitación**: No se puede utilizar si el número de predictores es mayor que el número de observaciones ($p > n$), ya que es imposible ajustar el modelo completo inicial. Además, al igual que el método *forward*, una vez que una variable es eliminada, no puede volver a entrar, lo que podría llevar a eliminar por error una variable que es importante en combinación con un subconjunto más pequeño de predictores.
@@ -669,7 +833,7 @@ output
 ```
 :::
 
-**Consideraciones Importantes**
+**Consideraciones importantes**
 
 La regresión Lasso es una poderosa técnica de regularización que no solo mejora la estabilidad del modelo en presencia de muchas variables predictoras, sino que también realiza una selección automática de las más relevantes. Su capacidad para reducir coeficientes a cero la convierte en una herramienta esencial en el análisis de datos de alta dimensión.
 
@@ -706,7 +870,7 @@ $$
 $$
 
 
-::: {.callout-note title="Propiedades Clave" collapse="false"}
+::: {.callout-note title="Propiedades clave" collapse="false"}
 -   **Manejo de la Multicolinealidad:** A diferencia de Lasso, que selecciona solo una de las variables correlacionadas y elimina las demás, Elastic Net distribuye la penalización entre todas las variables correlacionadas, evitando una selección arbitraria.
 
 -   **Selección de variables más estable:** La combinación de Lasso y Ridge permite una selección más robusta, manteniendo información relevante del modelo sin eliminar predictores clave.
@@ -745,7 +909,7 @@ Para determinar el mejor valor de $\alpha$, se usa **validación cruzada** proba
 
 La regresión Elastic Net combina lo mejor de Ridge y Lasso, ofreciendo un método de regularización robusto para modelos con muchas variables predictoras y posible multicolinealidad. Su capacidad para seleccionar variables sin eliminar información clave lo convierte en una opción ideal para modelos complejos y de alta dimensionalidad.
 
-### Comparación de los métodos de Regularización
+### Comparación de los métodos de regularización
 
 | Método | Penalización | Efecto sobre los coeficientes |
 |------------------------|------------------------|------------------------|
@@ -767,7 +931,7 @@ Elastic Net es ideal cuando hay **muchas variables correlacionadas** y se desea 
 -   Requiere la selección de hiperparámetros ($\lambda$ y $\alpha$), por lo que debe usarse validación cruzada para encontrar la combinación óptima.
 
 
-## Validación del Modelo
+## Validación del modelo
 
 Hemos ajustado un modelo, interpretado sus coeficientes y evaluado su significancia estadística. Pero, ¿cómo podemos estar seguros de que funcionará bien en el futuro, con datos que nunca ha visto? Esta es la pregunta fundamental que la **validación del modelo** busca responder.
 
@@ -776,7 +940,7 @@ Imagina que estás preparando un examen. Si solo memorizas las respuestas de los
 La validación es el proceso de simular este "examen final" para obtener una estimación honesta del rendimiento predictivo de nuestro modelo en el mundo real [@james2013introduction]. Se compone de dos elementos clave: las **estrategias de validación**, que nos dicen cómo simular el examen, y las **métricas de evaluación**, que nos dicen cómo calificarlo.
 
 
-### Estrategias de Validación
+### Estrategias de validación
 
 Para evaluar la capacidad de generalización, necesitamos probar el modelo en datos que no se usaron para entrenarlo. Las siguientes estrategias nos permiten hacer precisamente eso.
 
@@ -871,7 +1035,7 @@ A diferencia del RMSE, el MAE no eleva los errores al cuadrado, por lo que **tra
 En resumen, la validación nos obliga a confrontar nuestro modelo con la realidad de datos nuevos. Usando una estrategia robusta como la **validación cruzada** para calcular una métrica interpretable como el **RMSE** o el **MAE**, podemos obtener una estimación fiable de su rendimiento predictivo y construir modelos en los que realmente podamos confiar.
 Claro, aquí tienes ese contenido reorganizado y resumido dentro de un recuadro (`callout`), ideal para destacar esta idea clave en tu libro.
 
-::: {.callout-important title="Interpretando el Error"}
+::: {.callout-important title="Interpretando el error"}
 La comparación entre el error del modelo en los datos que ha visto (entrenamiento) y en datos que no ha visto (validación) es la herramienta de diagnóstico más importante para entender el ajuste del modelo.
 
 La regla general es que el error de entrenamiento siempre será más bajo (más optimista) que el de test. La clave está en analizar la **diferencia** entre ambos.
@@ -893,12 +1057,12 @@ La regla general es que el error de entrenamiento siempre será más bajo (más 
 
 Para ilustrar por qué la validación es indispensable, realizaremos un experimento controlado. Crearemos un conjunto de datos donde **conocemos la verdad**: sabemos exactamente qué variables influyen en la respuesta y cuáles son puro ruido. Luego, compararemos dos modelos:
 
-1.  **Modelo Completo**: Un modelo que incluye todas las variables disponibles, tanto las útiles como las de ruido.
-2.  **Modelo Correcto**: Un modelo que incluye únicamente las variables que realmente tienen un efecto sobre la respuesta.
+1.  **Modelo completo**: Un modelo que incluye todas las variables disponibles, tanto las útiles como las de ruido.
+2.  **Modelo correcto**: Un modelo que incluye únicamente las variables que realmente tienen un efecto sobre la respuesta.
 
 El objetivo es ver cuál de los dos modelos predice mejor en datos "no vistos", utilizando la validación cruzada para simular este escenario.
 
-**1. Simulación de Datos**
+**1. Simulación de datos**
 
 Creamos un dataset con 100 observaciones. La variable `y` dependerá de `X1`, `X2` y `X3`. Las variables `X4` a `X10` no tendrán ninguna relación real con `y`; serán **predictores de ruido**.
 
@@ -931,7 +1095,7 @@ datos_prueba_final <- datos[-indices_modelado, ]
 
 ```
 
-**2. Ajuste y Evaluación de Modelos con Validación Cruzada**
+**2. Ajuste y evaluación de modelos con validación cruzada**
 
 Usaremos la función `train()` del paquete `caret`, que es una herramienta increíblemente potente para ajustar y validar modelos. Configuraremos una **validación cruzada de 10 particiones (10-fold CV)** para estimar el error de predicción (RMSE) de nuestros dos modelos.
 
@@ -968,17 +1132,17 @@ rmse_correcto <- round(resumen_cv$statistics$RMSE["CORRECTO", "Mean"], 3)
 rmse_completo <- round(resumen_cv$statistics$RMSE["COMPLETO", "Mean"], 3)
 ```
 
-**3. Análisis de Resultados**
+**3. Análisis de resultados**
 
-Al comparar el **RMSE** promedio obtenido en la validación cruzada, la conclusión es clara: el **Modelo Correcto** (`r round(summary(resultados_cv)$statistics$RMSE["CORRECTO", "Mean"], 3)`) es consistentemente **mejor** (menor error) que el **Modelo Completo** (`r round(summary(resultados_cv)$statistics$RMSE["COMPLETO", "Mean"], 3)`).
+Al comparar el **RMSE** promedio obtenido en la validación cruzada, la conclusión es clara: el **Modelo correcto** (`r round(summary(resultados_cv)$statistics$RMSE["CORRECTO", "Mean"], 3)`) es consistentemente **mejor** (menor error) que el **Modelo completo** (`r round(summary(resultados_cv)$statistics$RMSE["COMPLETO", "Mean"], 3)`).
 
-El **Modelo Completo** sufre de **sobreajuste**. Al incluir las 7 variables de ruido, se esfuerza por encontrar patrones en datos puramente aleatorios. "Aprende" estas relaciones falsas en los datos de entrenamiento, pero falla al predecir en datos nuevos. El **Modelo Correcto**, al ser más parsimonioso, captura la estructura fundamental y generaliza mejor.
+El **Modelo completo** sufre de **sobreajuste**. Al incluir las 7 variables de ruido, se esfuerza por encontrar patrones en datos puramente aleatorios. "Aprende" estas relaciones falsas en los datos de entrenamiento, pero falla al predecir en datos nuevos. El **Modelo correcto**, al ser más parsimonioso, captura la estructura fundamental y generaliza mejor.
 
 Este ejemplo demuestra la lección más importante del modelado: **un buen ajuste en los datos de entrenamiento no garantiza un buen rendimiento predictivo**. La validación es el único método fiable para estimar la verdadera calidad de un modelo.
 
-**4. El Veredicto Final en el Conjunto de Prueba**
+**4. El veredicto final en el conjunto de prueba**
 
-La validación cruzada nos ha servido como un juez imparcial para comparar nuestros modelos candidatos y seleccionar el `Modelo Correcto` como el claro ganador. Ahora, para obtener una estimación final y no sesgada de su rendimiento en el mundo real, tomamos ese modelo elegido y lo enfrentamos a los `datos_prueba_final`, el conjunto de datos que ha permanecido intacto durante todo el proceso.
+La validación cruzada nos ha servido como un juez imparcial para comparar nuestros modelos candidatos y seleccionar el `Modelo correcto` como el claro ganador. Ahora, para obtener una estimación final y no sesgada de su rendimiento en el mundo real, tomamos ese modelo elegido y lo enfrentamos a los `datos_prueba_final`, el conjunto de datos que ha permanecido intacto durante todo el proceso.
 
 ```{r}
 #| label: evaluacion-final
