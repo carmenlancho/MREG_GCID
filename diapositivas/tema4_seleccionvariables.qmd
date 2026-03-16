@@ -1,12 +1,11 @@
 ---
-title: "Selección de Variables, Regularización y Validación"
-author: "Víctor Aceña - Isaac Martín"
+title: "Selección de variables, regularización y validación"
+author: "Carmen Lancho - Natalia Madrueño"
 institute: "DSLAB"
 date: last-modified
 format: 
   beamer: 
     theme: "Madrid"
-    colortheme: "dolphin"
     fonttheme: "structurebold"
     navigation: horizontal
     section-titles: false
@@ -14,7 +13,7 @@ format:
     slide-level: 1
     aspectratio: 169
     header-includes: |
-      \usepackage{dslab-new}
+      \usepackage{dslab-new-orange}
       \usedslabmodelos
 knitr:
   opts_chunk:
@@ -30,7 +29,7 @@ execute:
   cache: false
 ---
 
-# El Problema de la Selección de Variables
+# El problema de la selección de variables
 
 **En modelos de regresión con gran número de variables predictoras enfrentamos el desafío crítico de identificar qué variables son realmente relevantes**
 
@@ -46,7 +45,7 @@ execute:
 
 **El objetivo del tema:** Seleccionar el subconjunto óptimo de variables predictoras y validar la calidad del modelo resultante
 
-# Enfoques Principales del Tema
+# Enfoques principales del tema
 
 **Seis enfoques sistemáticos:**
 
@@ -69,7 +68,7 @@ execute:
 6. **Validación del modelo**
    - División train/test y validación cruzada
 
-# Proceso Completo de Construcción del Modelo
+# Proceso completo de construcción del modelo
 
 **Etapas del proceso sistemático:**
 
@@ -84,7 +83,7 @@ execute:
 
 **Este tema se centra en las etapas 7 y 8**
 
-# Tipos de Experimentos para Recogida de Datos
+# Tipos de experimentos para recogida de datos
 
 **Clasificación según el diseño:**
 
@@ -98,7 +97,7 @@ execute:
 - **Estudios de simulación:** Modelos matemáticos/computacionales
 - **Datos secundarios:** Bases de datos existentes
 
-# Filtrado Basado en Información Básica
+# Filtrado basado en información básica
 
 **Objetivo:** Filtrado preliminar antes de métodos sofisticados
 
@@ -112,7 +111,7 @@ execute:
    $$r_{X_j,Y} = \frac{\sum_{i=1}^{n}(x_{ij} - \bar{x}_j)(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_{ij} - \bar{x}_j)^2\sum_{i=1}^{n}(y_i - \bar{y})^2}}$$
    Umbral mínimo: $|r_{X_j,Y}| > \delta$ (ej: $\delta = 0.1$)
 
-# Filtrado por Multicolinealidad
+# Filtrado por multicolinealidad
 
 **Detectar y eliminar variables redundantes:**
 
@@ -125,12 +124,12 @@ execute:
 
 **Estrategia:** Eliminar variables con mayor VIF iterativamente hasta que todos los VIF sean aceptables
 
-# Visualización: Matriz de Correlación
+# Visualización: matriz de correlación
 ```{r}
 #| fig-width: 8
 #| fig-height: 6
 #| echo: false
-#| out-width: "60%"
+#| out-width: "50%"
 
 # Cargar la librería necesaria (si no está, instalar con install.packages("corrplot"))
 library(corrplot)
@@ -157,7 +156,7 @@ corrplot(M,
          mar = c(0,0,1,0))       # Márgenes
 ```
 
-# Visualización: Diagnóstico de Multicolinealidad
+# Visualización: Diagnóstico de multicolinealidad
 ```{r}
 #| fig-width: 8
 #| fig-height: 5
@@ -194,11 +193,11 @@ ggplot(vif_data, aes(x = reorder(variable, vif), y = vif, fill = vif > 10)) +
   theme_minimal() +
   theme(legend.position = "bottom")
 ```
-# Criterios de Bondad de Ajuste
+# Criterios de bondad de ajuste
 
 **Problema:** Equilibrar capacidad explicativa vs complejidad del modelo
 
-**Subajuste vs Sobreajuste:**
+**Subajuste vs sobreajuste:**
 - Muy pocas variables → subajuste (underfitting)
 - Demasiadas variables → sobreajuste (overfitting)
 
@@ -269,7 +268,7 @@ donde $MSE_{full}$ es el error cuadrático medio del modelo completo
 
 **Estrategia:** Buscar modelos donde $C_p \approx p+1$, elegir el menor entre ellos
 
-# ¿Cuándo Usar Cada Criterio?
+# ¿Cuándo usar cada criterio?
 
 ::::: columns
 :::: {.column width="50%"}
@@ -304,7 +303,7 @@ donde $MSE_{full}$ es el error cuadrático medio del modelo completo
 ::::
 :::::
 
-# Visualización: Criterios de Información (AIC vs BIC)
+# Visualización: Criterios de información (AIC vs BIC)
 
 ```{r}
 #| fig-width: 10
@@ -398,7 +397,7 @@ ggplot(cp_data, aes(x = n_vars + 1, y = cp)) +
   theme_minimal()
 ```
 
-# Métodos de Selección Exhaustiva
+# Métodos de selección exhaustiva
 
 **Best Subset Selection:** Evalúa **todos** los subconjuntos posibles
 
@@ -420,7 +419,7 @@ ggplot(cp_data, aes(x = n_vars + 1, y = cp)) +
 - Impracticable para $p > 15-20$
 - Puede seleccionar modelos sobreajustados sin validación cruzada
 
-# Métodos Automáticos Paso a Paso
+# Métodos automáticos paso a paso
 
 **Principio:** Construir modelo iterativamente, añadiendo o quitando predictores uno a uno
 
@@ -438,7 +437,7 @@ ggplot(cp_data, aes(x = n_vars + 1, y = cp)) +
 3. Repetir hasta que todas las variables sean significativas
 4. **Problema:** Requiere $n > p$
 
-# Métodos Automáticos Paso a Paso
+# Métodos automáticos paso a paso
 
 **Stepwise Regression:**
 
@@ -455,7 +454,7 @@ ggplot(cp_data, aes(x = n_vars + 1, y = cp)) +
 
 **Uso recomendado:** Como herramientas exploratorias, no para inferencia final
 
-# Métodos Basados en Regularización
+# Métodos basados en regularización
 
 **Principio:** Introducir penalización en la función de ajuste del modelo
 
@@ -547,7 +546,7 @@ $$SSE_{\text{lasso}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \
 :::
 
 
-# Elastic Net: Combinando lo Mejor de Ridge y Lasso
+# Elastic Net: Combinando lo mejor de Ridge y Lasso
 
 **Fundamento:** Combinación de penalizaciones Ridge ($L_2$) y Lasso ($L_1$)
 
@@ -566,7 +565,7 @@ $$SSE_{\text{Elastic Net}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|
 - **Selección de variables más estable**
 - **Evita selección arbitraria cuando hay grupos correlacionados**
 
-# Cuándo Usar Cada Método de Regularización
+# Cuándo usar cada método de regularización
 
 **Ridge Regression:**
 
@@ -589,7 +588,7 @@ $$SSE_{\text{Elastic Net}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|
 **Estrategia práctica:** Optimizar $\alpha$ mediante validación cruzada junto con $\lambda$
 
 
-# Selección del Parámetro de Regularización
+# Selección del parámetro de regularización
 
 **El problema:** ¿Cómo elegir el valor óptimo de lambda?
 
@@ -609,7 +608,7 @@ $$SSE_{\text{Elastic Net}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|
 **Regla 1-SE:** Preferir modelo más simple (mayor lambda) si su error es comparable al mínimo
 
 
-# Estrategias de Validación: Visión General
+# Estrategias de validación: Visión general
 
 **Partición inicial (paso obligatorio):**
 
@@ -626,7 +625,7 @@ Antes de cualquier análisis, dividir datos originales en:
 
 **Cada estrategia tiene sus ventajas e inconvenientes según el contexto del problema**
 
-# División Train/Test Simple
+# División Train/Test simple
 
 **Concepto:** División única de los datos de modelado
 
@@ -682,7 +681,7 @@ Antes de cualquier análisis, dividir datos originales en:
 - Todos los datos se usan para entrenamiento y test
 - Reduce variabilidad de la estimación
 
-# Esquema del Proceso de Validación Cruzada (k=5)
+# Esquema del proceso de validación cruzada (k=5)
 ```{r}
 #| fig-width: 10
 #| fig-height: 5
@@ -766,7 +765,7 @@ ggplot(plot_data, aes(x = id, y = iteration, fill = type)) +
 
 :::
 
-# Cuándo Usar Cada Estrategia de Validación
+# Cuándo usar cada estrategia de validación
 
 ::::: columns
 :::: {.column width="50%"}
@@ -777,7 +776,7 @@ ggplot(plot_data, aes(x = id, y = iteration, fill = type)) +
 - Necesidad de evaluación rápida
 - Primera aproximación al problema
 
-**Validación Cruzada k-fold:**
+**Validación cruzada k-fold:**
 
 - Dataset de tamaño moderado ($100 < n < 1000$)
 - Balance entre eficiencia y precisión
@@ -802,7 +801,7 @@ ggplot(plot_data, aes(x = id, y = iteration, fill = type)) +
 ::::
 :::::
 
-# Métricas de Rendimiento en Validación
+# Métricas de rendimiento en validación
 
 **Una vez obtenidas las predicciones, necesitamos "calificar" el modelo**
 
@@ -816,7 +815,7 @@ $$RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}$$
 - Mismas unidades que la variable respuesta
 - Interpretación: "desviación típica de los residuos"
 
-# Métricas de Rendimiento en Validación
+# Métricas de rendimiento en validación
 
 **Error Absoluto Medio:**
 $$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
@@ -833,7 +832,7 @@ $$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
 - **MAE:** Cuando se prefiere robustez frente a valores atípicos
 - **Ambas:** Para análisis completo del rendimiento predictivo
 
-# Interpretación de Errores: Diagnóstico del Ajuste
+# Interpretación de errores: diagnóstico del ajuste
 
 **La comparación clave:** Error en entrenamiento vs Error en validación
 
@@ -868,7 +867,7 @@ $$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
 
 **Resultado esperado:** El modelo correcto tendrá mejor rendimiento en validación cruzada, demostrando la importancia de la selección de variables.
 
-# Error de Entrenamiento vs Validación
+# Error de entrenamiento vs validación
 
 ```{r}
 #| fig-width: 10
@@ -920,7 +919,7 @@ p3 <- ggplot(validation_data, aes(x = complexity, y = error, color = dataset)) +
 print(p3)
 ```
 
-# El Conjunto de Prueba Final: La Evaluación Definitiva
+# El conjunto de prueba final: La evaluación definitiva
 
 **Después de todo el proceso de modelado:**
 
@@ -942,7 +941,7 @@ print(p3)
 - Error similar a validación cruzada → modelo robusto
 - Error mucho mayor → posible sobreajuste al proceso de modelado
 
-# Advertencias Importantes
+# Advertencias importantes
 
 **Los métodos stepwise (forward, backward, stepwise) requieren precaución especial**
 
@@ -960,7 +959,7 @@ print(p3)
 - Siempre validar con técnicas robustas
 - No reportar p-valores del modelo final como definitivos
 
-# Proceso Completo de Selección y Validación
+# Proceso completo de selección y validación
 
 **Flujo de trabajo recomendado:**
 
@@ -983,7 +982,7 @@ print(p3)
 - Objetivo (predicción vs explicación) → criterio de información
 - Multicolinealidad → regularización vs selección clásica
 
-# Consideraciones Prácticas
+# Consideraciones prácticas
 
 ::::: columns
 :::: {.column width="50%"}
@@ -1011,10 +1010,10 @@ print(p3)
 
 **Checklist de buenas prácticas:**
 
-- ✓ **Datos** → EDA + conocimiento del dominio
-- ✓ **Método** → Múltiples enfoques + validación cruzada
-- ✓ **Selección** → Criterios objetivos + interpretabilidad  
-- ✓ **Validación** → Diagnóstico + evaluación
+- **Datos**: EDA + conocimiento del dominio
+- **Método**: Múltiples enfoques + CV
+- **Selección**: Criterios objetivos + interpretabilidad  
+- **Validación**: Diagnóstico + evaluación
 ::::
 :::::
 
