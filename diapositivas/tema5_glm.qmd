@@ -1,12 +1,11 @@
 ---
 title: "Modelos Lineales Generalizados (GLM)"
-author: "Víctor Aceña - Isaac Martín"
+author: "Carmen Lancho - Natalia Madrueño"
 institute: "DSLAB"
 date: last-modified
 format: 
   beamer: 
     theme: "Madrid"
-    colortheme: "dolphin"
     fonttheme: "structurebold"
     navigation: horizontal
     section-titles: false
@@ -14,7 +13,7 @@ format:
     slide-level: 1
     aspectratio: 169
     header-includes: |
-      \usepackage{dslab-new}
+      \usepackage{dslab-new-orange}
       \usedslabmodelos
 knitr:
   opts_chunk:
@@ -32,19 +31,19 @@ execute:
 
 
 
-# Modelos de Regresión Generalizada
+# Modelos de regresión generalizada
 
-**Punto de Partida: La Regresión Lineal**
+**Punto de partida: La regresión lineal**
 
 * Es una herramienta potente para modelar una variable dependiente **continua**.
 * Sin embargo, sus supuestos (normalidad, homocedasticidad) no siempre se cumplen.
 
-**El Desafío: Datos No Normales**
+**El desafío: datos no normales**
 
 * ¿Cómo modelamos una variable de respuesta **binaria** (ej. enfermo/sano)?
 * ¿O datos de **conteo** (ej. nº de accidentes en una intersección)?
 
-**La Solución: Modelos Lineales Generalizados (GLM)**
+**La solución: Modelos Lineales Generalizados (GLM)**
 
 * Son una **extensión** de la regresión lineal que permite modelar respuestas con distribuciones como la Binomial o la de Poisson, utilizando **funciones de enlace** para mayor flexibilidad.
 
@@ -56,8 +55,8 @@ Los **Modelos Lineales Generalizados (GLM)** son una extensión de los modelos d
 Mientras que la regresión lineal clásica asume que la variable dependiente (Y) es continua y sigue una distribución Normal, los GLM permiten que Y sea:
 
 * **Binaria:** Éxito/Fracaso, Sí/No (ej. Regresión Logística).
-* **De Conteo:** Nº de eventos (ej. Regresión de Poisson).
-* **Continua y Positiva** con sesgo (ej. tiempos, costos).
+* **De conteo:** Nº de eventos (ej. Regresión de Poisson).
+* **Continua y positiva** con sesgo (ej. tiempos, costos).
 
 El marco teórico unificador de los GLM es que la distribución de la variable dependiente siempre pertenece a la **familia exponencial**.
 
@@ -66,20 +65,20 @@ El marco teórico unificador de los GLM es que la distribución de la variable d
 
 Todo Modelo Lineal Generalizado se define por la interacción de tres componentes clave:
 
-1.  **Componente Aleatorio:**
+1.  **Componente aleatorio:**
     * **Qué es:** La **distribución de probabilidad** que se asume para la variable dependiente (Y).
     * Proviene de la **familia exponencial**.
 
-2.  **Componente Sistemático:**
+2.  **Componente sistemático:**
     * **Qué es:** La **combinación lineal** de las variables predictoras (X), que forma el **predictor lineal** ($\eta$).
 
-3.  **Función de Enlace (*Link Function*):**
+3.  **Función de enlace (*Link Function*):**
     * **Qué es:** El **puente matemático** que conecta el predictor lineal ($\eta$) con la media de la variable respuesta ($\mu$).
 
 
-# Componentes en Detalle: Aleatorio y Sistemático
+# Componentes en detalle: aleatorio y sistemático
 
-**1. Componente Aleatorio (La Distribución)**
+**1. Componente aleatorio (la distribución)**
 
 Define el tipo de datos que estamos modelando. A diferencia de la regresión lineal (solo Normal), en los GLM podemos usar otras distribuciones:
 
@@ -87,7 +86,7 @@ Define el tipo de datos que estamos modelando. A diferencia de la regresión lin
 * **Distribución de Poisson:** Para datos de conteo (número de eventos).
 * **Distribución Gamma:** Para datos continuos y positivos (como costos o tiempos).
 
-**2. Componente Sistemático (El Predictor Lineal)**
+**2. Componente sistemático (el predictor lineal)**
 
 Describe cómo las variables independientes se combinan linealmente. Su forma es idéntica a la de la regresión lineal:
 
@@ -95,102 +94,102 @@ $$\eta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p$$
 
 Donde $\eta$ es el predictor lineal y $\boldsymbol{\beta}$ son los coeficientes del modelo.
 
-# Componentes en Detalle: La Función de Enlace
+# Componentes en detalle: La función de enlace
 
 La función de enlace ($g$) conecta el predictor lineal ($\eta$) con la media de la variable dependiente ($\mu$). Es la clave de la flexibilidad del modelo.
 
-**Relación Fundamental:**
+**Relación fundamental:**
 $$g(\mu) = \eta$$
-Esta función transforma la media de Y para que la relación con los predictores se vuelva lineal.
+Esta función transforma la media de $Y$ para que la relación con los predictores se vuelva lineal.
 
 **Logística (Logit):** Para Regresión Logística.
     $$g(\mu) = \log\left(\frac{\mu}{1 - \mu}\right)$$
 
-**Logarítmica:** Para Regresión de Poisson.
+**Logarítmica:** Para regresión de Poisson.
     $$g(\mu) = \log(\mu)$$
 
-**Identidad:** Para Regresión Lineal estándar (el GLM más simple).
+**Identidad:** Para regresión lineal estándar (el GLM más simple).
     $$g(\mu) = \mu$$
 
 
-# Diferencias Clave: Regresión Lineal vs. GLM
+# Diferencias clave: Regresión lineal vs. GLM
 
 ::::: columns
 ::: {.column width="50%"}
 **Regresión Lineal Clásica**
 
 * **Distribución:** Normal.
-* **Tipo de Respuesta:** Continua.
+* **Tipo de respuesta:** Continua.
 * **Relación:** Lineal y directa.
-* **Función de Enlace:** Identidad.
+* **Función de enlace:** Identidad.
 :::
 ::: {.column width="50%"}
 **Modelos Lineales Generalizados**
 
 * **Distribución:** Familia Exponencial.
-* **Tipo de Respuesta:** Flexible (binaria, conteo...).
+* **Tipo de respuesta:** Flexible (binaria, conteo...).
 * **Relación:** Transformada por una función de enlace.
-* **Función de Enlace:** Flexible (Logit, Log...).
+* **Función de enlace:** Flexible (Logit, Log...).
 :::
 :::::
 
-**Ventajas Principales de los GLM:**
+**Ventajas principales de los GLM:**
 
 * **Flexibilidad:** Permiten modelar muchos más tipos de variables dependientes.
-* **Interpretación Coherente:** Los coeficientes siguen siendo interpretables de forma rigurosa.
-* **Evaluación Robusta:** Se pueden usar las mismas herramientas de evaluación (AIC, BIC, tests de hipótesis).
+* **Interpretación coherente:** Los coeficientes siguen siendo interpretables de forma rigurosa.
+* **Evaluación robusta:** Se pueden usar las mismas herramientas de evaluación (AIC, BIC, tests de hipótesis).
 
 
-# Estimación de Parámetros en GLM
+# Estimación de parámetros en GLM
 
 La estimación en GLM representa un cambio fundamental respecto a la regresión lineal clásica.
 
-* **Regresión Lineal:** Utiliza **Mínimos Cuadrados Ordinarios (MCO)**, un método que funciona bajo supuestos de normalidad y homocedasticidad.
+* **Regresión lineal:** Utiliza **Mínimos Cuadrados Ordinarios (MCO)**, un método que funciona bajo supuestos de normalidad y homocedasticidad.
 * **GLM:** Necesita métodos más sofisticados debido a las distribuciones no normales y las funciones de enlace no lineales.
 
 El enfoque para los GLM se basa en un principio unificador:
 
-* **El Principio:** La **Máxima Verosimilitud (MLE)**, que proporciona un marco teórico coherente para toda la familia exponencial.
-* **El Algoritmo:** **IRLS** (*Iteratively Reweighted Least Squares*), el método computacional para encontrar la solución de máxima verosimilitud.
+* **El principio:** La **máxima verosimilitud (MLE)**, que proporciona un marco teórico coherente para toda la familia exponencial.
+* **El algoritmo:** **IRLS** (*Iteratively Reweighted Least Squares*), el método computacional para encontrar la solución de máxima verosimilitud.
 
 
-# El Método de Máxima Verosimilitud (MLE)
+# El método de máxima verosimilitud (MLE)
 
 
-A diferencia de Mínimos Cuadrados, el método de **Máxima Verosimilitud** se emplea para estimar los parámetros en un GLM.
+A diferencia de Mínimos Cuadrados, el método de **máxima verosimilitud** se emplea para estimar los parámetros en un GLM.
 
 **¿Por qué es necesario?**
 
 * Las distribuciones de la familia exponencial no siempre tienen una relación lineal directa con los predictores.
 * La varianza de la respuesta a menudo depende de su media ($Var(Y) = V(\mu)$), violando el supuesto de homocedasticidad que requiere MCO.
 
-**Principio Fundamental de MLE**
+**Principio fundamental de MLE**
 
 Consiste en encontrar los valores de los parámetros $\boldsymbol{\beta}$ que hacen **más probable** observar los datos que tenemos.
 
 
-# La Función de Verosimilitud ($L(\boldsymbol{\beta})$)
+# La función de verosimilitud ($L(\boldsymbol{\beta})$)
 
-Para aplicar el principio de Máxima Verosimilitud, primero definimos la **función de verosimilitud**.
+Para aplicar el principio de máxima verosimilitud, primero definimos la **función de verosimilitud**.
 
 * **Definición:** Es la probabilidad conjunta de observar la totalidad de nuestra muestra ($y_1, \ldots, y_n$) dado un conjunto de parámetros $\boldsymbol{\beta}$.
 * **Fórmula:**
     $$L(\boldsymbol{\beta}) = \prod_{i=1}^{n} f(y_i; \theta_i, \phi)$$
     donde $f(y_i; \theta_i, \phi)$ es la función de densidad o masa de probabilidad de cada observación.
-* **El Problema Práctico:** Maximizar una función que es un producto de muchos términos es computacionalmente complejo y puede ser numéricamente inestable.
+* **El problema práctico:** Maximizar una función que es un producto de muchos términos es computacionalmente complejo y puede ser numéricamente inestable.
 
 
-# La Función de Log-Verosimilitud ($\ell(\boldsymbol{\beta})$)
+# La función de Log-Verosimilitud ($\ell(\boldsymbol{\beta})$)
 
 Para solucionar el problema de los productos, en la práctica se trabaja con el **logaritmo** de la verosimilitud.
 
 * **Definición:** La función de log-verosimilitud es simplemente el logaritmo de la función de verosimilitud.
 * **Fórmula:**
     $$\ell(\boldsymbol{\beta}) = \log(L(\boldsymbol{\beta})) = \sum_{i=1}^{n} \log f(y_i; \theta_i, \phi)$$
-* **Ventaja Clave:** El logaritmo convierte los **productos en sumas**, lo que simplifica enormemente los cálculos matemáticos y numéricos necesarios para encontrar el máximo de la función.
+* **Ventaja clave:** El logaritmo convierte los **productos en sumas**, lo que simplifica enormemente los cálculos matemáticos y numéricos necesarios para encontrar el máximo de la función.
 
 
-# La Teoría Unificadora: La Familia Exponencial
+# La teoría unificadora: La familia Exponencial
 
 La clave de los GLM es que todas sus distribuciones (Binomial, Poisson, Gamma...) pertenecen a la **familia exponencial**.
 
@@ -198,66 +197,66 @@ Esto significa que todas se pueden escribir con una **forma matemática unificad
 $$f(y; \theta, \phi) = \exp\left\{\frac{y\theta - b(\theta)}{a(\phi)} + c(y, \phi)\right\}$$
 donde $\theta$ es el **parámetro natural** y $\phi$ es el **parámetro de dispersión**.
 
-**Propiedades Derivadas de esta Forma:**
+**Propiedades derivadas de esta forma:**
 Esta estructura unificada permite derivar propiedades generales para todos los GLM de forma elegante:
 
-* **Esperanza (Media):** $E(Y) = \mu = b'(\theta)$.
+* **Esperanza (media):** $E(Y) = \mu = b'(\theta)$.
 * **Varianza:** $\text{Var}(Y) = a(\phi) b''(\theta) = a(\phi) V(\mu)$, donde $V(\mu)$ es la **función de varianza** que caracteriza la relación media-varianza de cada distribución.
 
-# Distribuciones Comunes
+# Distribuciones comunes
 
 Estas son las distribuciones más frecuentes en la práctica.
 
 * **Normal**
 
-    * **Uso Típico:** Datos continuos simétricos (es el GLM equivalente a la regresión lineal).
-    * **Función de Varianza:** $V(\mu) = 1$ (varianza constante).
-    * **Enlace Canónico:** Identidad ($g(\mu) = \mu$).
+    * **Uso típico:** Datos continuos simétricos (es el GLM equivalente a la regresión lineal).
+    * **Función de varianza:** $V(\mu) = 1$ (varianza constante).
+    * **Enlace canónico:** Identidad ($g(\mu) = \mu$).
 
 * **Binomial**
 
-    * **Uso Típico:** Proporciones, datos binarios (éxito/fracaso).
-    * **Función de Varianza:** $V(\mu) = \mu(1-\mu)$.
-    * **Enlace Canónico:** Logit ($g(\mu) = \log(\frac{\mu}{1-\mu})$).
+    * **Uso típico:** Proporciones, datos binarios (éxito/fracaso).
+    * **Función de varianza:** $V(\mu) = \mu(1-\mu)$.
+    * **Enlace canónico:** Logit ($g(\mu) = \log(\frac{\mu}{1-\mu})$).
 
 * **Poisson**
 
-    * **Uso Típico:** Conteos de eventos.
-    * **Función de Varianza:** $V(\mu) = \mu$.
-    * **Enlace Canónico:** Log ($g(\mu) = \log(\mu)$).
+    * **Uso típico:** Conteos de eventos.
+    * **Función de varianza:** $V(\mu) = \mu$.
+    * **Enlace canónico:** Log ($g(\mu) = \log(\mu)$).
 
-# Distribuciones para Datos Asimétricos
+# Distribuciones para datos asimétricos
 
 Para datos continuos que son estrictamente positivos y tienen sesgo a la derecha.
 
 * **Gamma**
 
-    * **Uso Típico:** Tiempos, costos, o cualquier dato continuo positivo y asimétrico.
-    * **Función de Varianza:** $V(\mu) = \mu^2$.
+    * **Uso típico:** Tiempos, costos, o cualquier dato continuo positivo y asimétrico.
+    * **Función de varianza:** $V(\mu) = \mu^2$.
     * **Enlace Canónico:** Inverso ($g(\mu) = 1/\mu$).
 
 * **Inversa Gaussiana**
 
-    * **Uso Típico:** Tiempos hasta un evento, o datos con una asimetría aún más pronunciada que la Gamma.
-    * **Función de Varianza:** $V(\mu) = \mu^3$.
-    * **Enlace Canónico:** Inverso al cuadrado ($g(\mu) = 1/\mu^2$).
+    * **Uso típico:** Tiempos hasta un evento, o datos con una asimetría aún más pronunciada que la Gamma.
+    * **Función de varianza:** $V(\mu) = \mu^3$.
+    * **Enlace canónico:** Inverso al cuadrado ($g(\mu) = 1/\mu^2$).
 
-# Conceptos Clave de la Familia Exponencial
+# Conceptos clave de la familia Exponencial
 
 Para entender y comparar los diferentes GLM, dos conceptos derivados de la familia exponencial son fundamentales:
 
-1. La Función de Varianza: $V(\mu)$
+1. La función de varianza: $V(\mu)$
 
 * **Definición:** Es la **"firma"** de cada distribución, ya que define la relación teórica entre la media ($\mu$) y la varianza.
-* **Implicación Práctica:** Determina la **heterocedasticidad inherente** de los datos (ej. $V(\mu) = \mu$ en Poisson) y, por tanto, influye directamente en los **pesos** que el algoritmo IRLS asigna a cada observación durante la estimación.
+* **Implicación práctica:** Determina la **heterocedasticidad inherente** de los datos (ej. $V(\mu) = \mu$ en Poisson) y, por tanto, influye directamente en los **pesos** que el algoritmo IRLS asigna a cada observación durante la estimación.
 
-2. El Enlace Canónico: $g(\mu)$
+2. El enlace canónico: $g(\mu)$
 
 * **Definición:** Es la función de enlace que surge de forma **"natural"** de la estructura matemática de cada distribución.
-* **Implicación Práctica:** Aunque en la práctica se pueden probar otros enlaces, el canónico suele garantizar las mejores propiedades estadísticas y una estimación computacionalmente más eficiente.
+* **Implicación práctica:** Aunque en la práctica se pueden probar otros enlaces, el canónico suele garantizar las mejores propiedades estadísticas y una estimación computacionalmente más eficiente.
 
 
-# La Función de Varianza
+# La función de varianza
 
 La relación entre media y varianza es fundamental en los GLM. La función de varianza $V(\mu)$ determina la **heterocedasticidad inherente** de cada distribución e influye en la estimación del modelo.
 
@@ -265,11 +264,11 @@ La relación entre media y varianza es fundamental en los GLM. La función de va
 * **Distribución de Poisson:** $V(\mu) = \mu$. La varianza aumenta linealmente con la media.
 * **Distribución Gamma:** $V(\mu) = \mu^2$. La varianza aumenta cuadráticamente con la media.
 
-**Implicación Práctica:**
+**Implicación práctica:**
 Esta función influye directamente en los pesos del algoritmo IRLS. En regresión logística, por ejemplo, las observaciones con probabilidades cercanas a 0.5 tienen mayor varianza y, por tanto, reciben **menor peso** en la estimación.
 
 
-# El Algoritmo de Estimación: IRLS 
+# El algoritmo de estimación: IRLS 
 Las ecuaciones de máxima verosimilitud de los GLM no tienen una solución matemática directa como en la regresión lineal. Por ello, se necesita un **algoritmo iterativo** para encontrar los coeficientes.
 
 El método estándar es **IRLS** (*Iteratively Reweighted Least Squares*), que es una aplicación del método de Newton-Raphson.
@@ -282,7 +281,7 @@ El algoritmo aproxima el problema no lineal del GLM a una **serie de regresiones
 3.  Se resuelve una **regresión por mínimos cuadrados ponderada** para obtener una nueva y mejor estimación de $\boldsymbol{\beta}$.
 4.  Se repite el proceso hasta que las estimaciones de $\boldsymbol{\beta}$ se estabilizan (convergen).
 
-# Propiedades de los Estimadores
+# Propiedades de los estimadores
 
 Los estimadores MLE poseen propiedades **asintóticas** (se cumplen cuando $n \to \infty$) muy deseables, que los validan como el método de estimación preferido.
 
@@ -290,7 +289,7 @@ Los estimadores MLE poseen propiedades **asintóticas** (se cumplen cuando $n \t
 
 $\hat{\boldsymbol{\beta}} \xrightarrow{p} \boldsymbol{\beta} \text{ cuando } n \to \infty$.
 
-**2. Normalidad Asintótica:** Para muestras grandes, la distribución de los estimadores se aproxima a una Normal multivariada.
+**2. Normalidad asintótica:** Para muestras grandes, la distribución de los estimadores se aproxima a una Normal multivariada.
 
 $\sqrt{n}(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta}) \xrightarrow{d} N(\mathbf{0}, \mathbf{I}^{-1}(\boldsymbol{\beta}))$
 
@@ -300,56 +299,56 @@ Permite construir **intervalos de confianza** y realizar **tests de hipótesis**
 
 
 
-# La Matriz de Información: ¿Cuánta Certeza Tenemos?
+# La matriz de información: ¿Cuánta certeza tenemos?
 
 La **matriz de información** ($\mathbf{I}(\boldsymbol{\beta})$) es un concepto clave que cuantifica la certeza de las estimaciones de nuestros coeficientes.
 
-**Interpretación Intuitiva:**
+**Interpretación intuitiva:**
 
 * Mide la **"curvatura"** de la función de verosimilitud en su punto máximo.
 * Una función muy "puntiaguda" (alta curvatura) significa **mucha información** y, por tanto, estimaciones más precisas y fiables.
 * Una función más plana (baja curvatura) significa **poca información** y mayor incertidumbre.
 
-**Cálculo en la Práctica (GLM):** Aunque existen definiciones teóricas basadas en las segundas derivadas de la log-verosimilitud, el algoritmo IRLS nos proporciona una aproximación computacionalmente eficiente y directa:
+**Cálculo en la práctica (GLM):** Aunque existen definiciones teóricas basadas en las segundas derivadas de la log-verosimilitud, el algoritmo IRLS nos proporciona una aproximación computacionalmente eficiente y directa:
 
 $$\mathbf{I}(\hat{\boldsymbol{\beta}}) \approx \mathbf{X}^T \mathbf{W} \mathbf{X}$$
 
 donde $\mathbf{W}$ es la matriz diagonal de pesos calculada en la última iteración del algoritmo.
 
-# Cálculo de los Errores Estándar
+# Cálculo de los errores estándar
 
 Los **errores estándar** de los coeficientes individuales se obtienen a partir de la matriz de información. 
 
-**Proceso de Cálculo:**
+**Proceso de cálculo:**
 
-1.  **Matriz de Covarianza:** Se calcula como la **inversa** de la matriz de información.
-2.  **Errores Estándar:** Se obtienen como las raíces cuadradas de los elementos diagonales de esa matriz de covarianza. 
+1.  **Matriz de covarianza:** Se calcula como la **inversa** de la matriz de información.
+2.  **Errores estándar:** Se obtienen como las raíces cuadradas de los elementos diagonales de esa matriz de covarianza. 
 
 **Fórmula:**
 $$\text{SE}(\hat{\beta}_j) = \sqrt{[\mathbf{I}^{-1}(\hat{\boldsymbol{\beta}})]_{jj}}$$
 
-# Uso de los Errores Estándar en Inferencia
+# Uso de los errores estándar en inferencia
 
 Estos errores estándar son fundamentales para la inferencia estadística. 
 
-**Aplicaciones Principales:**
+**Aplicaciones principales:**
 
-* **Intervalos de Confianza:** 
+* **Intervalos de confianza:** 
   $$\hat{\beta}_j \pm z_{\alpha/2} \cdot \text{SE}(\hat{\beta}_j)$$
-* **Estadísticos de Prueba (de Wald):** 
+* **Estadísticos de prueba (de Wald):** 
   $$z_j = \frac{\hat{\beta}_j}{\text{SE}(\hat{\beta}_j)}$$
-* **Evaluación de la Precisión** de nuestras estimaciones. 
+* **Evaluación de la precisión** de nuestras estimaciones. 
 
-**Advertencia Importante:**
+**Advertencia importante:**
 
 * Estos errores estándar **son válidos bajo los supuestos del modelo GLM**. 
 * Violaciones serias de estos supuestos (como **sobredispersión** en modelos de Poisson) pueden hacer que sean inadecuados. 
 
-# La Deviance: Definición y Cálculo
+# La deviance: definición y cálculo
 
 La **deviance** es la medida principal de ajuste en GLM; es una generalización de la suma de cuadrados residuales.
 
-**Idea Fundamental:**
+**Idea fundamental:**
 Mide la discrepancia entre la verosimilitud de nuestro **modelo propuesto** y la de un **modelo saturado** (un modelo teóricamente perfecto que ajusta cada dato).
 
 $$D = 2 \sum_{i=1}^{n} \left[ \ell(\text{modelo saturado}) - \ell(\text{modelo propuesto}) \right]$$
@@ -361,17 +360,17 @@ $$D = 2 \sum_{i=1}^{n} \left[ \ell(\text{modelo saturado}) - \ell(\text{modelo p
 - Deviance baja: Buen ajuste del modelo a los datos
 - Deviance alta: Mal ajuste del modelo, sugiere que el modelo no captura adecuadamente los patrones en los datos
 
-# Interpretando la Deviance: Una Comparación Clave
+# Interpretando la deviance: Una comparación clave
 
 La clave para interpretar la deviance es **comparar** la de tu modelo con la de un modelo base.
 
-1. El Punto de Partida: La Deviance Nula
+1. El punto de partida: La deviance nula
 
 * **¿Qué es?** La deviance de un modelo simple, solo con intercepto (que ignora todos tus predictores).
 * **Analogía:** Es el **"error máximo"** que sirve como punto de comparación.
 
 
-2. El Resultado: La Deviance Residual
+2. El resultado: La deviance residual
 
 * **¿Qué es?** La deviance de tu modelo final, con todos los predictores incluidos.
 * **Analogía:** Es el **"error restante"** después de que tus predictores han hecho su trabajo.
@@ -379,25 +378,25 @@ La clave para interpretar la deviance es **comparar** la de tu modelo con la de 
 La **reducción de la deviance** (`Deviance Nula - Deviance Residual`) representa la **mejora en el ajuste** que se debe a tus predictores.
 
 
-# El Test de la Razón de Verosimilitudes (LRT)
+# El test de la razón de verosimilitudes (LRT)
 
 Es la herramienta principal para **comparar modelos anidados**, basándose en el principio de parsimonia.
 
-**Estadístico de Prueba:**
+**Estadístico de prueba:**
 La diferencia en las deviances sigue una distribución **chi-cuadrado**:
 $$LRT = D_{\text{reducido}} - D_{\text{completo}} \sim \chi^2_{df}$$
 (donde $df$ es la diferencia en el número de parámetros).
 
-**Regla de Decisión:**
+**Regla de decisión:**
 
 * **$H_0$**: El modelo reducido es suficiente.
 * Si el **p-valor < $\alpha$**, se rechaza $H_0$. La mejora del modelo completo es **estadísticamente significativa**.
 
-# LRT en la Práctica: Ejemplo con R
+# LRT en la práctica: Ejemplo con R
 
 **Objetivo:** Determinar si añadir la variable `disp` (cilindrada) a un modelo que ya contiene `wt` (peso) mejora significativamente la predicción.
 
-**Salida del Test en R**
+**Salida del test en R**
 
 ```
 Analysis of Deviance Table
@@ -410,9 +409,9 @@ Model 2: am ~ wt + disp
 2        29     17.785  1   1.3913   0.2382
 ```
 
-# LRT en la Práctica: Ejemplo con R
+# LRT en la práctica: Ejemplo con R
 
-**Interpretación del Resultado**
+**Interpretación del resultado**
 
 El test compara la **Deviance** de ambos modelos. La hipótesis nula ($H\_0$) es que el modelo reducido es suficiente.
 
@@ -432,10 +431,10 @@ La diagnosis de GLMs es el proceso de evaluar los supuestos del modelo y detecta
 * A diferencia de la regresión lineal, los residuos ordinarios no son suficientes.
 * Los GLM requieren herramientas especializadas debido a la **heterocedasticidad inherente** y a las diferentes distribuciones subyacentes (Poisson, Binomial, etc.).
 
-**Nuestro Enfoque:**
+**Nuestro enfoque:**
 Abordaremos el diagnóstico respondiendo a tres preguntas clave, utilizando diferentes tipos de **residuos** para obtener las respuestas.
 
-# Tipos de Residuos en GLMs
+# Tipos de residuos en GLMs
 
 Los residuos "crudos" ($y_i - \hat{\mu}_i$) no son homocedásticos, por lo que se utilizan versiones estandarizadas. Los más importantes son:
 
@@ -450,22 +449,22 @@ Los residuos "crudos" ($y_i - \hat{\mu}_i$) no son homocedásticos, por lo que s
     * Su distribución se aproxima mejor a la normalidad y su varianza es más estable que la de otros residuos.
     $$d_i = \text{sign}(y_i - \hat{\mu}_i) \sqrt{2[l_i(y_i) - l_i(\hat{\mu}_i)]}$$
 
-# ¿La Forma del Modelo es Correcta? 
+# ¿La forma del modelo es correcta? 
 
 Se evalúa si la estructura básica del modelo, $g(\mu) = X\beta$, es adecuada para los datos.
 
-**Herramientas de Diagnóstico:**
+**Herramientas de diagnóstico:**
 
-* **Gráfico de Residuos vs. Valores Ajustados:**
+* **Gráfico de residuos vs. valores ajustados:**
 
     * Es la herramienta fundamental. Se grafican los residuos (idealmente, deviance) contra el predictor lineal ($\hat{\eta}_i$).
     * **Un patrón curvilíneo** es una señal clara de que la forma funcional o la función de enlace son incorrectas.
 
-* **Gráficos de Residuos Parciales:** Evalúan si la relación es apropiada para **cada predictor individualmente**.
+* **Gráficos de residuos parciales:** Evalúan si la relación es apropiada para **cada predictor individualmente**.
 
-* **Test de Especificación de Enlace (Linktest):** Es una prueba formal. Si el predictor lineal al cuadrado ($\hat{\eta}^2$) resulta significativo al añadirlo al modelo, es evidencia de que la función de enlace está mal especificada.
+* **Test de especificación de enlace (Linktest):** Es una prueba formal. Si el predictor lineal al cuadrado ($\hat{\eta}^2$) resulta significativo al añadirlo al modelo, es evidencia de que la función de enlace está mal especificada.
 
-# ¿La Distribución es Correcta?
+# ¿La distribución es correcta?
 
 Se evalúa si la elección de la familia de distribución (Poisson, Binomial, etc.) fue acertada, empezando por la relación entre la media y la varianza.
 
@@ -478,7 +477,7 @@ Se evalúa si la elección de la familia de distribución (Poisson, Binomial, et
 * **Solución:** Cambiar a un modelo más flexible. El caso clásico es pasar de **Poisson** a **Binomial Negativo**, ya que este último incluye un parámetro ($\alpha$) para modelar la variabilidad extra: $Var(Y) = \mu + \alpha\mu^2$.
 
 
-# ¿La Distribución es Correcta?
+# ¿La distribución es correcta?
 
 Un segundo aspecto para verificar la distribución es la forma general de los errores.
 
@@ -492,13 +491,13 @@ Un segundo aspecto para verificar la distribución es la forma general de los er
     * Los puntos deberían seguir de cerca la línea diagonal.
     * **Desviaciones sistemáticas** de la línea pueden indicar que la familia de distribución asumida (Poisson, Binomial, etc.) es incorrecta.
 
-# ¿Hay Observaciones que Distorsionan el Modelo?
+# ¿Hay observaciones que distorsionan el modelo?
 
 Finalmente, buscamos identificar puntos individuales que tienen una influencia desproporcionada en los coeficientes del modelo.
 
-**Herramientas Matemáticas Clave:**
+**Herramientas matemáticas clave:**
 
-* **Leverage Generalizado ($h_i$):** Mide el potencial de una observación para ser influyente debido a su posición en el espacio de los predictores.
+* **Leverage generalizado ($h_i$):** Mide el potencial de una observación para ser influyente debido a su posición en el espacio de los predictores.
 * **Distancia de Cook para GLMs ($D_i$):** Mide la influencia global de una observación en *todos* los coeficientes.
     $$D_i = \frac{r_i^2 h_i}{p(1-h_i)^2}$$
 * **DFBETAS:** Mide la influencia de una observación en *cada coeficiente individual*.
@@ -508,7 +507,7 @@ Finalmente, buscamos identificar puntos individuales que tienen una influencia d
 * La herramienta visual principal es el **gráfico de residuos vs. leverage**.
 * La estrategia ante estas observaciones no es eliminarlas automáticamente, sino **investigarlas** para entender su naturaleza.
 
-# Regresión Logística: Modelando Eventos Binarios
+# Regresión Logística: Modelando eventos binarios
 
 La **regresión logística** es la herramienta fundamental de los GLM para modelar la probabilidad de ocurrencia de un **evento binario**.
 
@@ -516,57 +515,57 @@ La **regresión logística** es la herramienta fundamental de los GLM para model
 
 Modelar una variable dependiente que solo toma dos valores:
 
-* **Éxito / Fracaso**
-* **Sí / No**
-* **Enfermo / Sano**
+* **Éxito / fracaso**
+* **Sí / no**
+* **Enfermo / sano**
 
-**Pilares del Tema:**
+**Pilares del tema:**
 
 1.  **Fundamentos:** La función sigmoide y el enlace Logit.
 2.  **Estimación:** Máxima Verosimilitud (MLE) y el algoritmo IRLS.
 3.  **Interpretación:** El concepto clave de los **Odds Ratios**.
 4.  **Evaluación:** Bondad de ajuste (Deviance, Pseudo R²) y validación (Matriz de Confusión, Curva ROC).
 
-# Fundamentos: El Problema y la Función Sigmoide
+# Fundamentos: El problema y la función sigmoide
 
-**El Problema:** La regresión lineal puede predecir valores fuera del rango [0,1], lo cual no tiene sentido para modelar una probabilidad.
+**El problema:** La regresión lineal puede predecir valores fuera del rango [0,1], lo cual no tiene sentido para modelar una probabilidad.
 
-**La Solución:** La **función logística (o sigmoide)** transforma cualquier valor real del predictor lineal ($\eta$) en una probabilidad entre 0 y 1.
+**La solución:** La **función logística (o sigmoide)** transforma cualquier valor real del predictor lineal ($\eta$) en una probabilidad entre 0 y 1.
 
-**Fórmula de la Probabilidad:**
+**Fórmula de la probabilidad:**
 $$P(Y = 1 | X) = \frac{1}{1 + e^{-\eta}} = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \dots)}}$$
 
 
 La curva en forma de "S" asegura que las predicciones se aplanen hacia 0 y 1 en los extremos.
 
 
-# Fundamentos: La Función de Enlace Logit
+# Fundamentos: La función de enlace Logit
 
 Para poder usar un modelo lineal ($X\beta$), necesitamos transformar la probabilidad (que está en la escala [0,1]) a una escala que vaya de $-\infty$ a $+\infty$.
 
-**La Herramienta:** Esto se logra con la **función de enlace logit**.
+**La herramienta:** Esto se logra con la **función de enlace logit**.
 
-**Definición del Logit:** El logit de una probabilidad $p$ es el logaritmo de los *odds* (razón de probabilidades):
+**Definición del logit:** El logit de una probabilidad $p$ es el logaritmo de los *odds* (razón de probabilidades):
 $$\text{logit}(p) = \log\left(\frac{p}{1 - p}\right)$$
-**El Modelo Logístico Linealizado:**
+**El modelo logístico linealizado:**
 Esta transformación nos permite expresar el modelo de forma lineal:
 $$\log\left(\frac{p}{1 - p}\right) = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p$$
 
 
-# Estimación por Máxima Verosimilitud (MLE)
+# Estimación por máxima verosimilitud (MLE)
 
 **Función de Verosimilitud ($L(\boldsymbol{\beta})$):** Para un resultado binario $y_i \in \{0,1\}$, la verosimilitud se define como:
 $$L(\boldsymbol{\beta}) = \prod_{i=1}^{n} p_i^{y_i}(1-p_i)^{1-y_i}$$
 
-**Función de Log-Verosimilitud ($\ell(\boldsymbol{\beta})$):** Maximizamos el logaritmo de la función anterior:
+**Función de log-verosimilitud ($\ell(\boldsymbol{\beta})$):** Maximizamos el logaritmo de la función anterior:
 $$\ell(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[y_i \mathbf{x}_i^T\boldsymbol{\beta} - \log(1 + e^{\mathbf{x}_i^T\boldsymbol{\beta}})\right]$$
 
-**Ecuaciones de Puntuación (*Score Equations*):** Para encontrar el máximo, se deriva la log-verosimilitud respecto a cada $\beta_j$ y se iguala a cero:
+**Ecuaciones de puntuación (*Score Equations*):** Para encontrar el máximo, se deriva la log-verosimilitud respecto a cada $\beta_j$ y se iguala a cero:
 $$\frac{\partial \ell}{\partial \beta_j} = \sum_{i=1}^{n} x_{ij}(y_i - p_i) = 0$$
 Esto significa que la solución se encuentra cuando la suma de los residuos ($y_i - p_i$) ponderados por cada predictor es cero.
 
 
-# Implementación del Algoritmo IRLS
+# Implementación del algoritmo IRLS
 
 Como las ecuaciones de verosimilitud no tienen solución analítica cerrada, se utiliza el algoritmo IRLS. Para la regresión logística, los componentes específicos son:
 
@@ -574,17 +573,17 @@ Como las ecuaciones de verosimilitud no tienen solución analítica cerrada, se 
 El peso de cada observación es la varianza de una distribución Bernoulli, que es máxima cuando la probabilidad es 0.5.
 $$w_i = p_i(1-p_i)$$
 
-**Variable Dependiente Ajustada ($z_i$):**
+**Variable dependiente ajustada ($z_i$):**
 Es la versión linealizada de la respuesta en cada iteración.
 $$z_i = \eta_i^{(t)} + \frac{y_i - p_i^{(t)}}{w_i^{(t)}}$$
 
 Estos componentes se utilizan en cada paso de la actualización de los coeficientes: $\boldsymbol{\beta}^{(t+1)} = (\mathbf{X}^T \mathbf{W}^{(t)} \mathbf{X})^{-1} \mathbf{X}^T \mathbf{W}^{(t)} \mathbf{z}^{(t)}$.
 
-# Ejemplo: Verificación de la Estimación MLE en R
+# Ejemplo: verificación de la estimación MLE en R
 
 Podemos verificar que los coeficientes encontrados por `glm()` son, en efecto, los que maximizan la función de log-verosimilitud. A continuación se muestra la salida del código R:
 
-**Salida del Análisis:**
+**Salida del análisis:**
 
 ```
 Coeficientes estimados por glm():
@@ -600,11 +599,11 @@ Iteraciones necesarias: 4
 
 **Conclusión:** La salida confirma que el algoritmo convergió en 4 iteraciones para encontrar los coeficientes que maximizan la verosimilitud del modelo.
 
-# Interpretación: Probabilidad vs. Odds
+# Interpretación: probabilidad vs. odds
 
 Los coeficientes $\beta$ están en la escala del logit, por lo que no son directamente interpretables en términos de probabilidad. Para interpretarlos, primero necesitamos entender el concepto de **odds**.
 
-**Definición de Odds:**
+**Definición de odds:**
 
 * El **odds** es la razón entre la probabilidad de que un evento ocurra y la de que no ocurra.
     $$
@@ -634,7 +633,7 @@ El **Odds Ratio (OR)** es la herramienta principal para interpretar los coeficie
 
 **Ejemplo:** Si $\beta_{BMI} = 0.08$, entonces $OR = e^{0.08} \approx 1.083$. Por cada unidad que aumenta el BMI, el odds de tener diabetes se multiplica por 1.083 (es decir, aumenta un **8.3%**).
 
-# Bondad de Ajuste: Deviance y Pseudo R²
+# Bondad de ajuste: deviance y pseudo R²
 
 El $R^2$ tradicional no es aplicable en este contexto. La bondad de ajuste en regresión logística se evalúa con métricas basadas en la verosimilitud.
 
@@ -648,7 +647,7 @@ El $R^2$ tradicional no es aplicable en este contexto. La bondad de ajuste en re
 * Son análogos al $R^2$ que miden la mejora en la verosimilitud del modelo en comparación con un modelo nulo (solo con intercepto).
 * No representan la "proporción de varianza explicada", sino la mejora en el ajuste del modelo.
 
-# Bondad de Ajuste: Tipos de Pseudo R²
+# Bondad de ajuste: Tipos de pseudo R²
 
 Existen varias formulaciones para el Pseudo R². Las más comunes son:
 
@@ -663,11 +662,11 @@ Existen varias formulaciones para el Pseudo R². Las más comunes son:
     $$R^2_{\text{Nagelkerke}} = \frac{R^2_{\text{Cox-Snell}}}{1 - (L_{\text{nulo}})^{2/n}}$$
 
 
-# Validación: La Matriz de Confusión
+# Validación: La matriz de confusión
 
 La validación de un modelo logístico se centra en su **capacidad de clasificación**.
 
-**La Matriz de Confusión**
+**La matriz de confusión**
 
 * Es la herramienta fundamental. Compara las clases predichas por el modelo con las clases reales.
 * **Proceso:** Se convierten las probabilidades predichas ($\hat{p}_i$) en clases ("Sí" / "No") usando un **umbral de decisión** (típicamente 0.5).
@@ -679,7 +678,7 @@ Esto genera cuatro posibles resultados:
 * **Verdaderos Negativos (VN):** Predijo "No" y era "No".
 * **Falsos Negativos (FN):** Predijo "No" pero era "Sí" (Error Tipo II).
 
-# Validación: Métricas de Clasificación
+# Validación: Métricas de clasificación
 
 A partir de la matriz de confusión, se calculan las métricas de rendimiento clave:
 
@@ -717,15 +716,15 @@ A partir de la matriz de confusión, se calculan las métricas de rendimiento cl
 
     Sí, es una idea excelente. Integrar los ejemplos prácticos es fundamental para conectar la teoría con la aplicación en R.
 
-# Caso Práctico: Resultados del Modelo Logístico
+# Caso práctico: Resultados del modelo logístico
 
 Ajustamos un modelo para predecir la diabetes en el dataset `Pima.tr`. Los resultados clave de la validación del modelo son los siguientes:
 
 ::::: columns
 ::: {.column width="45%"}
-**Resultados Numéricos**
+**Resultados numéricos**
 
-**Matriz de Confusión:**
+**Matriz de confusión:**
 
 ```
        Actual
@@ -734,13 +733,13 @@ Predicted No Yes
       Yes  18  39
 ```
 
-**Métricas Clave:**
+**Métricas clave:**
 
   * **Exactitud:** 0.785
   * **AUC:** 0.831
 :::
 ::: {.column width="55%"}
-**Evaluación Visual: Curva ROC**
+**Evaluación visual: Curva ROC**
 
 ```{r}
 #| echo: false
@@ -758,27 +757,27 @@ plot(roc_obj, main = "Curva ROC (AUC = 0.831)")
 :::::
 
 
-# Regresión de Poisson: Modelando Datos de Conteo
+# Regresión de Poisson: Modelando datos de conteo
 
 Es la técnica de GLM utilizada para modelar **datos de conteo**: una variable que representa el número de veces que ocurre un evento en un intervalo.
 
-* **Tipo de Variable:** La respuesta toma valores enteros no negativos ($0, 1, 2, \dots$) y se asume que sigue una **distribución de Poisson**.
-* **Función de Probabilidad de Poisson:**
+* **Tipo de variable:** La respuesta toma valores enteros no negativos ($0, 1, 2, \dots$) y se asume que sigue una **distribución de Poisson**.
+* **Función de probabilidad de Poisson:**
     $$P(Y = y) = \frac{e^{-\lambda} \lambda^y}{y!}$$
     donde $\lambda$ es la **tasa media de ocurrencia** del evento.
 
 
-# El Modelo de Regresión de Poisson
+# El modelo de regresión de Poisson
 
 El objetivo del modelo es explicar la relación entre la **tasa de ocurrencia de los eventos** ($\lambda$) y un conjunto de variables predictoras $X$.
 
-* **Forma Funcional:** Se utiliza una **función de enlace logarítmica** para asegurar que la tasa $\lambda$ sea siempre positiva.
+* **Forma funcional:** Se utiliza una **función de enlace logarítmica** para asegurar que la tasa $\lambda$ sea siempre positiva.
     $$\log(\lambda) = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p$$
 * **Tasa Esperada:** El modelo puede expresarse en términos de la tasa esperada de eventos como:
     $$\lambda = e^{\beta_0 + \beta_1 X_1 + \dots + \beta_p X_p}$$
 
 
-# Supuestos y Limitaciones Clave
+# Supuestos y limitaciones clave
 
 Para que el modelo sea adecuado, se deben cumplir ciertos supuestos:
 
@@ -786,13 +785,13 @@ Para que el modelo sea adecuado, se deben cumplir ciertos supuestos:
 * **Equidispersión:** El supuesto fundamental de la distribución de Poisson es que la **media es igual a la varianza**:
     $$E(Y) = Var(Y) = \lambda$$
 
-**Limitaciones Comunes (Violación de Supuestos):**
+**Limitaciones comunes (violación de supuestos):**
 
 * **Sobredispersión:** Ocurre cuando la varianza es mayor que la media ($Var(Y) > E(Y)$). La solución es usar una **Regresión Binomial Negativa**.
-* **Exceso de Ceros:** Si hay más ceros en los datos de los que predice el modelo. La solución es usar modelos **ZIP** (*Zero-Inflated Poisson*).
+* **Exceso de ceros:** Si hay más ceros en los datos de los que predice el modelo. La solución es usar modelos **ZIP** (*Zero-Inflated Poisson*).
 
 
-# Interpretación de Coeficientes
+# Interpretación de coeficientes
 
 Los coeficientes $\beta$ están en la escala logarítmica de la tasa, por lo que para una interpretación práctica, los exponenciamos.
 
@@ -804,24 +803,24 @@ Los coeficientes $\beta$ están en la escala logarítmica de la tasa, por lo que
     * **IRR = 1:** No hay efecto.
 
 
-# Estimación por Máxima Verosimilitud 
+# Estimación por máxima verosimilitud 
 
 La estimación se adapta a la distribución de Poisson con enlace logarítmico.
 
-* **Función de Verosimilitud ($L(\boldsymbol{\beta})$):**
+* **Función de verosimilitud ($L(\boldsymbol{\beta})$):**
     $$L(\boldsymbol{\beta}) = \prod_{i=1}^{n} \frac{e^{-\lambda_i} \lambda_i^{y_i}}{y_i!}$$
     donde $\lambda_i = e^{\mathbf{x}_i^T\boldsymbol{\beta}}$.
-* **Función de Log-Verosimilitud ($\ell(\boldsymbol{\beta})$):**
+* **Función de log-verosimilitud ($\ell(\boldsymbol{\beta})$):**
     $$\ell(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[y_i \mathbf{x}_i^T\boldsymbol{\beta} - e^{\mathbf{x}_i^T\boldsymbol{\beta}} - \log(y_i!)\right]$$
-* **Ecuaciones de Puntuación:** La solución de máxima verosimilitud se encuentra cuando:
+* **Ecuaciones de puntuación:** La solución de máxima verosimilitud se encuentra cuando:
     $$\frac{\partial \ell}{\partial \beta_j} = \sum_{i=1}^{n} x_{ij}(y_i - \lambda_i) = 0$$
 
 
-# Ejemplo Práctico: Salida del Modelo Poisson
+# Ejemplo práctico: Salida del modelo Poisson
 
 **Objetivo:** Ajustamos un modelo para predecir el `número de accidentes` en función del `tráfico` y la `visibilidad`.
 
-**Salida de Coeficientes (`summary`)**
+**Salida de coeficientes (`summary`)**
 
 ```
 Coefficients:
@@ -831,23 +830,23 @@ trafico      9.999e-03  1.360e-06 < 2e-16 ***
 visibilidad -2.000e-01  1.012e-04 < 2e-16 ***
 ```
 
-**Métricas Globales del Modelo**
+**Métricas globales del modelo**
 
   * **Null deviance:** 1.68e+08 (con 99 g.l.)
   * **Residual deviance:** 89.3 (con 97 g.l.)
   * **AIC:** 1220.4
 
 
-# Ejemplo Práctico: Interpretación de Resultados
+# Ejemplo práctico: Interpretación de resultados
 
-**Significancia de los Predictores**
+**Significancia de los predictores**
 
 Basado en los p-valores (`Pr(>|z|)`) de la diapositiva anterior:
 
   * Tanto `trafico` como `visibilidad` son predictores **altamente significativos** (sus p-valores son prácticamente cero).
 
 
-**Interpretación de los Coeficientes (vía IRR)**
+**Interpretación de los coeficientes (vía IRR)**
 
 Para interpretar el efecto práctico, exponenciamos los coeficientes ($\text{IRR} = e^\beta$):
 
@@ -856,52 +855,52 @@ Para interpretar el efecto práctico, exponenciamos los coeficientes ($\text{IRR
   * **IRR (visibilidad):** $e^{-0.20} \approx 0.82$.
       * Un aumento de 1 km en `visibilidad` **reduce** la tasa de accidentes esperada en un **18%**.
 
-# Implementación del Algoritmo IRLS para Poisson
+# Implementación del algoritmo IRLS para Poisson
 
 Como no hay solución analítica cerrada, se utiliza el algoritmo IRLS con componentes específicos para Poisson.
 
 * **Pesos ($w_i$):** El peso de cada observación es simplemente la tasa esperada.
     $$w_i = \lambda_i$$
-* **Variable Dependiente Ajustada ($z_i$):**
+* **Variable dependiente ajustada ($z_i$):**
     $$z_i = \log(\lambda_i^{(t)}) + \frac{y_i - \lambda_i^{(t)}}{\lambda_i^{(t)}}$$
 
 * **Actualización de parámetros:**
 $$\boldsymbol{\beta}^{(t+1)} = (\mathbf{X}^T \mathbf{W}^{(t)} \mathbf{X})^{-1} \mathbf{X}^T \mathbf{W}^{(t)} \mathbf{z}^{(t)}$$
 
-# Propiedades Específicas de la Estimación Poisson
+# Propiedades específicas de la estimación Poisson
 
 La estimación MLE en el modelo de Poisson tiene características particulares:
 
 1.  **Equidispersión:** El modelo asume que la varianza aumenta linealmente con la media ($E(Y_i) = \text{Var}(Y_i) = \lambda_i$).
-2.  **Convergencia Rápida:** Generalmente requiere menos iteraciones que la regresión logística.
-3.  **Estabilidad Numérica:** El enlace logarítmico garantiza automáticamente que las tasas estimadas $\lambda_i$ sean siempre positivas.
-4.  **Interpretación Multiplicativa:** Los coeficientes se interpretan naturalmente como efectos multiplicativos sobre la tasa.
+2.  **Convergencia rápida:** Generalmente requiere menos iteraciones que la regresión logística.
+3.  **Estabilidad numérica:** El enlace logarítmico garantiza automáticamente que las tasas estimadas $\lambda_i$ sean siempre positivas.
+4.  **Interpretación multiplicativa:** Los coeficientes se interpretan naturalmente como efectos multiplicativos sobre la tasa.
 
-# Bondad de Ajuste en Regresión de Poisson
+# Bondad de ajuste en regresión de Poisson
 
 La métrica teórica fundamental sigue siendo la **deviance**, pero en la práctica, la prueba de bondad de ajuste más importante es la **evaluación de la sobredispersión**.
 
-* **Herramienta de Diagnóstico:** El **estadístico de dispersión ($\hat{\phi}$)** se convierte en la medida de facto del ajuste.
+* **Herramienta de fiagnóstico:** El **estadístico de dispersión ($\hat{\phi}$)** se convierte en la medida de facto del ajuste.
     $$\hat{\phi} = \frac{X^2_{\text{Pearson}}}{n-p}$$
 * **Interpretación:**
     * Si **$\hat{\phi} \approx 1$**: El supuesto de equidispersión se cumple y el ajuste es adecuado.
     * Si **$\hat{\phi} \gg 1$**: Hay **sobredispersión**. El modelo no se ajusta bien a la variabilidad de los datos, y se debe considerar una **Regresión Binomial Negativa**.
 
 
-# Validación del Modelo de Poisson
+# Validación del modelo de Poisson
 
 La validación se enfoca en la **capacidad de predicción**: ¿qué tan cerca están los conteos predichos de los conteos reales?
 
 * **Proceso:** Se ajusta el modelo en un conjunto de **entrenamiento** y se evalúa su rendimiento en un conjunto de **prueba**.
-* **Métricas de Validación Principales:**
+* **Métricas de validación principales:**
     * **Raíz del Error Cuadrático Medio (RMSE):** Mide la desviación estándar de los residuos. Penaliza más los errores grandes.
         $$\text{RMSE} = \sqrt{\frac{1}{n}\sum(y_i - \hat{\mu}_i)^2}$$
     * **Error Absoluto Medio (MAE):** Mide la magnitud promedio de los errores. Es menos sensible a outliers.
         $$\text{MAE} = \frac{1}{n}\sum|y_i - \hat{\mu}_i|$$
-* **Herramienta Visual:** **Gráfico de valores predichos vs. valores reales**. En un buen modelo, los puntos deben agruparse cerca de la línea diagonal $y=x$.
+* **Herramienta visual:** **Gráfico de valores predichos vs. valores reales**. En un buen modelo, los puntos deben agruparse cerca de la línea diagonal $y=x$.
 
 
-# Ejemplo Práctico: Diagnóstico del Modelo Poisson
+# Ejemplo práctico: Diagnóstico del modelo Poisson
 
 Este segundo ejemplo se centra en verificar dos aspectos clave de la estimación: la **convergencia del algoritmo** y el supuesto de **equidispersión**.
 
@@ -918,7 +917,7 @@ Razón varianza/media: 0.993
 * **Conclusión:** La razón es **muy cercana a 1**, por lo que **se cumple el supuesto**. No hay evidencia de sobredispersión y el modelo de Poisson es adecuado.
 
 
-# Otros GLMs: Adaptándose a la Realidad de los Datos
+# Otros GLMs: Adaptándose a la realidad de los datos
 
 Más allá de la regresión logística y de Poisson, existen otros GLM para manejar situaciones más complejas.
 
@@ -950,22 +949,22 @@ Exploraremos los tres modelos más importantes para estos casos:
 * Si $\alpha = 0$, el modelo se reduce a la regresión de Poisson.
 
 
-# Interpretación y Comparación
+# Interpretación y comparación
 
 La forma funcional del modelo es la misma que la de Poisson (con enlace logarítmico), pero debemos interpretar el nuevo parámetro de dispersión y comparar ambos modelos.
 
-**Interpretación del Parámetro de Dispersión ($\theta$)**
+**Interpretación del parámetro de dispersión ($\theta$)**
 
 * El software (como la función `glm.nb` en R) estima un parámetro $\theta$, donde $\alpha = 1/\theta$.
 * **Valores altos de $\theta$** (ej. > 100): Poca sobredispersión. El modelo es similar a Poisson.
 * **Valores bajos de $\theta$** (ej. < 10): Mucha sobredispersión. El modelo Binomial Negativo es claramente más apropiado.
 
-**Comparación de Modelos (Poisson vs. Binomial Negativa)**
+**Comparación de modelos (Poisson vs. Binomial Negativa)**
 
 * Se utiliza el **Criterio de Información de Akaike (AIC)**.
 * Si el **AIC de la Binomial Negativa es menor** que el AIC de Poisson, debemos preferir el modelo Binomial Negativo.
 
-# Modelos para Variables Continuas No Normales
+# Modelos para variables continuas no normales
 
 Cuando la variable dependiente (Y) es **continua**, pero **no sigue una distribución normal**, la regresión lineal clásica no es adecuada.
 
@@ -982,34 +981,34 @@ Los GLM nos ofrecen alternativas como la **Regresión Gamma** y la **Regresión 
 ::: {.column width="50%"}
 **Regresión Gamma**
 
-* **Uso Típico:** Para variables continuas **positivas y con sesgo a la derecha** (tiempos, costos, reclamos de seguros).
+* **Uso típico:** Para variables continuas **positivas y con sesgo a la derecha** (tiempos, costos, reclamos de seguros).
 * **Varianza:** Aumenta proporcionalmente al **cuadrado de la media** ($V(\mu)=\mu^2$).
-* **Enlace Común:** Logarítmico ($\log(\mu) = X\beta$).
+* **Enlace común:** Logarítmico ($\log(\mu) = X\beta$).
 :::
 ::: {.column width="50%"}
 **Regresión Inversa Gaussiana**
 
-* **Uso Típico:** Para tiempos de respuesta o variables con un **sesgo aún más pronunciado** que la Gamma.
+* **Uso típico:** Para tiempos de respuesta o variables con un **sesgo aún más pronunciado** que la Gamma.
 * **Varianza:** Aumenta proporcionalmente al **cubo de la media** ($V(\mu)=\mu^3$).
-* **Enlace Común:** Inverso al cuadrado ($1/\mu^2 = X\beta$).
+* **Enlace común:** Inverso al cuadrado ($1/\mu^2 = X\beta$).
 :::
 :::::
 
-# Guía de Decisión: ¿Qué GLM Debo Usar?
+# Guía de decisión: ¿Qué GLM debo usar?
 
 La elección del modelo depende casi exclusivamente de la naturaleza de tu variable respuesta (Y).
 
-* **¿Es Y binaria (0/1, Éxito/Fracaso)?**
+* **¿Es $Y$ binaria (0/1, Éxito/fracaso)?**
 Usa **Regresión Logística**.
 
-* **¿Es Y un conteo de eventos (nº de accidentes, nº de clientes)?**
+* **¿Es $Y$ un conteo de eventos (nº de accidentes, nº de clientes)?**
 
 Empieza con una **Regresión de Poisson**.
 
 * **Importante:** Después, comprueba si hay **sobredispersión**. Si la hay ($\hat{\phi} > 1.5$), cambia a una **Regresión Binomial Negativa**.
 
-* **¿Es Y continua, positiva y con sesgo a la derecha (tiempos, costos)?**
+* **¿Es $Y$ continua, positiva y con sesgo a la derecha (tiempos, costos)?**
 Usa **Regresión Gamma**. Es una excelente alternativa a transformar la variable con logaritmos y usar un modelo lineal.
 
-* **¿Es Y un tiempo hasta un evento con una asimetría muy pronunciada?**
+* **¿Es $Y$ un tiempo hasta un evento con una asimetría muy pronunciada?**
 Considera una **Regresión Inversa Gaussiana**.

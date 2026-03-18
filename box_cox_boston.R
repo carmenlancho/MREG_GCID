@@ -19,6 +19,8 @@ datos <- Boston
 str(datos)
 summary(datos)
 
+datos$chas <- as.factor(datos$chas)
+
 # ---------------------------------------------------------
 # 2. Modelo lineal inicial
 # Variable dependiente: medv
@@ -137,8 +139,6 @@ ncvTest(modelo_boxcox)
 # Independencia
 durbinWatsonTest(modelo_boxcox)
 
-# Multicolinealidad
-vif(modelo_boxcox)
 
 # ---------------------------------------------------------
 # 8. Comparación simple de ajuste
@@ -182,39 +182,6 @@ if (abs(lambda_opt) < 0.1) {
 head(pred_original_scale)
 
 
-
-#### Versión compacta
-library(MASS)
-library(lmtest)
-library(car)
-
-data("Boston")
-
-m1 <- lm(medv ~ lstat + rm + ptratio + crim, data = Boston)
-summary(m1)
-
-plot(m1)
-shapiro.test(resid(m1))
-bptest(m1)
-ncvTest(m1)
-
-bc <- boxcox(m1, lambda = seq(-2, 2, 0.1))
-lambda <- bc$x[which.max(bc$y)]
-lambda
-
-if (abs(lambda) < 0.1) {
-  Boston$medv_bc <- log(Boston$medv)
-} else {
-  Boston$medv_bc <- (Boston$medv^lambda - 1) / lambda
-}
-
-m2 <- lm(medv_bc ~ lstat + rm + ptratio + crim, data = Boston)
-summary(m2)
-
-plot(m2)
-shapiro.test(resid(m2))
-bptest(m2)
-ncvTest(m2)
 
 
 # Se aplicó una transformación Box-Cox con el objetivo de mejorar el 
