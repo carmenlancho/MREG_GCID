@@ -256,7 +256,7 @@ window.Quarto = {
   <ul>
   <li><a href="#proceso-completo-de-construcción-y-optimización-del-modelo" id="toc-proceso-completo-de-construcción-y-optimización-del-modelo" class="nav-link active" data-scroll-target="#proceso-completo-de-construcción-y-optimización-del-modelo"><span class="header-section-number">5.1</span> Proceso completo de construcción y optimización del modelo</a></li>
   <li><a href="#filtrado-basado-en-información-básica" id="toc-filtrado-basado-en-información-básica" class="nav-link" data-scroll-target="#filtrado-basado-en-información-básica"><span class="header-section-number">5.2</span> Filtrado basado en información básica</a></li>
-  <li><a href="#criterios-de-bondad-de-ajuste" id="toc-criterios-de-bondad-de-ajuste" class="nav-link" data-scroll-target="#criterios-de-bondad-de-ajuste"><span class="header-section-number">5.3</span> Criterios de Bondad de Ajuste</a>
+  <li><a href="#criterios-de-bondad-de-ajuste" id="toc-criterios-de-bondad-de-ajuste" class="nav-link" data-scroll-target="#criterios-de-bondad-de-ajuste"><span class="header-section-number">5.3</span> Criterios de bondad de ajuste</a>
   <ul class="collapse">
   <li><a href="#criterio-de-información-de-akaike" id="toc-criterio-de-información-de-akaike" class="nav-link" data-scroll-target="#criterio-de-información-de-akaike"><span class="header-section-number">5.3.1</span> Criterio de Información de Akaike</a></li>
   <li><a href="#criterio-de-información-bayesiano" id="toc-criterio-de-información-bayesiano" class="nav-link" data-scroll-target="#criterio-de-información-bayesiano"><span class="header-section-number">5.3.2</span> Criterio de Información Bayesiano</a></li>
@@ -308,7 +308,7 @@ window.Quarto = {
 
 
 <p>En los modelos de regresión, especialmente cuando se trabaja con conjuntos de datos que incluyen un gran número de variables predictoras, es común enfrentarse al desafío de identficar qué variables son realmente relevantes para explicar la variable respuesta. La inclusión de demasiadas variables en un modelo puede llevar a problemas como el sobreajuste, pérdida de interpretabilidad y complejidad innecesaria, mientras que la exclusión de variables importantes puede resultar en modelos subóptimos.</p>
-<p>Este tema aborda uno de los aspectos más críticos en la construcción de modelos de regresión: cómo seleccionar el subconjunto óptimo de variables predictoras y cómo validar la calidad del modelo resultante. Una vez realizado el análisis exploratorio y el ajuste inicial del modelo, surge la necesidad crítica de optimizar la selección de variables. Cuando se dispone de <span class="math inline">\(p\)</span> variables explicativas, es posible construir hasta <span class="math inline">\(2^p\)</span> modelos diferentes considerando todas las combinaciones posibles. Sin embargo, explorar de manera exhaustiva todos estos modelos puede ser computacionalmente inviable cuando <span class="math inline">\(p\)</span> es grande.</p>
+<p>Este tema aborda uno de los aspectos más críticos en la construcción de modelos de regresión: cómo seleccionar el mejor subconjunto de variables predictoras y cómo validar la calidad del modelo resultante. Una vez realizado el análisis exploratorio y el ajuste inicial del modelo, surge la necesidad crítica de optimizar la selección de variables. Cuando se dispone de <span class="math inline">\(p\)</span> variables explicativas, es posible construir hasta <span class="math inline">\(2^p\)</span> modelos diferentes considerando todas las combinaciones posibles. Sin embargo, explorar de manera exhaustiva todos estos modelos puede ser computacionalmente inviable cuando <span class="math inline">\(p\)</span> es grande.</p>
 <p>Para superar este desafío, en este tema nos enfocaremos en cinco enfoques principales:</p>
 <ol type="1">
 <li><p><strong>Filtrado basado en información básica</strong>: Eliminación preliminar de variables irrelevantes mediante criterios básicos (variabilidad, correlación, VIF)</p></li>
@@ -588,8 +588,8 @@ Ejemplo de filtrado inicial
 <p>Es importante considerar que este filtrado no es definitivo, ya que variables eliminadas en esta etapa pueden ser importantes en combinaciones específicas. Además, está basado en relaciones lineales y puede omitir relaciones no lineales importantes. Por tanto, requiere validación posterior del modelo resultante y los umbrales deben ajustarse según el dominio de aplicación específico.</p>
 </section>
 <section id="criterios-de-bondad-de-ajuste" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="criterios-de-bondad-de-ajuste"><span class="header-section-number">5.3</span> Criterios de Bondad de Ajuste</h2>
-<p>Una vez completado el filtrado preliminar de variables, nos enfrentamos a una de las tareas más importantes del modelado: seleccionar la combinación óptima de predictores. El objetivo es encontrar un equilibrio delicado. Un modelo con muy pocas variables puede ser demasiado simple y no capturar la relación real (<strong>subajuste</strong> o <em>underfitting</em>), mientras que un modelo con demasiadas variables puede ajustarse al ruido de la muestra y no generalizar bien a nuevos datos (<strong>sobreajuste</strong> u <em>overfitting</em>).</p>
+<h2 data-number="5.3" class="anchored" data-anchor-id="criterios-de-bondad-de-ajuste"><span class="header-section-number">5.3</span> Criterios de bondad de ajuste</h2>
+<p>Una vez completado el filtrado preliminar de variables, nos enfrentamos a una de las tareas más importantes del modelado: seleccionar la mejor combinación de predictores. El objetivo es encontrar un equilibrio delicado. Un modelo con muy pocas variables puede ser demasiado simple y no capturar la relación real (<strong>subajuste</strong> o <em>underfitting</em>), mientras que un modelo con demasiadas variables puede ajustarse al ruido de la muestra y no generalizar bien a nuevos datos (<strong>sobreajuste</strong> u <em>overfitting</em>).</p>
 <p>Para navegar este compromiso, utilizamos criterios de información que cuantifican la calidad de un modelo, equilibrando su capacidad explicativa con su complejidad. Estos nos permiten comparar modelos con diferente número de predictores de forma rigurosa y objetiva. Los tres criterios más influyentes en la estadística clásica son el Criterio de Información de Akaike (AIC), el Criterio de Información Bayesiano (BIC) y el estadístico Cp de Mallows.</p>
 <section id="criterio-de-información-de-akaike" class="level3" data-number="5.3.1">
 <h3 data-number="5.3.1" class="anchored" data-anchor-id="criterio-de-información-de-akaike"><span class="header-section-number">5.3.1</span> Criterio de Información de Akaike</h3>
@@ -634,7 +634,7 @@ Visualización del Cp de Mallows
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Una de las aplicaciones más útiles del Cp de Mallows es su visualización gráfica para identificar el modelo óptimo. El siguiente ejemplo muestra cómo crear un gráfico de Cp que facilita la interpretación y selección del mejor modelo.</p>
+<p>Una de las aplicaciones más útiles del Cp de Mallows es su visualización gráfica para identificar el mejor modelo. El siguiente ejemplo muestra cómo crear un gráfico de Cp que facilita la interpretación y selección del mejor modelo.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar librerías necesarias</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
@@ -672,7 +672,7 @@ Visualización del Cp de Mallows
 <span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> mejor_cp_idx, <span class="at">y =</span> mejor_cp_valor), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">shape =</span> <span class="dv">17</span>) <span class="sc">+</span></span>
 <span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Etiqueta para el mejor punto</span></span>
 <span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> mejor_cp_idx, <span class="at">y =</span> mejor_cp_valor <span class="sc">+</span> <span class="fl">1.5</span>,</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Óptimo Cp</span><span class="sc">\n</span><span class="st">("</span>, mejor_cp_idx, <span class="st">"variables)"</span>), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Mejor Cp</span><span class="sc">\n</span><span class="st">("</span>, mejor_cp_idx, <span class="st">"variables)"</span>), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
 <span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Criterio Cp de Mallows para Selección de Variables (mtcars)"</span>,</span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Se busca el modelo con el valor de Cp más bajo"</span>,</span>
@@ -699,8 +699,8 @@ Visualización del Cp de Mallows
 </div>
 <p>El gráfico resultante nos permite diagnosticar visualmente la calidad de los modelos candidatos. La línea discontinua roja representa la referencia para un modelo sin sesgo (<span class="math inline">\(C_p = p+1\)</span>).</p>
 <p>La estrategia de selección es clara: <strong>identificar el modelo que minimice el estadístico Cp</strong>. Este punto representa el mejor equilibrio teórico entre el sesgo del modelo (subajuste) y su varianza (sobreajuste). La línea roja nos ayuda a confirmar visualmente que el modelo elegido, además de ser el de menor Cp, tiene un sesgo bajo.</p>
-<p>Como se observa, el estadístico Cp disminuye drásticamente al pasar de uno a dos predictores. El modelo con <strong>3 variables</strong> es el seleccionado como óptimo porque alcanza el valor de Cp más bajo de todos los candidatos, con un valor de <strong>0.1</strong>.</p>
-<p>El análisis sugiere que el modelo más parsimonioso y con el mejor rendimiento predictivo se compone de las siguientes variables: <strong>wt, qsec, am</strong>. Añadir más predictores más allá de este punto óptimo no mejora el modelo; de hecho, el valor de Cp comienza a aumentar, lo que indica que estamos añadiendo una complejidad innecesaria y empezando a sobreajustar los datos.</p>
+<p>Como se observa, el estadístico Cp disminuye drásticamente al pasar de uno a dos predictores. El modelo con <strong>3 variables</strong> es el seleccionado como el mejor porque alcanza el valor de Cp más bajo de todos los candidatos, con un valor de <strong>0.1</strong>.</p>
+<p>El análisis sugiere que el modelo más parsimonioso y con el mejor rendimiento predictivo se compone de las siguientes variables: <strong>wt, qsec, am</strong>. Añadir más predictores más allá de este punto no mejora el modelo; de hecho, el valor de Cp comienza a aumentar, lo que indica que estamos añadiendo una complejidad innecesaria y empezando a sobreajustar los datos.</p>
 </div>
 </div>
 </div>
@@ -839,7 +839,7 @@ El principio de parsimonia en la selección de modelos
 </section>
 <section id="métodos-de-selección-exhaustiva" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="métodos-de-selección-exhaustiva"><span class="header-section-number">5.4</span> Métodos de selección exhaustiva</h2>
-<p>Los métodos de selección exhaustiva son un enfoque fundamental en la búsqueda de un subconjunto óptimo de variables predictoras en modelos de regresión. Este enfoque evalúa de manera sistemática diferentes combinaciones de variables para identificar cuál de ellas proporciona el mejor ajuste al modelo en función de un criterio predefinido, como el coeficiente de determinación ajustado (<span class="math inline">\(R^2\)</span> ajustado) o criterios de información como AIC o BIC.</p>
+<p>Los métodos de selección exhaustiva son un enfoque fundamental en la búsqueda del mejor subconjunto de variables predictoras en modelos de regresión. Este enfoque evalúa de manera sistemática diferentes combinaciones de variables para identificar cuál de ellas proporciona el mejor ajuste al modelo en función de un criterio predefinido, como el coeficiente de determinación ajustado (<span class="math inline">\(R^2\)</span> ajustado) o criterios de información como AIC o BIC.</p>
 <p>A diferencia de los métodos automáticos, los métodos de selección exhaustiva no dependen de un proceso iterativo de adición o eliminación de variables. En cambio, buscan exhaustivamente (o mediante aproximaciones computacionalmente más eficientes) entre todas las posibles combinaciones de variables, lo que garantiza un análisis completo de las interacciones y relevancias potenciales.</p>
 <p>El método más conocido dentro de este enfoque es la <strong>selección del mejor subconjunto (Best Subset Selection)</strong>, que evalúa todos los subconjuntos posibles de variables y selecciona el mejor para cada tamaño específico. Es el enfoque más completo pero también el más exigente computacionalmente. Para un conjunto de <span class="math inline">\(p\)</span> variables predictoras, este método construye todos los modelos posibles que incluyen <span class="math inline">\(k\)</span> variables, donde <span class="math inline">\(k = 1, 2, ..., p\)</span>, seleccionando el mejor modelo de cada tamaño según el criterio elegido.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo de selección exhaustiva">
@@ -871,7 +871,7 @@ Ejemplo de selección exhaustiva
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>total_variables <span class="ot">&lt;-</span> <span class="fu">ncol</span>(mtcars) <span class="sc">-</span> <span class="dv">1</span>  <span class="co"># Excluir variable respuesta</span></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>variables_seleccionadas <span class="ot">&lt;-</span> mejor_modelo_idx</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>El método de selección exhaustiva aplicado al conjunto de datos <code>mtcars</code> identifica el modelo óptimo que maximiza el R² ajustado. Este modelo alcanza un <strong>R² ajustado de 0.8375</strong>, utilizando <strong>5 variables</strong> del total de <strong>10 variables</strong> predictoras disponibles. Esta selección representa un equilibrio óptimo entre la capacidad explicativa del modelo y la penalización por complejidad, demostrando cómo la evaluación exhaustiva puede identificar el subconjunto de variables que mejor explica la variabilidad en el consumo de combustible.</p>
+<p>El método de selección exhaustiva aplicado al conjunto de datos <code>mtcars</code> identifica el modelo que maximiza el R² ajustado. Este modelo alcanza un <strong>R² ajustado de 0.8375</strong>, utilizando <strong>5 variables</strong> del total de <strong>10 variables</strong> predictoras disponibles. Esta selección representa un equilibrio entre la capacidad explicativa del modelo y la penalización por complejidad, demostrando cómo la evaluación exhaustiva puede identificar el subconjunto de variables que mejor explica la variabilidad en el consumo de combustible.</p>
 </div>
 </div>
 </div>
@@ -995,7 +995,7 @@ SSE_{ridge} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \lambda \s
 <li>A medida que <span class="math inline">\(\lambda\)</span> aumenta, los coeficientes <span class="math inline">\(\beta_j\)</span> (pendientes) se reducen en magnitud, lo que ayuda a controlar la varianza del modelo y a prevenir el sobreajuste.</li>
 <li>Si <span class="math inline">\(\lambda\)</span> es demasiado grande, los coeficientes se acercan a cero y el modelo puede perder interpretabilidad.</li>
 </ul>
-<p>La elección óptima de <span class="math inline">\(\lambda\)</span> se determina generalmente mediante <strong>validación cruzada</strong>.</p>
+<p>La elección de <span class="math inline">\(\lambda\)</span> se determina generalmente mediante <strong>validación cruzada</strong>.</p>
 <div class="callout callout-style-default callout-caution callout-titled" title="Aviso">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1006,16 +1006,16 @@ Aviso
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Los detalles de la validación cruzada son tratados en la asignatura de Minería de Datos.</p>
+<p>Los detalles de la validación cruzada son tratados en la asignatura de Aprendizaje Automático I.</p>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="Propiedades Clave">
+<div class="callout callout-style-default callout-note callout-titled" title="Propiedades clave">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Propiedades Clave
+Propiedades clave
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -1053,7 +1053,7 @@ Ejemplo
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo Ridge</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>modelo_ridge <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="dv">0</span>)  <span class="co"># alpha = 0 indica regresión Ridge</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Seleccionar lambda óptimo con validación cruzada</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Seleccionar lambda con validación cruzada</span></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>cv_ridge <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="dv">0</span>)</span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>lambda_optimo <span class="ot">&lt;-</span> cv_ridge<span class="sc">$</span>lambda.min  <span class="co"># Mejor valor de lambda</span></span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
@@ -1061,7 +1061,7 @@ Ejemplo
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.2583753</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo final con lambda óptimo</span></span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo final con el lambda seleccionado</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>modelo_ridge_final <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lambda =</span> lambda_optimo)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>modelo_ridge_final</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1119,14 +1119,14 @@ SSE_{\text{lasso}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \la
 <li>A medida que <span class="math inline">\(\lambda\)</span> aumenta, más coeficientes de pendiente se reducen a cero, lo que equivale a realizar <strong>selección de variables</strong>.</li>
 <li>Si <span class="math inline">\(\lambda\)</span> es demasiado grande, se eliminan demasiadas variables, lo que puede resultar en un modelo subóptimo.</li>
 </ul>
-<p>Al igual que en el método <em>Ridge</em>, la selección óptima de <span class="math inline">\(\lambda\)</span> se realiza generalmente mediante <strong>validación cruzada</strong>.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Propiedades Clave">
+<p>Al igual que en el método <em>Ridge</em>, la selección de <span class="math inline">\(\lambda\)</span> se realiza generalmente mediante <strong>validación cruzada</strong>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Propiedades clave">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Propiedades Clave
+Propiedades clave
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -1135,7 +1135,7 @@ Propiedades Clave
 <ul>
 <li><strong>Selección de variables automática:</strong> Lasso no solo regulariza, sino que también selecciona las variables más importantes eliminando aquellas menos relevantes.</li>
 <li><strong>Manejo de la multicolinealidad:</strong> Puede mejorar la interpretación del modelo cuando hay muchas variables correlacionadas.</li>
-<li><strong>Simplicidad y interpretabilidad:</strong> Un modelo con menos variables es más fácil de interpretar y aplicar en la práctica.</li>
+<li><strong>Simplicidad e interpretabilidad:</strong> Un modelo con menos variables es más fácil de interpretar y aplicar en la práctica.</li>
 <li><strong>Reduce el sobreajuste:</strong> La penalización <span class="math inline">\(L_1\)</span> evita que el modelo se ajuste demasiado a los datos de entrenamiento, mejorando su capacidad predictiva en datos nuevos.</li>
 </ul>
 </div>
@@ -1157,16 +1157,16 @@ Ejemplo
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo Lasso</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>modelo_lasso <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="dv">1</span>)  <span class="co"># alpha = 1 indica regresión Lasso</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Seleccionar lambda óptimo con validación cruzada</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Seleccionar lambda con validación cruzada</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>cv_lasso <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="dv">1</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>lambda_optimo <span class="ot">&lt;-</span> cv_lasso<span class="sc">$</span>lambda.min  <span class="co"># Mejor valor de lambda</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>lambda_sel <span class="ot">&lt;-</span> cv_lasso<span class="sc">$</span>lambda.min  <span class="co"># Mejor valor de lambda</span></span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lambda_optimo)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lambda_sel)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.03260326</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo final con lambda óptimo</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>modelo_lasso_final <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">lambda =</span> lambda_optimo)</span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo final con el lambda seleccionado</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>modelo_lasso_final <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">lambda =</span> lambda_sel)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar coeficientes</span></span>
@@ -1238,7 +1238,7 @@ Propiedades clave
 <div id="callout-13" class="callout-13-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <ul>
-<li><p><strong>Manejo de la Multicolinealidad:</strong> A diferencia de Lasso, que selecciona solo una de las variables correlacionadas y elimina las demás, Elastic Net distribuye la penalización entre todas las variables correlacionadas, evitando una selección arbitraria.</p></li>
+<li><p><strong>Manejo de la multicolinealidad:</strong> A diferencia de Lasso, que selecciona solo una de las variables correlacionadas y elimina las demás, Elastic Net distribuye la penalización entre todas las variables correlacionadas, evitando una selección arbitraria.</p></li>
 <li><p><strong>Selección de variables más estable:</strong> La combinación de Lasso y Ridge permite una selección más robusta, manteniendo información relevante del modelo sin eliminar predictores clave.</p></li>
 <li><p><strong>Mejora del rendimiento predictivo:</strong> Al utilizar validación cruzada para seleccionar los hiperparámetros <span class="math inline">\(\lambda_1\)</span>, <span class="math inline">\(\lambda_2\)</span> y <span class="math inline">\(\alpha\)</span>, se optimiza la capacidad del modelo para generalizar a nuevos datos.</p></li>
 </ul>
@@ -1261,16 +1261,16 @@ Ejemplo
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo Elastic Net</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>modelo_elastic_net <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="fl">0.5</span>)  <span class="co"># Alpha = 0.5 (50% Ridge, 50% Lasso)</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Seleccionar lambda óptimo con validación cruzada</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Seleccionar lambda con validación cruzada</span></span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>cv_elastic_net <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="fl">0.5</span>)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>lambda_optimo <span class="ot">&lt;-</span> cv_elastic_net<span class="sc">$</span>lambda.min  <span class="co"># Mejor valor de lambda</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>lambda_sel <span class="ot">&lt;-</span> cv_elastic_net<span class="sc">$</span>lambda.min  <span class="co"># Mejor valor de lambda</span></span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lambda_optimo)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lambda_sel)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.0213522</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo final con lambda óptimo</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>modelo_elastic_final <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">lambda =</span> lambda_optimo)</span>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo final con el lambda seleccionado</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>modelo_elastic_final <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">lambda =</span> lambda_sel)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar coeficientes</span></span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>output<span class="ot">=</span><span class="fu">cbind</span>(<span class="fu">round</span>(<span class="fu">coef</span>(modelo_elastic_final),<span class="dv">3</span>),output)</span>
@@ -1349,7 +1349,7 @@ V10          -0.414 -0.392 -0.390 -0.427</code></pre>
 <ul>
 <li><p>Elastic Net mejora la estabilidad del modelo en comparación con Lasso, especialmente cuando hay variables predictoras altamente correlacionadas.</p></li>
 <li><p>Es más flexible que Ridge y Lasso individualmente, permitiendo un ajuste más fino a distintos tipos de problemas.</p></li>
-<li><p>Requiere la selección de hiperparámetros (<span class="math inline">\(\lambda\)</span> y <span class="math inline">\(\alpha\)</span>), por lo que debe usarse validación cruzada para encontrar la combinación óptima.</p></li>
+<li><p>Requiere la selección de hiperparámetros (<span class="math inline">\(\lambda\)</span> y <span class="math inline">\(\alpha\)</span>), por lo que debe usarse validación cruzada para encontrar la mejor combinación.</p></li>
 </ul>
 </section>
 </section>
@@ -1456,7 +1456,7 @@ Guía para seleccionar estrategia de validación
 </section>
 <section id="métricas-de-rendimiento" class="level3" data-number="5.7.2">
 <h3 data-number="5.7.2" class="anchored" data-anchor-id="métricas-de-rendimiento"><span class="header-section-number">5.7.2</span> Métricas de rendimiento</h3>
-<p>Una vez que usamos una estrategia de validación para generar predicciones sobre datos no vistos, necesitamos una “nota” para cuantificar qué tan buenos fueron esos pronósticos. Aquí es donde entran las métricas de error.</p>
+<p>Una vez que usamos una estrategia de validación para generar predicciones sobre datos no vistos, necesitamos una “nota” para cuantificar cómo de buenos fueron esos pronósticos. Aquí es donde entran las métricas de error.</p>
 <section id="raíz-del-error-cuadrático-medio" class="level4" data-number="5.7.2.1">
 <h4 data-number="5.7.2.1" class="anchored" data-anchor-id="raíz-del-error-cuadrático-medio"><span class="header-section-number">5.7.2.1</span> Raíz del error cuadrático medio</h4>
 <p>La métrica más utilizada es la <strong>raíz del error cuadrático medio (RMSE)</strong>. Es como una desviación típica de los residuos, y nos da una idea de la magnitud promedio de los errores de predicción.</p>
@@ -1468,7 +1468,7 @@ Guía para seleccionar estrategia de validación
 <p>Una alternativa popular es el <strong>error absoluto medio (MAE)</strong>, que simplemente promedia el valor absoluto de los errores.</p>
 <p><span class="math display">\[MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|\]</span></p>
 <p>A diferencia del RMSE, el MAE no eleva los errores al cuadrado, por lo que <strong>trata todos los errores de forma proporcional a su magnitud</strong>. Un error de 10 unidades es simplemente el doble de malo que un error de 5. Esto hace que el MAE sea <strong>más robusto frente a valores atípicos</strong> y, para muchos, más fácil de interpretar como “el error promedio” que cometemos en nuestras predicciones.</p>
-<p>En resumen, la validación nos obliga a confrontar nuestro modelo con la realidad de datos nuevos. Usando una estrategia robusta como la <strong>validación cruzada</strong> para calcular una métrica interpretable como el <strong>RMSE</strong> o el <strong>MAE</strong>, podemos obtener una estimación fiable de su rendimiento predictivo y construir modelos en los que realmente podamos confiar. Claro, aquí tienes ese contenido reorganizado y resumido dentro de un recuadro (<code>callout</code>), ideal para destacar esta idea clave en tu libro.</p>
+<p>En resumen, la validación nos obliga a confrontar nuestro modelo con la realidad de datos nuevos. Usando una estrategia robusta como la <strong>validación cruzada</strong> para calcular una métrica interpretable como el <strong>RMSE</strong> o el <strong>MAE</strong>, podemos obtener una estimación fiable de su rendimiento predictivo y construir modelos en los que realmente podamos confiar.</p>
 <div class="callout callout-style-default callout-important callout-titled" title="Interpretando el error">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1516,7 +1516,7 @@ La maldición del sobreajuste
 <p><strong>1. Simulación de datos</strong></p>
 <p>Creamos un dataset con 100 observaciones. La variable <code>y</code> dependerá de <code>X1</code>, <code>X2</code> y <code>X3</code>. Las variables <code>X4</code> a <code>X10</code> no tendrán ninguna relación real con <code>y</code>; serán <strong>predictores de ruido</strong>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar la librería 'caret', que simplifica enormemente el proceso de validación</span></span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargamos la librería 'caret'</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(caret))</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Para reproducibilidad</span></span>
@@ -1540,7 +1540,7 @@ La maldición del sobreajuste
 <span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>datos_prueba_final <span class="ot">&lt;-</span> datos[<span class="sc">-</span>indices_modelado, ]</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>2. Ajuste y evaluación de modelos con validación cruzada</strong></p>
-<p>Usaremos la función <code>train()</code> del paquete <code>caret</code>, que es una herramienta increíblemente potente para ajustar y validar modelos. Configuraremos una <strong>validación cruzada de 10 particiones (10-fold CV)</strong> para estimar el error de predicción (RMSE) de nuestros dos modelos.</p>
+<p>Usaremos la función <code>train()</code> del paquete <code>caret</code>, que es una herramienta potente para ajustar y validar modelos. Configuraremos una <strong>validación cruzada de 10 particiones (10-fold CV)</strong> para estimar el error de predicción (RMSE) de nuestros dos modelos.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurar el método de validación cruzada de 10 particiones</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>control_cv <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
@@ -1588,9 +1588,8 @@ Rsquared
 COMPLETO 0.5917775 0.7793610 0.8556182 0.8189137 0.8882997 0.9505874    0
 CORRECTO 0.5019737 0.7988599 0.8513481 0.8017851 0.9048191 0.9385882    0</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraer métricas RMSE para uso en el texto</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>rmse_correcto <span class="ot">&lt;-</span> <span class="fu">round</span>(resumen_cv<span class="sc">$</span>statistics<span class="sc">$</span>RMSE[<span class="st">"CORRECTO"</span>, <span class="st">"Mean"</span>], <span class="dv">3</span>)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>rmse_completo <span class="ot">&lt;-</span> <span class="fu">round</span>(resumen_cv<span class="sc">$</span>statistics<span class="sc">$</span>RMSE[<span class="st">"COMPLETO"</span>, <span class="st">"Mean"</span>], <span class="dv">3</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>rmse_correcto <span class="ot">&lt;-</span> <span class="fu">round</span>(resumen_cv<span class="sc">$</span>statistics<span class="sc">$</span>RMSE[<span class="st">"CORRECTO"</span>, <span class="st">"Mean"</span>], <span class="dv">3</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>rmse_completo <span class="ot">&lt;-</span> <span class="fu">round</span>(resumen_cv<span class="sc">$</span>statistics<span class="sc">$</span>RMSE[<span class="st">"COMPLETO"</span>, <span class="st">"Mean"</span>], <span class="dv">3</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>3. Análisis de resultados</strong></p>
 <p>Al comparar el <strong>RMSE</strong> promedio obtenido en la validación cruzada, la conclusión es clara: el <strong>Modelo correcto</strong> (2.02) es consistentemente <strong>mejor</strong> (menor error) que el <strong>Modelo completo</strong> (2.117).</p>
