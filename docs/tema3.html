@@ -266,7 +266,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#catálogo-de-transformaciones-según-el-propósito" id="toc-catálogo-de-transformaciones-según-el-propósito" class="nav-link" data-scroll-target="#catálogo-de-transformaciones-según-el-propósito"><span class="header-section-number">4.3</span> Catálogo de transformaciones según el propósito</a>
   <ul class="collapse">
-  <li><a href="#transformaciones-para-linearizar-relaciones" id="toc-transformaciones-para-linearizar-relaciones" class="nav-link" data-scroll-target="#transformaciones-para-linearizar-relaciones"><span class="header-section-number">4.3.1</span> Transformaciones para linearizar relaciones</a></li>
+  <li><a href="#transformaciones-para-linealizar-relaciones" id="toc-transformaciones-para-linealizar-relaciones" class="nav-link" data-scroll-target="#transformaciones-para-linealizar-relaciones"><span class="header-section-number">4.3.1</span> Transformaciones para linealizar relaciones</a></li>
   <li><a href="#transformaciones-para-estabilizar-la-varianza" id="toc-transformaciones-para-estabilizar-la-varianza" class="nav-link" data-scroll-target="#transformaciones-para-estabilizar-la-varianza"><span class="header-section-number">4.3.2</span> Transformaciones para estabilizar la varianza</a></li>
   <li><a href="#transformaciones-para-normalizar-residuos-y-controlar-outliers" id="toc-transformaciones-para-normalizar-residuos-y-controlar-outliers" class="nav-link" data-scroll-target="#transformaciones-para-normalizar-residuos-y-controlar-outliers"><span class="header-section-number">4.3.3</span> Transformaciones para normalizar residuos y controlar outliers</a></li>
   </ul></li>
@@ -324,7 +324,7 @@ window.Quarto = {
 
 <p>En la práctica del análisis de datos, los datos en su estado bruto raramente están en la forma óptima para el modelado estadístico. La <strong>ingeniería de características</strong> es el proceso fundamental que transforma, combina y crea variables para maximizar la capacidad predictiva y la interpretabilidad de nuestros modelos <span class="citation" data-cites="kuhn2019feature zheng2018feature">(<a href="references.html#ref-kuhn2019feature" role="doc-biblioref">Kuhn y Johnson 2019</a>; <a href="references.html#ref-zheng2018feature" role="doc-biblioref">Zheng y Casari 2018</a>)</span>.</p>
 <p>Este proceso abarca tres áreas principales que exploraremos en profundidad:</p>
-<p><strong>Transformaciones de variables</strong>: Las transformaciones matemáticas nos permiten abordar múltiples problemas simultaneamente: linearizar relaciones no lineales, estabilizar la varianza (heterocedasticidad), aproximar la distribución de los errores a la normalidad, y reducir la influencia de valores atípicos. Dominar cuándo y cómo aplicar transformaciones logarítmicas, potenciales, Box-Cox o Yeo-Johnson es fundamental para optimizar nuestros modelos <span class="citation" data-cites="box1964analysis yeo2000new">(<a href="references.html#ref-box1964analysis" role="doc-biblioref">Box y Cox 1964</a>; <a href="references.html#ref-yeo2000new" role="doc-biblioref">Yeo y Johnson 2000</a>)</span>.</p>
+<p><strong>Transformaciones de variables</strong>: Las transformaciones matemáticas nos permiten abordar múltiples problemas simultaneamente: linealizar relaciones no lineales, estabilizar la varianza (heterocedasticidad), aproximar la distribución de los errores a la normalidad, y reducir la influencia de valores atípicos. Dominar cuándo y cómo aplicar transformaciones logarítmicas, potenciales, Box-Cox o Yeo-Johnson es fundamental para optimizar nuestros modelos <span class="citation" data-cites="box1964analysis yeo2000new">(<a href="references.html#ref-box1964analysis" role="doc-biblioref">Box y Cox 1964</a>; <a href="references.html#ref-yeo2000new" role="doc-biblioref">Yeo y Johnson 2000</a>)</span>.</p>
 <p><strong>Tratamiento de variables categóricas</strong>: Las variables categóricas requieren estrategias específicas de codificación que preserven la información relevante sin introducir supuestos erróneos. La elección entre codificación ordinal, one-hot encoding, o técnicas más avanzadas puede impactar significativamente el rendimiento del modelo <span class="citation" data-cites="potdar2017comparative">(<a href="references.html#ref-potdar2017comparative" role="doc-biblioref">Potdar, Pardawala, y Pai 2017</a>)</span>.</p>
 <p><strong>Interacciones entre variables</strong>: Las interacciones capturan cómo el efecto de una variable puede cambiar según el nivel de otra variable, revelando patrones que los efectos principales por sí solos no pueden detectar. Comprender los diferentes tipos de interacciones y sus aplicaciones es clave para modelar relaciones complejas en el mundo real <span class="citation" data-cites="jaccard2003interaction">(<a href="references.html#ref-jaccard2003interaction" role="doc-biblioref">Jaccard y Turrisi 2003</a>)</span>.</p>
 <div class="callout callout-style-default callout-important callout-titled" title="Objetivos de aprendizaje">
@@ -339,7 +339,7 @@ Objetivos de aprendizaje
 <div class="callout-body-container callout-body">
 <p>Al finalizar este capítulo, serás capaz de:</p>
 <ol type="1">
-<li><strong>Identificar cuándo aplicar transformaciones</strong> específicas según el problema: linearización, heterocedasticidad, normalidad, o atípicos.</li>
+<li><strong>Identificar cuándo aplicar transformaciones</strong> específicas según el problema: linealización, heterocedasticidad, normalidad, o atípicos.</li>
 <li><strong>Aplicar transformaciones clásicas</strong> (logarítmica, potencial, inversa) y <strong>avanzadas</strong> (Box-Cox, Yeo-Johnson) de manera apropiada.</li>
 <li><strong>Interpretar modelos transformados</strong>, comprendiendo cómo cambia el significado de los coeficientes después de la transformación.</li>
 <li><strong>Codificar variables categóricas</strong> using ordinal encoding y one-hot encoding según la naturaleza de las categorías.</li>
@@ -678,15 +678,15 @@ Ejemplo con outliers: Escalado robusto
 <section id="catálogo-de-transformaciones-según-el-propósito" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="catálogo-de-transformaciones-según-el-propósito"><span class="header-section-number">4.3</span> Catálogo de transformaciones según el propósito</h2>
 <p>Una vez realizado el diagnóstico, debemos seleccionar la transformación más apropiada. Cada transformación tiene propósitos específicos y efectos secundarios que debemos considerar. La clave está en entender no solo qué transformación aplicar, sino por qué esa transformación específica resuelve nuestro problema.</p>
-<section id="transformaciones-para-linearizar-relaciones" class="level3" data-number="4.3.1">
-<h3 data-number="4.3.1" class="anchored" data-anchor-id="transformaciones-para-linearizar-relaciones"><span class="header-section-number">4.3.1</span> Transformaciones para linearizar relaciones</h3>
-<p>Muchas relaciones en el mundo real no son lineales, pero pueden linearizarse mediante transformaciones apropiadas. La linearización no solo mejora el ajuste del modelo, sino que también facilita la interpretación y cumple con los supuestos de la regresión lineal.</p>
+<section id="transformaciones-para-linealizar-relaciones" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="transformaciones-para-linealizar-relaciones"><span class="header-section-number">4.3.1</span> Transformaciones para linealizar relaciones</h3>
+<p>Muchas relaciones en el mundo real no son lineales, pero pueden linealizarse mediante transformaciones apropiadas. La linealización no solo mejora el ajuste del modelo, sino que también facilita la interpretación y cumple con los supuestos de la regresión lineal.</p>
 <section id="transformación-logarítmica" class="level4" data-number="4.3.1.1">
 <h4 data-number="4.3.1.1" class="anchored" data-anchor-id="transformación-logarítmica"><span class="header-section-number">4.3.1.1</span> Transformación logarítmica</h4>
 <p>La transformación logarítmica es probablemente la más utilizada en estadística aplicada debido a su versatilidad y propiedades interpretativas únicas.</p>
 <p><strong>Cuándo utilizarla:</strong></p>
 <ul>
-<li>Relaciones exponenciales: Cuando Y crece exponencialmente respecto a X, <span class="math inline">\(Y = ae^{bX}\)</span> se lineariza como <span class="math inline">\(\log(Y) = \log(a) + bX\)</span></li>
+<li>Relaciones exponenciales: Cuando Y crece exponencialmente respecto a X, <span class="math inline">\(Y = ae^{bX}\)</span> se linealiza como <span class="math inline">\(\log(Y) = \log(a) + bX\)</span></li>
 <li>Relaciones multiplicativas: En modelos donde los efectos se combinan multiplicativamente</li>
 <li>Procesos de crecimiento proporcional: Donde la tasa de cambio es proporcional al nivel actual</li>
 <li>Variables con crecimiento acelerado: Ingresos, precios, donde cada unidad adicional tiene impacto decreciente</li>
@@ -699,8 +699,8 @@ Ejemplo con outliers: Escalado robusto
 </ul>
 <p><strong>Aplicaciones matemáticas:</strong></p>
 <ul>
-<li><span class="math inline">\(Y' = \log(Y)\)</span>: Lineariza relaciones exponenciales en Y</li>
-<li><span class="math inline">\(X' = \log(X)\)</span>: Lineariza relaciones de potencia en X<br>
+<li><span class="math inline">\(Y' = \log(Y)\)</span>: Linealiza relaciones exponenciales en Y</li>
+<li><span class="math inline">\(X' = \log(X)\)</span>: Linealiza relaciones de potencia en X<br>
 </li>
 <li><span class="math inline">\(\log(Y) = a + b\log(X)\)</span>: Modelo log-log que produce elasticidades constantes</li>
 </ul>
@@ -713,7 +713,7 @@ Ejemplo con outliers: Escalado robusto
 <p><strong>Identificación y aplicación:</strong></p>
 <ul>
 <li>Relaciones curvilíneas que en escala log-log se vuelven lineales</li>
-<li>Método de linearización: tomar logaritmo de ambas variables <span class="math inline">\(\log(Y) = \log(a) + b\log(X)\)</span></li>
+<li>Método de linealización: tomar logaritmo de ambas variables <span class="math inline">\(\log(Y) = \log(a) + b\log(X)\)</span></li>
 <li>El exponente b representa la elasticidad o exponente de escalamiento</li>
 </ul>
 <p><strong>Ejemplos clásicos:</strong> Ley de Stevens en psicofísica, relaciones masa-metabolismo (Ley de Kleiber), economía urbana donde PIB de ciudades escala con población elevada a una potencia.</p>
@@ -744,7 +744,7 @@ Ejemplo con outliers: Escalado robusto
 <li>Porcentajes de crecimiento: donde el error de medición es proporcional al nivel</li>
 <li>Procesos multiplicativos: donde los errores se acumulan multiplicativamente</li>
 </ul>
-<p><strong>Efectos múltiples:</strong> La transformación logarítmica frecuentemente resuelve múltiples problemas simultáneamente: lineariza relaciones exponenciales, estabiliza varianza multiplicativa, reduce el impacto de outliers extremos, y aproxima distribuciones asimétricas a la normalidad.</p>
+<p><strong>Efectos múltiples:</strong> La transformación logarítmica frecuentemente resuelve múltiples problemas simultáneamente: linealiza relaciones exponenciales, estabiliza varianza multiplicativa, reduce el impacto de outliers extremos, y aproxima distribuciones asimétricas a la normalidad.</p>
 </section>
 </section>
 <section id="transformaciones-para-normalizar-residuos-y-controlar-outliers" class="level3" data-number="4.3.3">
@@ -755,7 +755,7 @@ Ejemplo con outliers: Escalado robusto
 <p>La transformación inversa <span class="math inline">\(Y' = \frac{1}{Y}\)</span> o <span class="math inline">\(X' = \frac{1}{X}\)</span> es útil para relaciones hiperbólicas y distribuciones con colas pesadas hacia la derecha.</p>
 <p><strong>Identificación matemática:</strong></p>
 <ul>
-<li>Relación hiperbólica: <span class="math inline">\(Y = \frac{a}{X} + b\)</span> se lineariza como <span class="math inline">\(Y = a \cdot \frac{1}{X} + b\)</span></li>
+<li>Relación hiperbólica: <span class="math inline">\(Y = \frac{a}{X} + b\)</span> se linealiza como <span class="math inline">\(Y = a \cdot \frac{1}{X} + b\)</span></li>
 <li>Asíntota horizontal: la relación se aproxima a un valor límite cuando X aumenta</li>
 </ul>
 <p><strong>Aplicaciones específicas:</strong> Tiempo hasta el evento (con asíntota natural), tasas de decaimiento, relaciones dosis-respuesta en farmacología, curvas de demanda con elasticidad precio variable.</p>

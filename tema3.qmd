@@ -4,7 +4,7 @@ En la práctica del análisis de datos, los datos en su estado bruto raramente e
 
 Este proceso abarca tres áreas principales que exploraremos en profundidad:
 
-**Transformaciones de variables**: Las transformaciones matemáticas nos permiten abordar múltiples problemas simultaneamente: linearizar relaciones no lineales, estabilizar la varianza (heterocedasticidad), aproximar la distribución de los errores a la normalidad, y reducir la influencia de valores atípicos. Dominar cuándo y cómo aplicar transformaciones logarítmicas, potenciales, Box-Cox o Yeo-Johnson es fundamental para optimizar nuestros modelos [@box1964analysis; @yeo2000new].
+**Transformaciones de variables**: Las transformaciones matemáticas nos permiten abordar múltiples problemas simultaneamente: linealizar relaciones no lineales, estabilizar la varianza (heterocedasticidad), aproximar la distribución de los errores a la normalidad, y reducir la influencia de valores atípicos. Dominar cuándo y cómo aplicar transformaciones logarítmicas, potenciales, Box-Cox o Yeo-Johnson es fundamental para optimizar nuestros modelos [@box1964analysis; @yeo2000new].
 
 **Tratamiento de variables categóricas**: Las variables categóricas requieren estrategias específicas de codificación que preserven la información relevante sin introducir supuestos erróneos. La elección entre codificación ordinal, one-hot encoding, o técnicas más avanzadas puede impactar significativamente el rendimiento del modelo [@potdar2017comparative].
 
@@ -13,7 +13,7 @@ Este proceso abarca tres áreas principales que exploraremos en profundidad:
 ::: {.callout-important title="Objetivos de aprendizaje"}
 Al finalizar este capítulo, serás capaz de:
 
-1.  **Identificar cuándo aplicar transformaciones** específicas según el problema: linearización, heterocedasticidad, normalidad, o atípicos.
+1.  **Identificar cuándo aplicar transformaciones** específicas según el problema: linealización, heterocedasticidad, normalidad, o atípicos.
 2.  **Aplicar transformaciones clásicas** (logarítmica, potencial, inversa) y **avanzadas** (Box-Cox, Yeo-Johnson) de manera apropiada.
 3.  **Interpretar modelos transformados**, comprendiendo cómo cambia el significado de los coeficientes después de la transformación.
 4.  **Codificar variables categóricas** using ordinal encoding y one-hot encoding según la naturaleza de las categorías.
@@ -216,9 +216,9 @@ kable(tabla_outliers, caption = "Comparación de métodos de escalado con outlie
 
 Una vez realizado el diagnóstico, debemos seleccionar la transformación más apropiada. Cada transformación tiene propósitos específicos y efectos secundarios que debemos considerar. La clave está en entender no solo qué transformación aplicar, sino por qué esa transformación específica resuelve nuestro problema.
 
-### Transformaciones para linearizar relaciones
+### Transformaciones para linealizar relaciones
 
-Muchas relaciones en el mundo real no son lineales, pero pueden linearizarse mediante transformaciones apropiadas. La linearización no solo mejora el ajuste del modelo, sino que también facilita la interpretación y cumple con los supuestos de la regresión lineal.
+Muchas relaciones en el mundo real no son lineales, pero pueden linealizarse mediante transformaciones apropiadas. La linealización no solo mejora el ajuste del modelo, sino que también facilita la interpretación y cumple con los supuestos de la regresión lineal.
 
 #### Transformación logarítmica
 
@@ -226,7 +226,7 @@ La transformación logarítmica es probablemente la más utilizada en estadísti
 
 **Cuándo utilizarla:**
 
--   Relaciones exponenciales: Cuando Y crece exponencialmente respecto a X, $Y = ae^{bX}$ se lineariza como $\log(Y) = \log(a) + bX$
+-   Relaciones exponenciales: Cuando Y crece exponencialmente respecto a X, $Y = ae^{bX}$ se linealiza como $\log(Y) = \log(a) + bX$
 -   Relaciones multiplicativas: En modelos donde los efectos se combinan multiplicativamente
 -   Procesos de crecimiento proporcional: Donde la tasa de cambio es proporcional al nivel actual
 -   Variables con crecimiento acelerado: Ingresos, precios, donde cada unidad adicional tiene impacto decreciente
@@ -239,8 +239,8 @@ La transformación logarítmica es probablemente la más utilizada en estadísti
 
 **Aplicaciones matemáticas:**
 
--   $Y' = \log(Y)$: Lineariza relaciones exponenciales en Y
--   $X' = \log(X)$: Lineariza relaciones de potencia en X\
+-   $Y' = \log(Y)$: Linealiza relaciones exponenciales en Y
+-   $X' = \log(X)$: Linealiza relaciones de potencia en X\
 -   $\log(Y) = a + b\log(X)$: Modelo log-log que produce elasticidades constantes
 
 **Interpretación especial:** En modelos log-lineales y log-log, los coeficientes tienen interpretaciones económicas directas. En el modelo log-lineal $\log(Y) = a + bX$, el coeficiente b representa el cambio porcentual en Y por unidad de cambio en X. En el modelo log-log $\log(Y) = a + b\log(X)$, b es la elasticidad.
@@ -254,7 +254,7 @@ Las transformaciones de potencia son fundamentales cuando trabajamos con leyes f
 **Identificación y aplicación:**
 
 -   Relaciones curvilíneas que en escala log-log se vuelven lineales
--   Método de linearización: tomar logaritmo de ambas variables $\log(Y) = \log(a) + b\log(X)$
+-   Método de linealización: tomar logaritmo de ambas variables $\log(Y) = \log(a) + b\log(X)$
 -   El exponente b representa la elasticidad o exponente de escalamiento
 
 **Ejemplos clásicos:** Ley de Stevens en psicofísica, relaciones masa-metabolismo (Ley de Kleiber), economía urbana donde PIB de ciudades escala con población elevada a una potencia.
@@ -289,7 +289,7 @@ Cuando la varianza es proporcional al cuadrado de la media (heterocedasticidad m
 -   Porcentajes de crecimiento: donde el error de medición es proporcional al nivel
 -   Procesos multiplicativos: donde los errores se acumulan multiplicativamente
 
-**Efectos múltiples:** La transformación logarítmica frecuentemente resuelve múltiples problemas simultáneamente: lineariza relaciones exponenciales, estabiliza varianza multiplicativa, reduce el impacto de outliers extremos, y aproxima distribuciones asimétricas a la normalidad.
+**Efectos múltiples:** La transformación logarítmica frecuentemente resuelve múltiples problemas simultáneamente: linealiza relaciones exponenciales, estabiliza varianza multiplicativa, reduce el impacto de outliers extremos, y aproxima distribuciones asimétricas a la normalidad.
 
 ### Transformaciones para normalizar residuos y controlar outliers
 
@@ -301,7 +301,7 @@ La transformación inversa $Y' = \frac{1}{Y}$ o $X' = \frac{1}{X}$ es útil para
 
 **Identificación matemática:**
 
--   Relación hiperbólica: $Y = \frac{a}{X} + b$ se lineariza como $Y = a \cdot \frac{1}{X} + b$
+-   Relación hiperbólica: $Y = \frac{a}{X} + b$ se linealiza como $Y = a \cdot \frac{1}{X} + b$
 -   Asíntota horizontal: la relación se aproxima a un valor límite cuando X aumenta
 
 **Aplicaciones específicas:** Tiempo hasta el evento (con asíntota natural), tasas de decaimiento, relaciones dosis-respuesta en farmacología, curvas de demanda con elasticidad precio variable.
