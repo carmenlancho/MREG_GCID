@@ -1,7 +1,7 @@
 ---
-title: "Laboratorio 4: Selección de Variables, Regularización y Validación"
+title: "Laboratorio 4: Selección de variables, regularización y validación"
 subtitle: "Modelos Estadísticos de Predicción"
-author: "Víctor Aceña Gil - Isaac Martín de Diego"
+author: "Natalia Madrueño Sierro, Carmen Lancho Martín"
 date: today
 format: 
   html:
@@ -15,19 +15,9 @@ execute:
   message: false
 ---
 
-## Objetivos del Laboratorio
 
-Al finalizar este laboratorio, serás capaz de:
 
-- Aplicar filtros básicos para eliminación preliminar de variables
-- Utilizar criterios de información (AIC, BIC, Cp) para comparar modelos
-- Implementar métodos de selección exhaustiva (Best Subset Selection)
-- Ejecutar métodos automáticos paso a paso (forward, backward, stepwise)
-- Aplicar técnicas de regularización (Ridge, Lasso, Elastic Net)
-- Validar modelos usando estrategias train/test y validación cruzada
-- Interpretar métricas de rendimiento predictivo
-
-## Configuración Inicial
+## Configuración inicial
 
 ```{r setup}
 # Cargar librerías necesarias
@@ -46,9 +36,9 @@ suppressPackageStartupMessages({
 set.seed(123)
 ```
 
-## Parte 1: Preparación de Datos y Análisis Exploratorio
+## Parte 1: Preparación de datos y Análisis exploratorio
 
-### Dataset de Trabajo
+### Dataset de trabajo
 
 Utilizaremos el dataset Boston Housing para demonstrar todas las técnicas. Este dataset contiene información sobre precios de viviendas en Boston y sus características.
 
@@ -88,7 +78,7 @@ cat("black: Proporción de población afroamericana\n")
 cat("lstat: Porcentaje de población de bajo estatus\n")
 ```
 
-### Visualización de Relaciones
+### Visualización de relaciones
 
 ```{r exploratory_visualization}
 # Matriz de correlaciones
@@ -115,9 +105,9 @@ ggplot(Boston, aes(y = medv)) +
   theme_minimal()
 ```
 
-## Parte 2: Filtrado Basado en Información Básica
+## Parte 2: Filtrado basado en información básica
 
-### Análisis de Variabilidad
+### Análisis de variabilidad
 
 ```{r variability_analysis}
 # Calcular varianzas de todas las variables predictoras
@@ -149,7 +139,7 @@ ggplot(varianzas, aes(x = reorder(variable, varianza), y = varianza)) +
   theme_minimal()
 ```
 
-### Análisis de Correlación con Variable Respuesta
+### Análisis de correlación con variable respuesta
 
 ```{r correlation_analysis}
 # Calcular correlaciones con la variable respuesta
@@ -185,7 +175,7 @@ if(length(vars_baja_corr) > 0) {
 }
 ```
 
-### Análisis de Multicolinealidad
+### Análisis de multicolinealidad
 
 ```{r multicollinearity_analysis}
 # Ajustar modelo completo para calcular VIF
@@ -231,7 +221,7 @@ if(length(vars_alto_vif) > 0) {
 }
 ```
 
-### Resumen del Filtrado Inicial
+### Resumen del filtrado inicial
 
 ```{r summary_filtering}
 # Resumen de filtrado
@@ -256,9 +246,9 @@ variables_finales <- setdiff(names(Boston), "medv")
 cat("Variables para análisis posterior:", length(variables_finales), "\n")
 ```
 
-## Parte 3: Criterios de Bondad de Ajuste
+## Parte 3: Criterios de bondad de ajuste
 
-### Modelos Candidatos con Diferentes Números de Variables
+### Modelos candidatos con diferentes números de variables
 
 ```{r model_comparison_setup}
 # Crear algunos modelos candidatos de diferentes complejidades
@@ -323,7 +313,7 @@ cat("Mejor Cp:", mejor_cp, "\n")
 cat("Mejor R² ajustado:", mejor_r2_adj, "\n")
 ```
 
-### Visualización de Criterios
+### Visualización de criterios
 
 ```{r criteria_visualization}
 # Gráfico de AIC vs número de variables
@@ -372,7 +362,7 @@ p4 <- ggplot(comparacion_modelos, aes(x = n_variables, y = R2_adj)) +
 grid.arrange(p1, p2, p3, p4, ncol = 2)
 ```
 
-## Parte 4: Métodos de Selección Exhaustiva
+## Parte 4: Métodos de selección exhaustiva
 
 ### Best Subset Selection
 
@@ -459,7 +449,7 @@ grid.arrange(p1, p2, p3, ncol = 2)
 plot(best_subset, scale = "adjr2", main = "Variables Seleccionadas por Tamaño de Modelo")
 ```
 
-## Parte 5: Métodos Automáticos Paso a Paso
+## Parte 5: Métodos automáticos paso a paso
 
 ### Forward Selection
 
@@ -535,7 +525,7 @@ metodos_automaticos <- data.frame(
 print(metodos_automaticos)
 ```
 
-### Comparación de Variables Seleccionadas
+### Comparación de variables seleccionadas
 
 ```{r compare_selections}
 # Crear matriz de comparación de variables seleccionadas
@@ -567,9 +557,9 @@ vars_mayoria <- todas_vars[apply(comparacion_seleccion[,-1], 1, sum) >= 3]
 cat(paste(vars_mayoria, collapse = ", "), "\n")
 ```
 
-## Parte 6: Métodos de Regularización
+## Parte 6: Métodos de regularización
 
-### Preparación de Datos para Regularización
+### Preparación de datos para regularización
 
 ```{r regularization_setup}
 # Preparar matrices para glmnet
@@ -714,7 +704,7 @@ cat("\nVariables seleccionadas por Elastic Net:", paste(vars_elastic, collapse =
 cat("Número de variables seleccionadas:", length(vars_elastic), "\n")
 ```
 
-### Comparación de Métodos de Regularización
+### Comparación de nétodos de regularización
 
 ```{r regularization_comparison}
 # Comparar todos los métodos de regularización
@@ -741,9 +731,9 @@ ggplot(comparacion_reg, aes(x = N_Variables, y = RMSE, color = Metodo)) +
   theme(legend.position = "none")
 ```
 
-## Parte 7: Validación Rigurosa del Modelo
+## Parte 7: Validación del modelo
 
-### Partición Final de Datos
+### Partición final de datos
 
 ```{r final_data_partition}
 # Partición inicial: 60% modelado, 40% validación final
@@ -765,7 +755,7 @@ cat("Datos de entrenamiento:", nrow(datos_train), "observaciones\n")
 cat("Datos de test (comparación):", nrow(datos_test), "observaciones\n")
 ```
 
-### Validación Cruzada de Modelos Seleccionados
+### Validación cruzada de modelosseleccionados
 
 ```{r cross_validation_comparison}
 # Configurar validación cruzada 10-fold
@@ -834,7 +824,7 @@ metricas_cv <- data.frame(
 print(metricas_cv)
 ```
 
-### Evaluación Final en Datos No Vistos
+### Evaluación final en datos no vistos
 
 ```{r final_evaluation}
 # Seleccionar el mejor modelo basado en validación cruzada
@@ -882,7 +872,7 @@ if(abs(diferencia_rmse) < 0.5) {
 }
 ```
 
-### Diagnóstico Visual del Modelo Final
+### Diagnóstico visual del modelo final
 
 ```{r final_diagnostics}
 # Gráfico de predicciones vs valores reales
@@ -929,7 +919,7 @@ p4 <- ggplot(diagnostic_data, aes(sample = Residuo)) +
 grid.arrange(p1, p2, p3, p4, ncol = 2)
 ```
 
-## Parte 8: Ejercicios Prácticos
+## Parte 8: Ejercicios prácticos
 
 ### Ejercicio 1: Dataset mtcars
 
@@ -951,13 +941,10 @@ cat("5. Aplicar regularización (Ridge, Lasso, Elastic Net)\n")
 cat("6. Validar el mejor modelo con validación cruzada\n")
 cat("7. Evaluación final en conjunto de prueba\n\n")
 
-# Tu código aquí:
-# Ejemplo de inicio:
-head(mtcars)
-# Continúa con el análisis completo...
+
 ```
 
-### Ejercicio 2: Dataset Simulado con Ruido
+### Ejercicio 2: Dataset simulado con ruido
 
 ```{r ejercicio_simulado}
 # Crear dataset desafiante para selección de variables
@@ -997,46 +984,18 @@ cat("Desafío:\n")
 cat("¿Pueden los métodos de selección identificar correctamente\n")
 cat("las 5 variables importantes y descartar las 15 de ruido?\n\n")
 
-# Tu código aquí:
-# Aplica todos los métodos y compara los resultados
-# ¿Qué método identifica mejor las variables verdaderas?
+
 ```
 
-### Ejercicio 3: Comparación Sistemática
+## Parte 9: Conceptos clave
 
-```{r ejercicio_comparacion}
-# Función para evaluar todos los métodos en un dataset
-evaluar_metodos_seleccion <- function(datos, var_respuesta) {
-  # Esta función debería implementar todo el pipeline
-  # y retornar una tabla de comparación
-  
-  cat("=== EJERCICIO 3: FUNCIÓN DE EVALUACIÓN ===\n")
-  cat("Implementa una función que:\n")
-  cat("1. Reciba un dataset y nombre de variable respuesta\n")
-  cat("2. Aplique todos los métodos de selección\n")
-  cat("3. Compare los resultados usando validación cruzada\n")
-  cat("4. Retorne un resumen con las mejores opciones\n\n")
-  
-  # Tu implementación aquí...
-  
-  return(NULL)
-}
-
-# Prueba la función con diferentes datasets
-# evaluar_metodos_seleccion(Boston, "medv")
-# evaluar_metodos_seleccion(mtcars, "mpg")
-# evaluar_metodos_seleccion(datos_simulados, "y")
-```
-
-## Parte 9: Conceptos Clave para Recordar
-
-### Resumen de Métodos
+### Resumen de métodos
 
 ::: {.callout-important title="Guía de Decisión para Selección de Variables"}
 
 **¿Cuándo usar cada método?**
 
-**Filtrado Básico:**
+**Filtradobásico:**
 
 - Siempre como primer paso
 - Elimina variables obvialmente problemáticas
@@ -1048,7 +1007,7 @@ evaluar_metodos_seleccion <- function(datos, var_respuesta) {
 - Se requiere la solución óptima garantizada
 - Recursos computacionales suficientes
 
-**Métodos Automáticos (Forward/Backward/Stepwise):**
+**Métodos automáticos (Forward/Backward/Stepwise):**
 
 - Cuando p es moderado a grande (p > 20)
 - Exploración rápida del espacio de modelos
@@ -1060,14 +1019,14 @@ evaluar_metodos_seleccion <- function(datos, var_respuesta) {
 - **Lasso:** Se sospecha que muchas variables son irrelevantes
 - **Elastic Net:** Hay grupos de variables correlacionadas, se busca estabilidad
 
-**Criterios de Información:**
+**Criterios de información:**
 
 - **AIC:** Objetivo predictivo
 - **BIC:** Objetivo de identificar el "modelo verdadero"
 - **Cp de Mallows:** Análisis del sesgo-varianza
 :::
 
-### Métricas de Validación
+### Métricas de validación
 
 ::: {.callout-note title="Interpretación de Métricas"}
 
@@ -1083,14 +1042,14 @@ evaluar_metodos_seleccion <- function(datos, var_respuesta) {
 - Trata todos los errores proporcionalmente
 - Más robusto a outliers
 
-**R² de Validación Cruzada:**
+**R² de validación cruzada:**
 
 - Proporción de varianza explicada en datos no vistos
 - Mejor indicador que R² de entrenamiento
 - Valores similares entre CV y test indican buena generalización
 :::
 
-### Señales de Alerta
+### Señales de alerta
 
 ::: {.callout-warning title="Problemas Comunes"}
 
@@ -1106,14 +1065,14 @@ evaluar_metodos_seleccion <- function(datos, var_respuesta) {
 - Modelo demasiado simple
 - Patrones no capturados en los residuos
 
-**Selección Inestable:**
+**Selección inestable:**
 
 - Métodos diferentes seleccionan variables muy distintas
 - Resultados cambian mucho con pequeñas variaciones en datos
 - Indica posible sobreajuste o datos insuficientes
 :::
 
-### Mejores Prácticas
+### Mejores prácticas
 
 1. **Siempre partir datos antes de cualquier análisis**
 2. **Usar validación cruzada para selección, conjunto independiente para evaluación final**
@@ -1122,6 +1081,4 @@ evaluar_metodos_seleccion <- function(datos, var_respuesta) {
 5. **Considerar interpretabilidad vs precisión predictiva**
 6. **Documentar todo el proceso de selección**
 
-## Próximo Laboratorio
 
-En el Laboratorio 5 exploraremos modelos lineales generalizados (GLM), incluyendo regresión logística y regresión de Poisson, ampliando nuestras herramientas para variables respuesta no continuas.
