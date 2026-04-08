@@ -1,6 +1,6 @@
 # Modelos de regresión generalizada {#sec-tema4}
 
-Hasta ahora hemos estuadiado la regresión lineal como una herramienta poderosa para modelar la relación entre una variable dependiente continua y un conjunto de variables independientes. Sin embargo, en muchos contextos del mundo real, las suposiciones de la regresión lineal tradicional no son adecuadas. ¿Qué sucede si la variable dependiente es binaria, como en un diagnóstico médico (enfermo/sano)? ¿O si estás modelando el número de accidentes en una intersección o la cantidad de compras realizadas por un cliente?
+Hasta ahora hemos estudiado la regresión lineal como una herramienta poderosa para modelar la relación entre una variable dependiente continua y un conjunto de variables independientes. Sin embargo, en muchos contextos del mundo real, las suposiciones de la regresión lineal tradicional no son adecuadas. ¿Qué sucede si la variable dependiente es binaria, como en un diagnóstico médico (enfermo/sano)? ¿O si estás modelando el número de accidentes en una intersección o la cantidad de compras realizadas por un cliente?
 
 Para abordar estos desafíos, se utilizan los llamados **Modelos Lineales Generalizados (GLM)**. Esta clase de modelos amplía la regresión lineal al permitir que la variable dependiente tenga distribuciones diferentes a la normal, como la binomial o la de Poisson. Además, los GLM utilizan funciones de enlace que transforman la relación entre la variable dependiente y los predictores, permitiendo una mayor flexibilidad en el modelado.
 
@@ -103,7 +103,7 @@ Los GLM se utilizan en una amplia variedad de disciplinas para resolver problema
 
 Las ventajas principales de los GLM son:
 
--   **Flexibilidad:** Los GLM permiten modelar diferentes tipos de variables dependientes, lo que amplía significativamente el rango de problemas que se pueden abordar.
+-   **Flexibilidad:** Los GLM permiten modelar diferentes tipos de variables dependientes, lo que amplía el rango de problemas que se pueden abordar.
 
 -   **Interpretación coherente:** Aunque se utilizan funciones de enlace, los coeficientes de los GLM pueden interpretarse de manera similar a los modelos lineales, proporcionando información sobre el impacto de cada variable independiente.
 
@@ -147,7 +147,7 @@ Esta forma unificada tiene propiedades matemáticas muy convenientes que hacen q
 ::: {.callout-note title="La familia exponencial: Un vistazo general"}
 La elegancia de los GLM reside en que muchas distribuciones aparentemente distintas comparten una estructura matemática común. Esto permite una teoría unificada. Aquí están los miembros más importantes:
 
-| Distribución | Uso típico | Función de varianza $V(\mu)$ | Enlace Ccanónico $g(\mu)$ |
+| Distribución | Uso típico | Función de varianza $V(\mu)$ | Enlace canónico $g(\mu)$ |
 |:---|:---|:---|:---|
 | **Normal** | Datos continuos simétricos | $1$ | Identidad: $\mu$ |
 | **Binomial** | Proporciones, datos binarios (éxito/fracaso) | $\mu(1-\mu)$ | Logit: $\log(\frac{\mu}{1-\mu})$ |
