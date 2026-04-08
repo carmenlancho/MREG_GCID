@@ -61,7 +61,7 @@ Mientras que la regresión lineal clásica asume que la variable dependiente (Y)
 El marco teórico unificador de los GLM es que la distribución de la variable dependiente siempre pertenece a la **familia exponencial**.
 
 
-# Los 3 Componentes de un GLM
+# Los 3 componentes de un GLM
 
 Todo Modelo Lineal Generalizado se define por la interacción de tres componentes clave:
 
@@ -116,7 +116,7 @@ Esta función transforma la media de $Y$ para que la relación con los predictor
 
 ::::: columns
 ::: {.column width="50%"}
-**Regresión Lineal Clásica**
+**Regresión lineal clásica**
 
 * **Distribución:** Normal.
 * **Tipo de respuesta:** Continua.
@@ -233,7 +233,7 @@ Para datos continuos que son estrictamente positivos y tienen sesgo a la derecha
 
     * **Uso típico:** Tiempos, costos, o cualquier dato continuo positivo y asimétrico.
     * **Función de varianza:** $V(\mu) = \mu^2$.
-    * **Enlace Canónico:** Inverso ($g(\mu) = 1/\mu$).
+    * **Enlace canónico:** Inverso ($g(\mu) = 1/\mu$).
 
 * **Inversa Gaussiana**
 
