@@ -272,9 +272,9 @@ window.Quarto = {
   <li><a href="#diagnosis-de-glms" id="toc-diagnosis-de-glms" class="nav-link" data-scroll-target="#diagnosis-de-glms"><span class="header-section-number">6.4</span> Diagnosis de GLMs</a>
   <ul class="collapse">
   <li><a href="#tipos-de-residuos-en-glms" id="toc-tipos-de-residuos-en-glms" class="nav-link" data-scroll-target="#tipos-de-residuos-en-glms"><span class="header-section-number">6.4.1</span> Tipos de residuos en GLMs</a></li>
-  <li><a href="#la-forma-del-modelo-es-correcta-linealidad-y-enlace" id="toc-la-forma-del-modelo-es-correcta-linealidad-y-enlace" class="nav-link" data-scroll-target="#la-forma-del-modelo-es-correcta-linealidad-y-enlace"><span class="header-section-number">6.4.2</span> ¿La forma del modelo es correcta? (Linealidad y Enlace)</a></li>
+  <li><a href="#la-forma-del-modelo-es-correcta-linealidad-y-enlace" id="toc-la-forma-del-modelo-es-correcta-linealidad-y-enlace" class="nav-link" data-scroll-target="#la-forma-del-modelo-es-correcta-linealidad-y-enlace"><span class="header-section-number">6.4.2</span> ¿La forma del modelo es correcta? (Linealidad y enlace)</a></li>
   <li><a href="#la-distribución-que-elegimos-es-la-correcta-varianza-y-normalidad" id="toc-la-distribución-que-elegimos-es-la-correcta-varianza-y-normalidad" class="nav-link" data-scroll-target="#la-distribución-que-elegimos-es-la-correcta-varianza-y-normalidad"><span class="header-section-number">6.4.3</span> ¿La distribución que elegimos es la correcta? (Varianza y Normalidad)</a></li>
-  <li><a href="#hay-observaciones-que-distorsionan-el-modelo-atípicos-e-influyentes" id="toc-hay-observaciones-que-distorsionan-el-modelo-atípicos-e-influyentes" class="nav-link" data-scroll-target="#hay-observaciones-que-distorsionan-el-modelo-atípicos-e-influyentes"><span class="header-section-number">6.4.4</span> ¿Hay observaciones que distorsionan el modelo? (Atípicos e Influyentes)</a></li>
+  <li><a href="#hay-observaciones-que-distorsionan-el-modelo-atípicos-e-influyentes" id="toc-hay-observaciones-que-distorsionan-el-modelo-atípicos-e-influyentes" class="nav-link" data-scroll-target="#hay-observaciones-que-distorsionan-el-modelo-atípicos-e-influyentes"><span class="header-section-number">6.4.4</span> ¿Hay observaciones que distorsionan el modelo? (Atípicos e influyentes)</a></li>
   </ul></li>
   <li><a href="#regresión-logística" id="toc-regresión-logística" class="nav-link" data-scroll-target="#regresión-logística"><span class="header-section-number">6.5</span> Regresión logística</a>
   <ul class="collapse">
@@ -484,13 +484,13 @@ Aplicaciones
 <p><span class="math display">\[f(y; \theta, \phi) = \exp\left\{\frac{y\theta - b(\theta)}{a(\phi)} + c(y, \phi)\right\}\]</span></p>
 <p>donde <span class="math inline">\(\theta\)</span> es el <strong>parámetro natural</strong> o canónico que está relacionado directamente con la media de la distribución, <span class="math inline">\(\phi\)</span> es el <strong>parámetro de dispersión</strong> que controla la variabilidad, y <span class="math inline">\(b(\theta)\)</span>, <span class="math inline">\(a(\phi)\)</span> y <span class="math inline">\(c(y, \phi)\)</span> son funciones específicas de cada distribución que determinan sus propiedades particulares.</p>
 <p>Esta forma unificada tiene propiedades matemáticas muy convenientes que hacen que los GLM sean tanto elegantes teóricamente como computacionalmente eficientes. La esperanza de <span class="math inline">\(Y\)</span> se obtiene como <span class="math inline">\(E(Y) = \mu = b'(\theta)\)</span> (la derivada de <span class="math inline">\(b\)</span> respecto a <span class="math inline">\(\theta\)</span>), y la varianza como <span class="math inline">\(\text{Var}(Y) = a(\phi) b''(\theta) = a(\phi) V(\mu)\)</span>, donde <span class="math inline">\(V(\mu)\)</span> es la <strong>función de varianza</strong> que caracteriza cómo la varianza depende de la media en cada tipo de distribución.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="La Familia Exponencial: Un Vistazo General">
+<div class="callout callout-style-default callout-note callout-titled" title="La familia exponencial: Un vistazo general">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-La Familia Exponencial: Un Vistazo General
+La familia exponencial: Un vistazo general
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -505,9 +505,9 @@ La Familia Exponencial: Un Vistazo General
 <thead>
 <tr class="header">
 <th style="text-align: left;">Distribución</th>
-<th style="text-align: left;">Uso Típico</th>
-<th style="text-align: left;">Función de Varianza <span class="math inline">\(V(\mu)\)</span></th>
-<th style="text-align: left;">Enlace Canónico <span class="math inline">\(g(\mu)\)</span></th>
+<th style="text-align: left;">Uso típico</th>
+<th style="text-align: left;">Función de varianza <span class="math inline">\(V(\mu)\)</span></th>
+<th style="text-align: left;">Enlace Ccanónico <span class="math inline">\(g(\mu)\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -717,13 +717,13 @@ LRT = D_{\text{modelo reducido}} - D_{\text{modelo completo}} \sim \chi^2_{df}
 <li><p><strong>Selección de variables:</strong> Evaluar si la inclusión o exclusión de variables específicas mejora significativamente el ajuste del modelo.</p></li>
 <li><p><strong>Comparación de especificaciones:</strong> Decidir entre diferentes formas funcionales o distribuciones para el mismo conjunto de datos.</p></li>
 </ol>
-<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo: Comparando Modelos con el Test de Razón de Verosimilitudes">
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo: Comparando modelos con el Test de Razón de Verosimilitudes">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Ejemplo: Comparando Modelos con el Test de Razón de Verosimilitudes
+Ejemplo: Comparando modelos con el Test de Razón de Verosimilitudes
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -788,7 +788,7 @@ Model 2: am ~ wt + disp
 </ul>
 </section>
 <section id="la-forma-del-modelo-es-correcta-linealidad-y-enlace" class="level3" data-number="6.4.2">
-<h3 data-number="6.4.2" class="anchored" data-anchor-id="la-forma-del-modelo-es-correcta-linealidad-y-enlace"><span class="header-section-number">6.4.2</span> ¿La forma del modelo es correcta? (Linealidad y Enlace)</h3>
+<h3 data-number="6.4.2" class="anchored" data-anchor-id="la-forma-del-modelo-es-correcta-linealidad-y-enlace"><span class="header-section-number">6.4.2</span> ¿La forma del modelo es correcta? (Linealidad y enlace)</h3>
 <p>Esta primera pregunta evalúa si la estructura básica del modelo, <span class="math inline">\(g(\mu) = X\beta\)</span>, es adecuada para los datos. Para ello, utilizamos varias herramientas de diagnóstico:</p>
 <ul>
 <li><p>El <strong>gráfico de residuos vs.&nbsp;valores ajustados</strong> es la herramienta fundamental. Se grafican los residuos (idealmente, deviance) contra los valores predichos en la escala del predictor lineal (<span class="math inline">\(\hat{\eta}_i\)</span>). Si la forma del modelo es correcta, no deberíamos ver ningún patrón sistemático. Una tendencia curvilínea es una señal clara de que la forma funcional o la función de enlace son incorrectas.</p></li>
@@ -811,7 +811,7 @@ Model 2: am ~ wt + disp
 <p>Un segundo aspecto es la forma general de la distribución, que se evalúa con el <strong>Gráfico Q-Q de residuos deviance</strong>. Aunque los errores de un GLM no son estrictamente normales, los residuos deviance sí deberían tener una distribución aproximadamente normal si el modelo está bien especificado. Desviaciones sistemáticas de la línea diagonal en el gráfico Q-Q pueden indicar que la distribución asumida para los datos es incorrecta.</p>
 </section>
 <section id="hay-observaciones-que-distorsionan-el-modelo-atípicos-e-influyentes" class="level3" data-number="6.4.4">
-<h3 data-number="6.4.4" class="anchored" data-anchor-id="hay-observaciones-que-distorsionan-el-modelo-atípicos-e-influyentes"><span class="header-section-number">6.4.4</span> ¿Hay observaciones que distorsionan el modelo? (Atípicos e Influyentes)</h3>
+<h3 data-number="6.4.4" class="anchored" data-anchor-id="hay-observaciones-que-distorsionan-el-modelo-atípicos-e-influyentes"><span class="header-section-number">6.4.4</span> ¿Hay observaciones que distorsionan el modelo? (Atípicos e influyentes)</h3>
 <p>Finalmente, buscamos identificar puntos individuales que tienen una influencia desproporcionada en el modelo. Las herramientas matemáticas para ello son generalizaciones de las vistas en regresión lineal:</p>
 <ul>
 <li><p><strong>Leverage generalizado (<span class="math inline">\(h_i\)</span>):</strong> Mide el potencial de una observación para ser influyente debido a su posición en el espacio de los predictores. <span class="math display">\[

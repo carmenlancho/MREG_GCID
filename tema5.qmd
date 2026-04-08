@@ -144,10 +144,10 @@ donde $\theta$ es el **parámetro natural** o canónico que está relacionado di
 
 Esta forma unificada tiene propiedades matemáticas muy convenientes que hacen que los GLM sean tanto elegantes teóricamente como computacionalmente eficientes. La esperanza de $Y$ se obtiene como $E(Y) = \mu = b'(\theta)$ (la derivada de $b$ respecto a $\theta$), y la varianza como $\text{Var}(Y) = a(\phi) b''(\theta) = a(\phi) V(\mu)$, donde $V(\mu)$ es la **función de varianza** que caracteriza cómo la varianza depende de la media en cada tipo de distribución.
 
-::: {.callout-note title="La Familia Exponencial: Un Vistazo General"}
+::: {.callout-note title="La familia exponencial: Un vistazo general"}
 La elegancia de los GLM reside en que muchas distribuciones aparentemente distintas comparten una estructura matemática común. Esto permite una teoría unificada. Aquí están los miembros más importantes:
 
-| Distribución | Uso Típico | Función de Varianza $V(\mu)$ | Enlace Canónico $g(\mu)$ |
+| Distribución | Uso típico | Función de varianza $V(\mu)$ | Enlace Ccanónico $g(\mu)$ |
 |:---|:---|:---|:---|
 | **Normal** | Datos continuos simétricos | $1$ | Identidad: $\mu$ |
 | **Binomial** | Proporciones, datos binarios (éxito/fracaso) | $\mu(1-\mu)$ | Logit: $\log(\frac{\mu}{1-\mu})$ |
@@ -341,7 +341,7 @@ donde $df$ es la diferencia en grados de libertad (número de parámetros) entre
 
 3. **Comparación de especificaciones:** Decidir entre diferentes formas funcionales o distribuciones para el mismo conjunto de datos.
 
-::: {.callout-tip title="Ejemplo: Comparando Modelos con el Test de Razón de Verosimilitudes" collapse="true"}
+::: {.callout-tip title="Ejemplo: Comparando modelos con el Test de Razón de Verosimilitudes" collapse="true"}
 Supongamos que queremos determinar si añadir la variable `disp` (cilindrada) a un modelo de regresión logística que ya contiene `wt` (peso) mejora significativamente la predicción de si un coche tiene transmisión automática (`am`).
 
 ```{r lrt_example}
@@ -396,7 +396,7 @@ La elección del tipo de residuo apropiado es crucial. Los residuos "crudos" ($y
     d_i = \text{sign}(y_i - \hat{\mu}_i) \sqrt{2[l_i(y_i) - l_i(\hat{\mu}_i)]}
     $$
 
-### ¿La forma del modelo es correcta? (Linealidad y Enlace)
+### ¿La forma del modelo es correcta? (Linealidad y enlace)
 
 Esta primera pregunta evalúa si la estructura básica del modelo, $g(\mu) = X\beta$, es adecuada para los datos. Para ello, utilizamos varias herramientas de diagnóstico:
 
@@ -428,7 +428,7 @@ Este término adicional se ajusta a la variabilidad de los datos, proporcionando
 
 Un segundo aspecto es la forma general de la distribución, que se evalúa con el **Gráfico Q-Q de residuos deviance**. Aunque los errores de un GLM no son estrictamente normales, los residuos deviance sí deberían tener una distribución aproximadamente normal si el modelo está bien especificado. Desviaciones sistemáticas de la línea diagonal en el gráfico Q-Q pueden indicar que la distribución asumida para los datos es incorrecta.
 
-### ¿Hay observaciones que distorsionan el modelo? (Atípicos e Influyentes)
+### ¿Hay observaciones que distorsionan el modelo? (Atípicos e influyentes)
 
 Finalmente, buscamos identificar puntos individuales que tienen una influencia desproporcionada en el modelo. Las herramientas matemáticas para ello son generalizaciones de las vistas en regresión lineal:
 
