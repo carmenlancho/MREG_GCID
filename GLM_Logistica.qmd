@@ -1,0 +1,619 @@
+---
+title: "GLM - Regresión Logística"
+author: "Natalia Madrueño Sierro - Carmen Lancho Martín"
+date: 13/04/2026
+date-format: full
+lang: es
+published-title: "Fecha"
+format:
+  html:
+    self-contained: true
+    css: estilos_html.css
+    toc: true 
+    toc-location: left
+    toc-title: "Índice"
+    author-title: "Autor"
+    page-layout: article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+# Introducción a los Modelos Lineales Generalizados (GLMs)
+
+Los modelos lineales generalizados son una extensión de los modelo de regresión lineal ($E(Y)=\beta_0 + \beta_1 X_1 + \dots \beta_p X_p$, siendo $p$ el número de variables dependientes), diseñados para cubrir las limitaciones del modelo de regresión lineal (la variable respuesta $Y$ puede no ser normal, no hay homogeneidad de varianzas).
+
+En los modelos lineales generalizados, se usa una transformación $g(\cdot)$ de $E(Y)=\mu$ que permita considerar una relación lineal con las variables explicativas: 
+
+$$
+g(\mu) = \beta_0 + \beta_1 X_1 + \dots \beta_p X_p
+$$ 
+
+De este modo, un modelo lineal generalizado está compuesto por:
+
+1.  La variable dependiente $Y$ cuya distribución pertenece a la familia exponencial (e.g., Binomial, Poisson, Normal).
+2.  Las variables explicativas $X_1,\cdots, X_p$ (serán variables dummy para los niveles de un factor)
+3.  Los coeficientes $\beta_0,\beta_1\cdots,\beta_p$ asociados a dichas variables explicativas y al intercepto.
+4.  Una función $g(\cdot)$, llamada función link o de enlace, que conecta la esperanza de la variable respuesta con el predictor lineal. Esta función $g$ es monótona y diferenciable.
+
+Nótese que el modelo de regresión lineal no es más que un caso particular de los GLMs con $Y \sim Normal$ y $g(\mu)=E(\mu)$.
+
+Algunos ejemplos de GLMs son:
+
+-   Datos con conteos de eventos (distribución Poisson).
+-   Datos con proporciones o eventos binarios (distribución Binomial).
+
+En este documento, nos centraremos en la regresión logística, es decir, en el caso en el que el target o variable objetivo es binaria $Y \in \{0,1\}$.
+
+# GLMs para variables binarias
+
+Cuando la variable respuesta es binaria ($Y \in \{0,1\}$), lo que se modela es la probabilidad de éxito ($P(Y=1)$):
+
+$$ 
+\text{Probabilidad de éxito }\ \ \ P(Y_i = 1) = \pi_i 
+$$
+
+$$ 
+\text{Probabilidad de fracaso }\ \ \ P(Y_i = 0) = 1 - \pi_i 
+$$ con $\pi_i \in [0,1]$.
+
+Esta probabilidad de éxito se va a modelar en función de las covariables ($X_1,\cdots,X_p$) observadas. Sin embargo, en este caso, un modelo lineal estándar 
+$$
+\pi_i = \beta_0 + \beta_1 X_{i1} + \dots \beta_p X_{ip}
+$$ 
+no resultaría adecuado puesto que dicha combinación lineal puede dar valores fuera del rango $[0,1]$.
+
+¿Cómo solucionamos esta situación? Mediante una transformación $g(\cdot)$ que cumpla las condiciones dichas anteriormente y que pase de las probabilidades $\pi_i$ que toman valor en $[0,1]$ a $g(\pi)$ que tome valores en la recta real.
+
+En particular, existen 3 funciones link distintas para esta situación:
+
+-   Logit: $$g(\pi_i)= logit(\pi_i)=\log \left( \dfrac{\pi_i}{1-\pi_i} \right)$$
+-   Probit: $$g(\pi_i)= probit(\pi_i)= \phi^{-1} (\pi_i)$$ siendo $\phi$ la función de distribución de la Normal estándar.
+-   cloglog: $$g(\pi_i)= cloglog(\pi_i)= \log(- \log(1- \pi_i)) $$
+
+Despejando $\pi$ en cada caso obtenemos:
+
+-   Logit: $$\pi= \dfrac{\exp(\mathbf{X}^{t}\mathbf{\beta})}{1+\exp(\mathbf{X}^{t}\mathbf{\beta})} = \dfrac{1}{1+\exp(-\mathbf{X}^{t}\mathbf{\beta})}$$
+-   Probit: $$\pi = \phi(\mathbf{X}^{t}\mathbf{\beta})$$
+-   cloglog: $$\pi = 1-\exp(-\exp(\mathbf{X}^{t}\mathbf{\beta}))$$
+
+### Comparación gráfica de las funciones de enlace
+
+Vamos a graficar las 3 funciones de enlace (y sus inversas) para poder compararlas mejor.
+
+```{r}
+
+# Probabilidades
+prob <- seq(0.01, 0.99, length.out = 100)
+# Funciones de enlace
+logit <- log(prob / (1 - prob))
+probit <- qnorm(prob)
+cloglog <- log(-log(1 - prob))
+
+plot(prob, logit, type = "l", col = "darkblue",lwd=2, 
+     ylab = "Función link", xlab = "Probabilidad", main = "Comparación de funciones link")
+lines(prob, probit, col = "darkorange",lwd=2)
+lines(prob, cloglog, col = "maroon1",lwd=2)
+legend("topleft", legend = c("Logit", "Probit", "Cloglog"), 
+       col = c("darkblue", "darkorange", "maroon1"), lty = 1,lwd=2)
+
+# Cuadrícula
+grid(col = "gray", lty = 3) 
+
+```
+
+Con las inversas (no es más que girar el gráfico):
+
+```{r}
+
+# valores en la recta real
+x <- seq(-15, 15, length.out = 100)
+
+# Funciones de enlace
+logit <- 1 / (1 + exp(-x)) 
+probit <- pnorm(x) 
+cloglog <- 1 - exp(-exp(x)) 
+
+
+plot(x, logit, type = "l", col = "darkblue",lwd=2, 
+     ylab = "Probabilidad", xlab = "Función link", main = "Comparación de funciones link")
+lines(x, probit, col = "darkorange",lwd=2)
+lines(x, cloglog, col = "maroon1",lwd=2)
+legend("topleft", legend = c("Logit", "Probit", "Cloglog"), 
+       col = c("darkblue", "darkorange", "maroon1"), lty = 1,lwd=2)
+
+# Cuadrícula
+grid(col = "gray", lty = 3) 
+```
+
+# Ejemplo en R de regresión logística con los datos kyphosis
+
+Comenzamos cargando los datos kyphosis de la librería rpart:
+
+```{r warning=FALSE}
+library(rpart)
+library(ggplot2)
+data(kyphosis)
+```
+
+El conjunto de datos kyphosis contiene información sobre 81 pacientes que fueron sometidos a una operación para corregir la cifosis. La cifosis es una curvatura convexa anormalmente excesiva de la columna vertebral. Las variables son:
+
+-   kyphosis: variable binaria que toma los valores present/absent indicando si había cifosis tras la operación
+-   age: edad en meses
+-   number: número de vertebras involucradas
+-   start: el número de la primera vértebra (superior) operada
+
+El objetivo es predecir si un paciente desarrollará una complicación postoperatoria de cifosis o no en función de las 3 variables disponibles.
+
+Les echamos un primer vistazo:
+
+```{r}
+head(kyphosis)
+```
+
+Veamos cómo está guardada cada variable (numérica, factor, etc):
+
+```{r}
+str(kyphosis)
+```
+
+La variable kyphosis está correctamente guardada como un factor y el resto como numéricas. Con el siguiente código vemos que 0 es absent y 1 es present. De no ser así, deberíamos cambiar el orden para asegurar, a la hora de hacer el glm, que modelamos la probabilidad de $Y=1$ (present).
+
+```{r}
+levels(kyphosis$Kyphosis)
+```
+
+Hagamos un breve resumen inicial:
+
+```{r}
+summary(kyphosis)
+```
+
+Como en cualquier estudio con datos, lo primero es realizar un análisis exploratorio de los datos.
+
+### Análisis exploratorio de kyphosis
+
+```{r}
+ggplot(kyphosis, aes(x = Age)) +
+  geom_histogram( fill = "lightblue", color = "black", alpha = 0.7) +
+  labs(title = "Histograma de Age", x = "Edad", y = "Frecuencia") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(kyphosis, aes(x = as.factor(Number))) +
+  geom_bar(fill = "lightblue", color = "black", alpha = 0.7) +
+  labs(title = "Barplot de Number de vértebras", x = "Número de vértebras", y = "Frecuencia") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(kyphosis, aes(x = Start)) +
+  geom_histogram(fill = "lightblue", color = "black", alpha = 0.7) +
+  labs(title = "Histograma de Start", x = "Primera vértebra afectada", y = "Frecuencia") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(kyphosis, aes(x = Kyphosis, y = Age, fill = Kyphosis)) +
+  geom_boxplot() +
+  labs(title = "Boxplot de Edad por Kyphosis", x = "Kyphosis", y = "Edad") +
+  theme_minimal() +
+  scale_fill_manual(values = c("deepskyblue4", "darkorange"))
+
+# Prueba de Mann-Whitney
+age_test <- wilcox.test(Age ~ Kyphosis, data = kyphosis)
+print(age_test)
+```
+
+```{r}
+ggplot(kyphosis, aes(x = Kyphosis, y = Number, fill = Kyphosis)) +
+  geom_boxplot() +
+  labs(title = "Boxplot de Número de vértebras por Kyphosis", x = "Kyphosis", y = "Número de vértebras") +
+  theme_minimal() +
+  scale_fill_manual(values = c("deepskyblue4", "darkorange"))
+
+# Prueba de Mann-Whitney
+number_test <- wilcox.test(Number ~ Kyphosis, data = kyphosis)
+print(number_test)
+```
+
+```{r}
+ggplot(kyphosis, aes(x = Kyphosis, y = Start, fill = Kyphosis)) +
+  geom_boxplot() +
+  labs(title = "Boxplot de Ángulo por Kyphosis", x = "Kyphosis", y = "Ángulo") +
+  theme_minimal() +
+  scale_fill_manual(values =  c("deepskyblue4", "darkorange"))
+
+# Prueba de Mann-Whitney
+start_test <- wilcox.test(Start ~ Kyphosis, data = kyphosis)
+print(start_test)
+```
+
+### Modelo de regresión logística
+
+Comenzamos ajustando un modelo de regresión logística con todas las variables y usando la función de enlace logit. Tenemos que aclarar también cuál es la distribución de la variables respuesta. En este caso es binomial. Podéis encontrar más información en la [ayuda de R](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/family).
+
+```{r}
+glm_fit=glm(Kyphosis~., family=binomial("logit"),data=kyphosis)
+# Kyphosis~. es lo mismo que Kyphosis~Age+Number+Start
+summary(glm_fit)
+```
+
+¿Qué significa la salida de R?
+
+-   Call: Muestra las especificaciones del modelo
+
+-   Deviance residuals: Se ofrece una estadística descriptiva básica del comportamiento de los residuos. Estos residuos reflejan la contribución de cada observación al deviance. Si el modelo que se ha ajustado es bueno, siguen (aproximadamente) una distribución Normal. 
+
+-   Coeficientes: Muestra las estimaciones de los coeficientes (betas), su error estándar y la significatividad asociada.
+
+-   AIC: Criterio de Información de Akaike. Mide la calidad del modelo. Se prefieren valores bajos.
+
+-   Number of Fisher Scoring iterations: Número de iteraciones que se necesitan para la estimación de los coeficientes mediante máxima verosimilitud.
+
+-   Deviance. Recordemos que el estadístico deviance se utiliza para medir la calidad del modelo. Se calcula comparando la verosimilitud del modelo ajustado con la verosimilitud del modelo saturado (que ajusta perfectamente los datos). El estadístico $D$ se distribuye como una $\chi^{2}_{n-p}$ siendo $n$ el número de datos y $p$ el número de variables en el modelo.
+
+    -   Null deviance: Deviance del modelo nulo, es decir, solo con el intercept.
+    -   Residual deviance. Deviance del modelo ajustado. Se compara con la deviance del modelo nulo. Cuando menor, mejor. La diferencia en grados de libertad es el número de variables que se introducen en el modelo.
+
+Podemos realizar algunos tests asociados a deviance:
+
+1.  Evaluar la bondad del ajuste comparando la deviance del modelo ajustado con la distribución chi-cuadrado. Bajo la hipótesis nula, el modelo es adecuado para los datos y el estadístico deviance $D$ se distribuye como una $\chi^{2}_{n-p}$. Por tanto, podemos calcular $p-valor = 1-P(\chi^{2}_{n-p} < D)$ que indicará si el modelo se ajusta bien a los datos.
+2.  Comparar el deviance del modelo nulo y el modelo ajustado para determinar si el modelo ajustado es estadísticamente mejor que el nulo. Bajo la hipótesis nula $D_{null}-D_{fitted} \sim \chi^{2}_{df_{null}-df_{fitted}}$. Por tanto, un p-valor bajo indicará que existen diferencias entre ambos modelos.
+
+Estudiemos estos casos:
+
+```{r}
+deviance_fitted <- glm_fit$deviance
+df_fitted <- glm_fit$df.residual
+
+p_value <- 1 - pchisq(deviance_fitted, df = df_fitted)
+print(p_value)
+```
+
+```{r}
+deviance_null <- glm_fit$null.deviance
+df_null <- glm_fit$df.null
+p_value <- 1 - pchisq(deviance_null-deviance_fitted, 
+                      df = glm_fit$df.null - glm_fit$df.residual)
+print(p_value)
+```
+
+Las funciones *`drop1()`* y *`add1()`* de R sirven para realizar este último test para comparar modelos anidados de forma más automática. En particular, *`drop1()`* evalúa el impacto de eliminar una variable y *`add1()`* evalúa el impacto de añadir una variable.
+
+```{r}
+drop1(glm_fit, scope = ~ Age + Number + Start, test = "Chisq")
+```
+
+<div class="question-box">
+<strong>Pregunta:</strong>  
+¿Serías capaz de obtener alguno de estos valores? 
+Intenta llegar al p-valor 0.047739 por ejemplo.
+</div>
+
+
+
+```{r}
+glm_fit2 = glm(Kyphosis~Age, family=binomial("logit"),data=kyphosis)
+add1(glm_fit2, scope = ~ Age + Number + Start, test = "Chisq")
+```
+
+También se pueden comparar modelos con la función *anova()*. 
+
+<div class="question-box">
+<strong>Pregunta:</strong>  
+¿Qué está haciendo esta función?
+</div>
+
+
+```{r}
+glm_fit3 <- glm(Kyphosis ~ Age + Number, family = binomial, data = kyphosis)
+
+# Comparación de modelos
+anova(glm_fit, glm_fit3, test = "Chisq")
+```
+
+Otra opción es usar la función *step()* que va añadiendo y eliminando términos en función el AIC.
+
+```{r}
+glm_fit4 <- step(glm(Kyphosis ~ ., family = binomial, data = kyphosis))
+```
+
+### ¿Otra manera de evaluar el modelo?
+
+Podemos evaluar la calidad del modelo en función de su capacidad para predecir correctamente los 0's y los 1's. La manera correcta de hacerlo es particionar el conjunto de datos en 2 (train-test) o 3 trozos (train-test-validación) o mediante validación cruzada para poder analizar la capacidad predictiva del modelo en datos con los que no ha entrenado ([dicho con otras palabras](https://x.com/ChristophMolnar/status/1750448927948599316)). 
+
+En este ejemplo, evaluaremos directamente en el conjunto de entrenamiento. Para ello, en primer lugar debemos obtener las predicciones del modelo:
+```{r}
+preds = predict(glm_fit,kyphosis,type='response')
+summary(preds)
+```
+Ahora binarizamos las probabilidades y calculamos la matriz de confusión:
+
+```{r}
+library(caret)
+preds_bin <- factor(ifelse(preds > 0.5, 'present', 'absent'))
+confusionMatrix(preds_bin,kyphosis$Kyphosis,positive = 'present',mode='everything')
+```
+
+
+### Odds ratio
+El modelo de regresión logística (función link logit) es muy interpretable. Se pueden interpretar sus coeficientes en términos de odds ratios. 
+
+¿Qué son los odds ratios?
+Supongamos que tenemos un evento con probabilidad $p$, entonces $odds= \frac{p}{1-p}$. Si $p=1/2$, entonces $odds=1$. El ratio de dos odds es lo que se llama odds ratio (OR):
+$$
+OR = \dfrac{\frac{p_1}{1-p_1}}{\frac{p_2}{1-p_2}}
+$$
+Así, el $OR$ (o razón de ventajas, oportunidades, probabilidades) se puede interpretar como un cambio en la probabilidad. 
+
+
+Los $OR$ surgen de forma natural en la regresión logística puesto que:
+$$
+\log\left(\frac{P(Y = 1|\mathbf{X}_1)}{1-P(Y = 1|\mathbf{X}_1)}\right) = \beta_0 + \beta_1 \mathbf{X}_1
+$$
+Aplicamos la exponencial:
+
+$$
+\frac{P(Y = 1|\mathbf{X}_1)}{1-P(Y = 1|\mathbf{X}_1)} = \exp( \beta_0 + \beta_1 \mathbf{X}_1)
+$$
+Si hacemos el siguiente cociente, que es un $OR$:
+$$
+OR(\mathbf{X}_1) = \dfrac{\frac{P(Y = 1|\mathbf{X}_1+1)}{1-P(Y = 1|\mathbf{X}_1+1)}}{\frac{P(Y = 1|\mathbf{X}_1)}{1-P(Y = 1|\mathbf{X}_1)}} = \dfrac{\exp( \beta_0 + \beta_1 (\mathbf{X}_1+1))}{\exp( \beta_0 + \beta_1 \mathbf{X}_1)} = \exp(\beta_1)
+$$
+Es decir, la exponencial de los coeficientes es un odds ratio que se interpreta como el cambio que se produce en los odds cuando la variable dependiente $\mathbf{X}$ aumenta una unidad (o cambia al nivel superior en el caso de una variable categórica).
+
+
+Valores de odds ratio mayores que 1 indican que los odds de que la variable respuesta tome el valor 1 aumentan cuando la variable explicativa correspondiente aumenta en una unidad. En consecuencia, y manteniendo constantes las demás variables, también aumenta la probabilidad de que la variable respuesta valga 1.
+
+Valores de odds ratio menores que 1 indican que los odds de que la variable respuesta tome el valor 1 disminuyen cuando la variable explicativa correspondiente aumenta en una unidad. En consecuencia, y manteniendo constantes las demás variables, también disminuye la probabilidad de que la variable respuesta valga 1.
+
+En R los obtenemos del siguiente modo:
+```{r}
+# Obtener los coeficientes del modelo
+coeficientes <- coef(glm_fit)
+
+# Calcular los odds ratios
+odds_ratios <- exp(coeficientes)
+odds_ratios[2:4]
+```
+Interpretación:
+
+* Edad: Por cada mes de edad que aumentan los pacientes, el riesgo de tener  kyphosis aumenta en un 1.099%
+* Number: Por cada aumento del número de vertebras afectas, las opciones de tener kyphosis aumentan un 50.77%
+* Start. Para esta interpretación hacemos $1/0.8134181 = 1.22938$ que indica que por cada disminución de una unidad en el valor de la variable Start, el riesgo de tener kyphosis aumentan en un 22.9%.
+
+### Análisis de residuos
+
+```{r}
+library(car)
+residualPlots(glm_fit)
+```
+Como se explica en la [ayuda de R del gráfico binnedplot](https://www.rdocumentation.org/packages/arm/versions/1.14-4/topics/binnedplot):  
+In logistic regression, as with linear regression, the residuals can be defined as observed minus expected values. The data are discrete and so are the residuals. As a result, plots of raw residuals from logistic regression are generally not useful. The binned residuals plot instead, after dividing the data into categories (bins) based on their fitted values, plots the average residual versus the average fitted value for each bin.
+
+```{r}
+library(arm)
+binnedplot(fitted(glm_fit), 
+           residuals(glm_fit,type = 'response'), 
+           nclass = NULL, 
+           xlab = "Expected Values", 
+           ylab = "Average residual", 
+           main = "Binned residual plot")
+```
+
+### Categorización de variables
+
+Hemos tratado la variable Start y la variable Number como continuas pero quizás no sea lo mejor puesto que también pueden verse como variables categóricas (Number sería claramente ordinal). Así, vamos a categorizarlas y a obtener el modelo de regresión logística con ellas. Lo adecuado en estas circunstancias es seguir las instrucciones del experto en el dominio que nos indicará la manera correcta de categorizar las variables. Para este ejemplo, estudiaremos con más detalle las variables para decidir la categorización a realizar.
+
+
+
+```{r}
+table(kyphosis$Number)
+```
+
+En el caso de Number vamos a categorizar del siguiente modo: 4 o menos vs 5 más.
+```{r}
+kyphosis$Number_cat = cut(kyphosis$Number,breaks = c(0,4,10))
+
+```
+Analicemos cómo se relaciona con el target:
+
+```{r}
+table(kyphosis$Number_cat,kyphosis$Kyphosis)
+chisq.test(kyphosis$Number_cat,kyphosis$Kyphosis)
+```
+
+
+
+```{r}
+table(kyphosis$Start)
+```
+
+En el caso de Start vamos a categorizar del siguiente modo: $\{1,2,3,4,5,6\}, \{7,8,9,10,11,12\},\{13,14,15,16,17,18\}$.
+
+```{r}
+kyphosis$Start_cat = cut(kyphosis$Start,breaks = c(0,6,12,18))
+```
+
+```{r}
+table(kyphosis$Start_cat,kyphosis$Kyphosis)
+chisq.test(kyphosis$Start_cat,kyphosis$Kyphosis)
+# reordenamos los niveles
+kyphosis$Start_cat <- factor(kyphosis$Start_cat, levels=c('(12,18]', '(6,12]', '(0,6]'))
+```
+
+Hagamos ahora el modelo de regresión logística con las variables categorizadas:
+
+```{r}
+glm_cat <- glm(Kyphosis~Age+Number_cat+Start_cat, family=binomial("logit"),data=kyphosis)
+summary(glm_cat)
+```
+
+Calculemos las predicciones:
+```{r}
+preds_cat = predict(glm_cat,kyphosis,type='response')
+preds_bin_cat <- factor(ifelse(preds_cat > 0.5, 'present', 'absent'))
+confusionMatrix(preds_bin_cat,kyphosis$Kyphosis,positive = 'present',mode='everything')
+```
+
+
+
+<div class="question-box">
+<strong>Pregunta:</strong>  
+¿Qué modelo seleccionarías?
+</div>
+
+
+Analicemos ahora los odds ratio:
+```{r}
+# Obtener los coeficientes del modelo
+coefs_cat <- coef(glm_cat)
+
+# Calcular los odds ratios
+odds_ratios_cat <- exp(coefs_cat)
+odds_ratios_cat[2:5]
+```
+
+
+
+<div class="question-box">
+<strong>Pregunta:</strong>  
+¿Cómo interpretarías estos odds ratio?
+</div>
+
+
+### Modelo con interacción
+
+```{r}
+glm_cat2 <- glm(Kyphosis~Age+Number_cat*Start_cat, family=binomial("logit"),data=kyphosis)
+summary(glm_cat2)
+```
+Claramente la interacción es no significativa y empeora el modelo.
+
+
+# Ejemplo de regresión logística con proporciones
+
+Utilizaremos el conjunto de datos *esoph*. Dicho conjunto de datos contiene información sobre el consumo de alcohol y tabaco en diferentes grupos de edad y su relación con el cáncer de esófago. El dataset contienen las siguientes variables:
+
+* agegp: Grupo de edad
+* alcgp: Nivel de consumo de alcohol
+* tobgp: Nivel de consumo de tabaco
+* ncontrols: Número de personas control (sin cáncer de esófago)
+* ncases: Número de casos (con cáncer de esófago)
+
+Comenzamos echándole un ojo a los datos:
+
+```{r}
+data(esoph)
+head(esoph)
+```
+```{r}
+str(esoph)
+```
+
+```{r}
+summary(esoph)
+```
+
+
+Con este conjunto de datos podemos construir el target: proporción de casos con cáncer de esófago en función del grupo de edad, el nivel de consumo de alcohol y de tabaco.
+
+```{r}
+esoph$proportion <- esoph$ncases / (esoph$ncases + esoph$ncontrols)
+head(esoph)
+```
+Analicemos los datos:
+
+```{r warning=FALSE}
+ggplot(esoph, aes(x = proportion)) +
+  geom_histogram( fill = "steelblue", color = "black", alpha = 0.7,
+                  binwidth = 0.1) +
+  labs(title = "Histograma de la proporción de casos", x = "Proporción de casos", y = "Frecuencia") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(esoph, aes(x = agegp)) +
+  geom_bar(fill = "steelblue", color = "black", alpha = 0.7) +
+  labs(title = "Barplot de Grupo de edad", x = "Grupo de edad", y = "Frecuencia") +
+  theme_minimal()
+```
+
+```{r}
+
+ggplot(esoph, aes(x = alcgp)) +
+  geom_bar(fill = "steelblue", color = "black", alpha = 0.7) +
+  labs(title = "Barplot de Nivel de consumo de alcohol", x = "Consumo de alcohol", y = "Frecuencia") +
+  theme_minimal()
+```
+
+
+```{r}
+ggplot(esoph, aes(x = tobgp)) +
+  geom_bar(fill = "steelblue", color = "black", alpha = 0.7) +
+  labs(title = "Barplot de Nivel de consumo de tabaco", x = "Consumo de tabaco", y = "Frecuencia") +
+  theme_minimal()
+```
+
+Estudiamos la relación de las variables con el target:
+
+```{r}
+ggplot(esoph, aes(x = agegp, y = proportion, fill = agegp)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(
+    title = "Boxplot: Proporción vs. Grupo de edad",
+    x = "Grupo de edad",
+    y = "Proporción"
+  ) +
+  theme_minimal() 
+
+kruskal.test(proportion ~ agegp, data = esoph)
+```
+
+
+```{r}
+ggplot(esoph, aes(x = alcgp, y = proportion, fill = alcgp)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(
+    title = "Boxplot: Proporción vs. Nivel de consumo de alcohol",
+    x = "Nivel de consumo de alcohol",
+    y = "Proporción"
+  ) +
+  theme_minimal() 
+
+kruskal.test(proportion ~ alcgp, data = esoph)
+```
+
+```{r}
+ggplot(esoph, aes(x = tobgp, y = proportion, fill = tobgp)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(
+    title = "Boxplot: Proporción vs. Nivel de consumo de tabaco",
+    x = "Nivel de consumo de tabaco",
+    y = "Proporción"
+  ) +
+  theme_minimal() 
+
+kruskal.test(proportion ~ tobgp, data = esoph)
+```
+
+Pasamos ya a ajustar el modelo de regresión logística
+
+```{r}
+
+# Modelo de regresión logística
+glm_prop <- glm(
+  proportion ~ agegp + alcgp + tobgp,
+  family = binomial(),
+  weights = ncases + ncontrols,  # Pesos para el modelo binomial
+  data = esoph
+)
+
+summary(glm_prop)
+```
+
+
+
