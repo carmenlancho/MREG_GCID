@@ -982,17 +982,18 @@ Errores estándar de los coeficientes:</code></pre>
 <p><span class="math display">\[
 \text{odds} = \frac{0.8}{1 - 0.8} = 4
 \]</span></p>
-<p>Esto significa que el evento es <strong>4 veces más probable</strong> que no ocurra.</p>
-<p>El <strong>odds ratio (OR)</strong> mide el cambio en los odds cuando una variable independiente aumenta en una unidad. Se calcula como el exponencial del coeficiente de la regresión logística:</p>
+<p>Esto significa que la probabilidad de que ocurra el evento es 4 veces la probabilidad de que no ocurra. Equivalentemente, se dice que los odds son 4:1 a favor del evento.</p>
+<p>El <strong>odds ratio (OR)</strong> mide cómo cambian los odds cuando una variable independiente aumenta en una unidad. En regresión logística, el OR asociado al coeficiente (<span class="math inline">\(\beta_j\)</span>) se calcula como:</p>
 <p><span class="math display">\[
 \text{OR} = e^{\beta}
 \]</span></p>
 <p><strong>Interpretación de OR:</strong></p>
 <ul>
-<li>Si <strong>OR &gt; 1</strong>, el evento es más probable a medida que aumenta la variable independiente.</li>
-<li>Si <strong>OR &lt; 1</strong>, el evento es menos probable a medida que aumenta la variable independiente.</li>
+<li>Si <strong>OR &gt; 1</strong>, los odds del evento aumentan a medida que aumenta la variable independiente.</li>
+<li>Si <strong>OR &lt; 1</strong>, los odds del evento disminuyen a medida que aumenta la variable independiente.</li>
 <li>Si <strong>OR = 1</strong>, no hay efecto.</li>
 </ul>
+<p>Por ejemplo, si <span class="math inline">\(e^{\beta_j}=1.5\)</span>, entonces un aumento de una unidad en <span class="math inline">\(x_j\)</span> multiplica los odds por 1.5. Esto no significa necesariamente que la probabilidad aumente en un 50%, porque el cambio en probabilidad depende del valor inicial de <span class="math inline">\(p\)</span>.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1021,7 +1022,7 @@ Ejemplo
 <p>La <strong>deviance</strong> en regresión logística se calcula utilizando la distribución binomial subyacente. Para cada observación, comparamos la probabilidad que predice nuestro modelo con la “probabilidad perfecta” que asignaría un modelo saturado. Matemáticamente, esto se expresa como:</p>
 <p><span class="math display">\[D = 2 \sum_{i=1}^{n} \left[ y_i \log\left(\frac{y_i}{\hat{p}_i}\right) + (1-y_i) \log\left(\frac{1-y_i}{1-\hat{p}_i}\right) \right]\]</span></p>
 <p>donde <span class="math inline">\(y_i \in \{0,1\}\)</span> representa el resultado observado y <span class="math inline">\(\hat{p}_i\)</span> es la probabilidad estimada por nuestro modelo. Es importante notar que cuando <span class="math inline">\(y_i = 0\)</span> o <span class="math inline">\(y_i = 1\)</span>, algunos términos en esta expresión se anulan automáticamente, lo que refleja la naturaleza discreta de los datos binarios.</p>
-<p>La interpretación de la deviance sigue principios similares a los discutidos anteriormente, pero es crucial recordar que ahora estamos tratando con datos binarios. La deviance nos ayuda a entender qué tan bien nuestro modelo logístico se ajusta a los datos de respuesta binaria en comparación con un modelo que simplemente predice la media.</p>
+<p>La deviance mide cómo de bien se ajusta un modelo logístico en comparación con el modelo saturado, es decir, el modelo que reproduce perfectamente los datos observados. En la práctica, también suele compararse la deviance del modelo ajustado con la deviance del modelo nulo, que solo incluye intercepto y predice la misma probabilidad para todas las observaciones.</p>
 <p>Los <strong>pseudo R²</strong> son medidas alternativas que intentan capturar la proporción de variabilidad explicada por el modelo, similar al <span class="math inline">\(R^2\)</span> en regresión lineal, pero adaptadas a la naturaleza de los datos binarios y la verosimilitud del modelo. Estas medidas son útiles para evaluar y comparar modelos, aunque su interpretación no es tan directa como el <span class="math inline">\(R^2\)</span> tradicional.</p>
 <p>El <strong>McFadden’s R²</strong> es quizás el más utilizado y se define como:</p>
 <p><span class="math display">\[R^2_{\text{McFadden}} = 1 - \frac{\log L_{\text{modelo}}}{\log L_{\text{modelo nulo}}}\]</span></p>

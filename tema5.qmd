@@ -591,9 +591,9 @@ $$
 \text{odds} = \frac{0.8}{1 - 0.8} = 4
 $$
 
-Esto significa que el evento es **4 veces más probable** que no ocurra.
+Esto significa que la probabilidad de que ocurra el evento es 4 veces la probabilidad de que no ocurra. Equivalentemente, se dice que los odds son 4:1 a favor del evento.
 
-El **odds ratio (OR)** mide el cambio en los odds cuando una variable independiente aumenta en una unidad. Se calcula como el exponencial del coeficiente de la regresión logística:
+El **odds ratio (OR)** mide cómo cambian los odds cuando una variable independiente aumenta en una unidad. En regresión logística, el OR asociado al coeficiente ($\beta_j$) se calcula como:
 
 $$
 \text{OR} = e^{\beta}
@@ -601,9 +601,11 @@ $$
 
 **Interpretación de OR:**
 
--   Si **OR \> 1**, el evento es más probable a medida que aumenta la variable independiente.
--   Si **OR \< 1**, el evento es menos probable a medida que aumenta la variable independiente.
+-   Si **OR \> 1**, los odds del evento aumentan a medida que aumenta la variable independiente.
+-   Si **OR \< 1**, los odds del evento disminuyen a medida que aumenta la variable independiente.
 -   Si **OR = 1**, no hay efecto.
+
+Por ejemplo, si $e^{\beta_j}=1.5$, entonces un aumento de una unidad en $x_j$ multiplica los odds por 1.5. Esto no significa necesariamente que la probabilidad aumente en un 50%, porque el cambio en probabilidad depende del valor inicial de $p$.
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
 Supongamos que ajustamos un modelo de regresión logística para predecir la probabilidad de tener diabetes en función del índice de masa corporal (BMI). El coeficiente asociado a **BMI** es 0.08.
@@ -627,7 +629,8 @@ $$D = 2 \sum_{i=1}^{n} \left[ y_i \log\left(\frac{y_i}{\hat{p}_i}\right) + (1-y_
 
 donde $y_i \in \{0,1\}$ representa el resultado observado y $\hat{p}_i$ es la probabilidad estimada por nuestro modelo. Es importante notar que cuando $y_i = 0$ o $y_i = 1$, algunos términos en esta expresión se anulan automáticamente, lo que refleja la naturaleza discreta de los datos binarios.
 
-La interpretación de la deviance sigue principios similares a los discutidos anteriormente, pero es crucial recordar que ahora estamos tratando con datos binarios. La deviance nos ayuda a entender qué tan bien nuestro modelo logístico se ajusta a los datos de respuesta binaria en comparación con un modelo que simplemente predice la media.
+
+La deviance mide cómo de bien se ajusta un modelo logístico en comparación con el modelo saturado, es decir, el modelo que reproduce perfectamente los datos observados. En la práctica, también suele compararse la deviance del modelo ajustado con la deviance del modelo nulo, que solo incluye intercepto y predice la misma probabilidad para todas las observaciones.
 
 Los **pseudo R²** son medidas alternativas que intentan capturar la proporción de variabilidad explicada por el modelo, similar al $R^2$ en regresión lineal, pero adaptadas a la naturaleza de los datos binarios y la verosimilitud del modelo. Estas medidas son útiles para evaluar y comparar modelos, aunque su interpretación no es tan directa como el $R^2$ tradicional.
 
