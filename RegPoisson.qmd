@@ -1,0 +1,328 @@
+---
+title: "Regresión de Poisson"
+---
+
+Supongamos que queremos explicar el número de visitas al médico en un año según: edad, fumador, ejercicio.
+
+```{r}
+
+set.seed(123)
+
+# -----------------------------
+# 1. Simular datos
+# -----------------------------
+n <- 500
+
+edad <- round(rnorm(n, mean = 45, sd = 12))
+edad[edad < 18] <- 18
+
+fumador <- factor(sample(c("No", "Si"), n, replace = TRUE, prob = c(0.7, 0.3)))
+ejercicio <- round(rnorm(n, mean = 3, sd = 1.2), 1)
+ejercicio[ejercicio < 0] <- 0
+
+# Media verdadera en escala log
+eta <- 0.6 + 0.015*edad + 0.35*(fumador == "Si") - 0.18*ejercicio
+
+mu <- exp(eta)
+
+# Conteo Poisson
+visitas <- rpois(n, lambda = mu)
+
+datos_pois <- data.frame(visitas, edad, fumador, ejercicio)
+
+```
+
+Ajustamos el modelo
+
+```{r}
+# -----------------------------
+# 2. Ajustar modelo Poisson
+# -----------------------------
+mod_pois <- glm(visitas ~ edad + fumador + ejercicio,
+                family = poisson(link = "log"),
+                data = datos_pois)
+
+summary(mod_pois)
+```
+
+El modelo ajustado es de la forma:
+$$log(\mu_i) = \beta_0 + \beta_1 edad_i + \beta_2 fumador_i + \beta_3 ejercicio_i$$
+O, equivalentemente, 
+$$\mu_i = \exp(\beta_0 + \beta_1 edad_i + \beta_2 fumador_i + \beta_3 ejercicio_i)$$
+Para interpretar los coeficientes, hacemos la exponencial. En Poisson, exponencial  el coeficiente da un rate ratio $e^{\beta_j}$.
+```{r}
+exp(coef(mod_pois))
+```
+
+ * Como exp(beta_edad)=1.016, por cada año adicional de edad, el número esperado de visitas se multiplica por 1.016 (es decir, aumenta aproximadamente un 1.6%), manteniendo constantes las demás variables
+ * Como exp(beta_fumadorSi)=1.38, los fumadores tienen una tasa esperada de visitas 1.39 veces la de los no fumadores, ceteris paribus. Es decir, alrededor de un 38% más de visitas esperadas.
+ * Como exp(beta_ejercicio)=0.82, por cada unidad adicional de ejercicio, la tasa esperada de visitas se multiplica por 0.82, es decir, disminuye alrededor de un 18%, dejando el resto de variables fijas.
+ 
+ 
+ Manteniendo constantes las demás variables, cada año adicional de edad se asocia con un incremento del 1.6% en el número esperado de visitas. Los fumadores presentan una tasa esperada de visitas 1.38 veces la de los no fumadores. Cada unidad adicional de ejercicio se asocia con una reducción del 18% en la tasa esperada de visitas.
+ 
+ **ntervalos de confianza para rate ratios**
+```{r}
+exp(confint(mod_pois))
+```
+ 
+ En formato tabla:
+```{r}
+resultado <- cbind(
+  beta = coef(mod_pois),
+  RR = exp(coef(mod_pois)),
+  IC_inf = exp(confint(mod_pois)[,1]),
+  IC_sup = exp(confint(mod_pois)[,2])
+)
+
+print(resultado)
+```
+ 
+## Predicciones
+**Predicción de medias esperadas**
+```{r}
+predict(mod_pois, type = "response")[1:10]
+```
+Esto devuelve $\hat{\mu}_i$, esto es, el número esperado de visitas para cada observación.
+
+**Predicción para perfiles concretos**
+```{r}
+nuevo <- data.frame(
+  edad = c(30, 30, 60, 60),
+  fumador = factor(c("No", "Si", "No", "Si"), levels = levels(datos_pois$fumador)),
+  ejercicio = c(2, 2, 2, 2)
+)
+
+pred <- predict(mod_pois, newdata = nuevo, type = "response")
+cbind(nuevo, visitas_esperadas = pred)
+```
+¡Muy interpretable!
+
+## Diagnóstico
+
+Aquí no miramoss normalidad de residuos como en lineal.
+Lo importante suele ser:
+
+  * forma funcional
+  * residuos
+  * puntos influyentes
+  * sobredispersión
+  * exceso de ceros
+  * comparación observado vs predicho
+  
+**Residuos deviance y Pearson**
+```{r}
+res_dev <- residuals(mod_pois, type = "deviance")
+res_pear <- residuals(mod_pois, type = "pearson")
+ajustados <- fitted(mod_pois)
+
+par(mfrow = c(1, 2))
+plot(ajustados, res_dev,
+     xlab = "Valores ajustados",
+     ylab = "Residuos deviance",
+     main = "Deviance residuals vs fitted")
+
+plot(ajustados, res_pear,
+     xlab = "Valores ajustados",
+     ylab = "Residuos Pearson",
+     main = "Pearson residuals vs fitted")
+par(mfrow = c(1, 1))
+```
+¿Cómo interpretarlos? Buscamos:
+
+  * puntos muy extremos
+  * patrones sistemáticos
+  * curvatura o grupos raros
+  * mucha dispersión creciente no explicada
+
+Lo que preocupa no es que “no se vea nube normal”, sino residuos muy grandes o un patrón claro de mala especificación
+
+**Forma funcional**
+En Poisson, el supuesto es que el log de la media es lineal en los predictores:
+
+$$\log(\mu_i) = x_i^T \beta$$
+
+Por tanto, hay que revisar si *edad* y *ejercicio* deberían entrar de forma no lineal. Para ellos, comparamos con términos cuadráticos.
+```{r}
+mod_pois_quad <- glm(visitas ~ edad + I(edad^2) + fumador + ejercicio + I(ejercicio^2),
+                     family = poisson(link = "log"),
+                     data = datos_pois)
+
+anova(mod_pois, mod_pois_quad, test = "Chisq")
+```
+Como el modelo con cuadrados mejora mucho, sospechamos no linealidad.
+
+
+**Residuos contra cada predictor**
+```{r}
+par(mfrow = c(1, 2))
+plot(datos_pois$edad, res_dev,
+     xlab = "Edad", ylab = "Residuos deviance",
+     main = "Residuos vs edad")
+abline(h = 0, lty = 2, col = 2)
+
+plot(datos_pois$ejercicio, res_dev,
+     xlab = "Ejercicio", ylab = "Residuos deviance",
+     main = "Residuos vs ejercicio")
+abline(h = 0, lty = 2, col = 2)
+par(mfrow = c(1, 1))
+```
+
+Podemos añadir una curva suavizada por si nos ayuda.
+```{r}
+plot(datos_pois$edad, res_dev,
+     xlab = "Edad", ylab = "Residuos deviance",
+     main = "Residuos vs edad")
+lines(lowess(datos_pois$edad, res_dev), lwd = 2, col = 2)
+abline(h = 0, lty = 2)
+```
+
+**Observaciones influyentes**
+```{r}
+hat_vals <- hatvalues(mod_pois)
+cook_vals <- cooks.distance(mod_pois)
+
+par(mfrow = c(1, 2))
+plot(hat_vals, type = "h", main = "Leverage", ylab = "hat values")
+abline(h = 2*mean(hat_vals), lty = 2, col = 2)
+
+plot(cook_vals, type = "h", main = "Cook's distance", ylab = "Cook")
+abline(h = 4/nrow(datos_pois), lty = 2, col = 2)
+par(mfrow = c(1, 1))
+```
+
+Casos que podrían ser problemáticos:
+```{r}
+which(hat_vals > 2*mean(hat_vals))
+which(cook_vals > 4/nrow(datos_pois))
+```
+
+```{r}
+idx <- which(cook_vals > 4/nrow(datos_pois))
+datos_pois[idx, ]
+```
+
+**Sobredispersión**
+Esto es clave en regresión de Poisson. Poisson supone $Var(Y_i|X)=\mu_i$. Pero en datos reales muchas veces ocurre que $Var(Y_i|X)>\mu_i$. Esto es sobredispersión.
+
+Una medida rápida con residuos de Pearson es:
+```{r}
+dispersion <- sum(residuals(mod_pois, type = "pearson")^2) / mod_pois$df.residual
+dispersion
+```
+Si está cerca de 1 es razonable, hasta 1.5 consideramos que quizás hay algo de sobredispersión, mayor de 1.5 ya consideramos que hay un problema claro.
+
+También podemos estudiar la sobredispersión con deviance/gl:
+```{r}
+mod_pois$deviance / mod_pois$df.residual
+```
+
+¿Qué hacemos si hay sobredispersión? 
+Podemos utilizar la Quasipoisson que mantiene la media pero corrige los errores estándar.
+```{r}
+mod_quasi <- glm(visitas ~ edad + fumador + ejercicio,
+                 family = quasipoisson(link = "log"),
+                 data = datos_pois)
+
+summary(mod_quasi)
+```
+Otra opción es usar la binomial negativa. 
+```{r}
+library(MASS)
+
+mod_nb <- glm.nb(visitas ~ edad + fumador + ejercicio,
+                 data = datos_pois)
+
+summary(mod_nb)
+```
+Se suelen comparar ambos modelos con el AIC:
+```{r}
+AIC(mod_pois, mod_nb)
+```
+Si el AIC de la binomial negativa, es mejor usar dicha distribución.
+
+**Observado vs predicho**
+Nos sirve para verificar si el modelo reproduce bien el nivel medio.
+```{r}
+plot(fitted(mod_pois), datos_pois$visitas,
+     xlab = "Conteo esperado",
+     ylab = "Conteo observado",
+     main = "Observado vs predicho")
+abline(0, 1, col = 2, lty = 2)
+```
+
+También podemos agrupar por deciles del ajustado:
+```{r}
+datos_pois$grupo <- cut(fitted(mod_pois),
+                        breaks = quantile(fitted(mod_pois), probs = seq(0, 1, 0.1)),
+                        include.lowest = TRUE)
+
+comparacion <- aggregate(cbind(obs = visitas, pred = fitted(mod_pois)) ~ grupo,
+                         data = datos_pois,
+                         FUN = mean)
+
+print(comparacion)
+
+plot(comparacion$pred, comparacion$obs,
+     xlab = "Media predicha",
+     ylab = "Media observada",
+     main = "Observado vs predicho por grupos")
+abline(0, 1, col = 2, lty = 2)
+```
+**Exceso de ceros**
+```{r}
+mean(datos_pois$visitas == 0)
+mean(dpois(0, lambda = fitted(mod_pois)))
+```
+La primera línea nos da la proporción observada de ceros y la segunda, la proporción media de ceros esperada por el modelo. Si la proporción observada es mucho mayor, podemos sospechar exceso de ceros.
+
+**Comparación con modelo nulo**
+```{r}
+mod_nulo <- glm(visitas ~ 1,
+                family = poisson(link = "log"),
+                data = datos_pois)
+
+anova(mod_nulo, mod_pois, test = "Chisq")
+```
+Nos dice si el modelo con covariables mejora frente al modelo con solo intercepto.
+
+
+## Resumen revisión Poisson
+```{r}
+# Ajuste
+mod <- glm(y ~ x1 + x2 + x3, family = poisson(link = "log"), data = datos)
+
+# Resumen
+summary(mod)
+exp(coef(mod))
+exp(confint(mod))
+
+# Residuos
+res_dev <- residuals(mod, type = "deviance")
+res_pear <- residuals(mod, type = "pearson")
+fit <- fitted(mod)
+
+par(mfrow = c(1, 2))
+plot(fit, res_dev); abline(h = 0, lty = 2, col = 2)
+plot(fit, res_pear); abline(h = 0, lty = 2, col = 2)
+par(mfrow = c(1, 1))
+
+# Influencia
+plot(hatvalues(mod), type = "h")
+abline(h = 2*mean(hatvalues(mod)), col = 2, lty = 2)
+
+plot(cooks.distance(mod), type = "h")
+abline(h = 4/nrow(datos), col = 2, lty = 2)
+
+# Sobredispersión
+sum(residuals(mod, type = "pearson")^2) / mod$df.residual
+mod$deviance / mod$df.residual
+
+# Comparación con modelo más flexible
+library(MASS)
+mod_nb <- glm.nb(y ~ x1 + x2 + x3, data = datos)
+AIC(mod, mod_nb)
+summary(mod_nb)
+```
+
+
