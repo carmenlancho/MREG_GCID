@@ -41,35 +41,49 @@ set.seed(123)
 
 ### Conceptos fundamentales
 
-```{r glm_conceptos}
-cat("=== COMPONENTES DE UN MODELO LINEAL GENERALIZADO ===\n\n")
 
-cat("1. COMPONENTE ALEATORIO:\n")
-cat("   - Define la distribución de la variable respuesta\n")
-cat("   - Debe pertenecer a la familia exponencial\n")
-cat("   - Ejemplos: Normal, Binomial, Poisson, Gamma\n\n")
+#### Componentes de un Modelo Lineal Generalizado (GLM)
 
-cat("2. COMPONENTE SISTEMÁTICO:\n")
-cat("   - Combinación lineal de predictores: η = β₀ + β₁X₁ + ... + βₚXₚ\n")
-cat("   - η es el predictor lineal\n\n")
+**Componente aleatorio**
 
-cat("3. FUNCIÓN DE ENLACE:\n")
-cat("   - Conecta la media de Y con el predictor lineal: g(μ) = η\n")
-cat("   - Debe ser monótona y diferenciable\n\n")
+* Define la distribución de la variable respuesta $Y$.
+* La distribución debe pertenecer a la familia exponencial.
+* Ejemplos habituales: Normal, Binonmial, Poisson, Gamma.
 
-# Tabla de distribuciones comunes y sus enlaces
-distribuciones_glm <- data.frame(
-  Distribucion = c("Normal", "Binomial", "Poisson", "Gamma", "Inversa Gaussiana"),
-  Uso_Tipico = c("Variables continuas", "Proporciones/Binarias", "Conteos", 
-                 "Variables positivas sesgadas", "Tiempos hasta evento"),
-  Funcion_Varianza = c("1", "μ(1-μ)", "μ", "μ²", "μ³"),
-  Enlace_Canonico = c("Identidad: μ", "Logit: log(μ/(1-μ))", "Log: log(μ)", 
-                      "Inverso: 1/μ", "Inverso cuadrado: 1/μ²"),
-  Enlace_Comun = c("Identidad", "Logit", "Log", "Log", "Log")
-)
 
-print(distribuciones_glm)
-```
+**Componente sistemático**
+
+Consiste en una combinación lineal de los predictores:
+
+$$
+\eta = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
+$$
+
+donde:
+
+* $\eta$ es el predictor lineal.
+* $\beta_i$ son los coeficientes del modelo.
+* $X_i$ son las variables explicativas.
+
+**Función de enlace**
+
+Relaciona la media de la variable respuesta $Y$ con el predictor lineal:
+
+$$
+g(\mu) = \eta
+$$
+
+La función de enlace debe ser monoótona y diferenciable.
+
+#### Distribuciones comunes en modelos GLM
+
+| Distribución | Uso típico | Función de varianza | Enlace canónico | Enlace común |
+|-------------|----------|---------------------|-----------------|--------------|
+| Normal | Variables continuas | 1 | Identidad: $\mu$ | Identidad |
+| Binomial | Proporciones / binarias | $\mu(1-\mu)$ | Logit: $log(\mu/(1-\mu))$ | Logit |
+| Poisson | Conteos | $\mu$ | Log: $log(\mu)$ | Log |
+| Gamma | Variables positivas sesgadas | $\mu^2$ | Inverso: $1/\mu$ | Log |
+| Inversa Gaussiana | Tiempos hasta evento | $\mu^3$ | Inverso cuadrado: $1/\mu^2$ | Log |
 
 ### Comparación con regresión lineal
 
@@ -104,16 +118,22 @@ ggplot(datos_ejemplo, aes(x = x)) +
        x = "Variable Predictora", y = "Probabilidad / Respuesta") +
   theme_minimal()
 
-cat("=== PROBLEMAS DE LA REGRESIÓN LINEAL PARA RESPUESTA BINARIA ===\n")
-cat("1. Predicciones fuera del rango [0,1]\n")
-cat("2. Varianza no constante (heterocedasticidad)\n")
-cat("3. Residuos no normales\n")
-cat("4. Relación no lineal entre predictores y probabilidad\n\n")
 
+```
+
+Problemas de la regresión lineal para respuesta binaria:
+
+  * Predicciones fuera del rango $[0,1]$
+  * Varianza no constante (heterocedasticidad)
+  * Residuos no normales
+  * Relación no lineal entre predictores y probabilidad
+  
+```{r}
 # Mostrar predicciones problemáticas del modelo lineal
 pred_problematicas <- sum(datos_ejemplo$pred_lineal < 0 | datos_ejemplo$pred_lineal > 1)
 cat("Predicciones fuera de [0,1] en modelo lineal:", pred_problematicas, "de", n, "\n")
 ```
+
 
 ## Parte 2: Regresión Logística
 
@@ -131,18 +151,20 @@ pima_completo <- rbind(Pima.tr, Pima.te)
 cat("=== DATASET PIMA INDIANS DIABETES ===\n")
 cat("Observaciones:", nrow(pima_completo), "\n")
 cat("Variables:", ncol(pima_completo), "\n\n")
+```
 
-# Descripción de variables
-cat("Variables:\n")
-cat("type: Diabetes (Yes/No) - Variable respuesta\n")
-cat("npreg: Número de embarazos\n")
-cat("glu: Concentración de glucosa en plasma\n")
-cat("bp: Presión arterial diastólica\n")
-cat("skin: Grosor del pliegue cutáneo del tríceps\n")
-cat("bmi: Índice de masa corporal\n")
-cat("ped: Función de pedigrí de diabetes\n")
-cat("age: Edad\n\n")
+**Descripción de variables**
 
+  * *type*: Diabetes (Yes/No) - Variable respuesta
+  * *npreg*: Número de embarazos
+  * *glu*: Concentración de glucosa en plasma
+  * *bp*: Presión arterial diastólica
+  * *kin*: Grosor del pliegue cutáneo del tríceps
+  * *bmi*: Índice de masa corporal
+  * *ped*: Función de pedigrí de diabetes
+  * *age*: Edad
+
+```{r logistic_data2}
 # Resumen estadístico
 summary(pima_completo)
 
@@ -182,17 +204,15 @@ resultados_or <- data.frame(
   IC_97.5 = round(conf_intervals[,2], 3)
 )
 print(resultados_or)
-
-# Interpretación práctica
-cat("\n=== INTERPRETACIÓN DE ODDS RATIOS ===\n")
-cat("glu (Glucosa): OR =", round(odds_ratios["glu"], 3), "\n")
-cat("  → Por cada mg/dl adicional de glucosa, las odds de diabetes se multiplican por", round(odds_ratios["glu"], 3), "\n")
-cat("  → Esto representa un cambio de", round((odds_ratios["glu"] - 1) * 100, 1), "% en las odds\n\n")
-
-cat("bmi (IMC): OR =", round(odds_ratios["bmi"], 3), "\n")
-cat("  → Por cada unidad adicional de IMC, las odds de diabetes se multiplican por", round(odds_ratios["bmi"], 3), "\n")
-cat("  → Esto representa un cambio de", round((odds_ratios["bmi"] - 1) * 100, 1), "% en las odds\n")
 ```
+
+
+**Interpretación práctica**
+
+  * glu (Glucosa): OR =`r round(odds_ratios["glu"], 3)`. Por cada mg/dl adicional de glucosa, las odds de diabetes se multiplican por `r round(odds_ratios["glu"], 3)`. Esto representa un cambio de `r round((odds_ratios["glu"] - 1) * 100, 1)` % en las odds
+  * mi (IMC): OR = `r round(odds_ratios["bmi"], 3)`. Por cada unidad adicional de IMC, las odds de diabetes se multiplican por `r round(odds_ratios["bmi"], 3)`. Esto representa un cambio de `r round((odds_ratios["bmi"] - 1) * 100, 1)` % en las odds.
+
+
 
 ### Selección de variables
 
@@ -451,17 +471,14 @@ resultados_irr <- data.frame(
   IC_97.5 = round(conf_int_pois[,2], 3)
 )
 print(resultados_irr)
-
-# Interpretación práctica
-cat("\n=== INTERPRETACIÓN DE IRR ===\n")
-cat("calidad: IRR =", round(irr["calidad"], 3), "\n")
-cat("  → Por cada punto adicional en calidad, la tasa de infecciones se multiplica por", round(irr["calidad"], 3), "\n")
-cat("  → Esto representa una disminución del", round((1 - irr["calidad"]) * 100, 1), "% en la tasa\n\n")
-
-cat("size_large: IRR =", round(irr["size_large"], 3), "\n")
-cat("  → Hospitales grandes tienen una tasa", round(irr["size_large"], 2), "veces mayor que pequeños\n")
-cat("  → Esto representa un aumento del", round((irr["size_large"] - 1) * 100, 1), "% en la tasa\n")
 ```
+
+**Interpretación práctica**
+
+  * calidad: IRR = `r round(irr["calidad"], 3)`. Por cada punto adicional en calidad, la tasa de infecciones se multiplica por `r round(irr["calidad"], 3)`. Esto representa una disminución del `r round((1 - irr["calidad"]) * 100, 1)` en la tasa.
+  * size_large: IRR = `r round(irr["size_large"], 3)`. Hospitales grandes tienen una tasa `r round(irr["size_large"], 2)`  veces mayor que pequeños.  Esto representa un aumento del `r round((irr["size_large"] - 1) * 100, 1)` % en la tasa.
+
+
 
 ### Diagnóstico del modelo de Poisson
 
@@ -568,7 +585,7 @@ if(p_valor_lr < 0.05) {
 }
 ```
 
-### Validación del modelo de onteo
+### Validación del modelo de conteo
 
 ```{r poisson_validation}
 # Predicciones en conjunto de prueba
@@ -787,7 +804,6 @@ cat("7. Crear curva ROC y calcular AUC\n\n")
 summary(datos_admision)
 table(datos_admision$admit)
 
-cat("Tu análisis aquí...\n")
 ```
 
 ### Ejercicio 2: Análisis de datos de conteo
@@ -834,60 +850,8 @@ cat("Media de reclamaciones:", round(mean(datos_seguros$claims), 3), "\n")
 cat("Varianza de reclamaciones:", round(var(datos_seguros$claims), 3), "\n")
 cat("Razón varianza/media:", round(var(datos_seguros$claims)/mean(datos_seguros$claims), 3), "\n\n")
 
-cat("Tu análisis aquí...\n")
 ```
 
-### Ejercicio 3: Selección de modelo GLM
-
-```{r ejercicio_seleccion}
-# Dataset con múltiples tipos de respuesta para practicar selección
-set.seed(777)
-n_multi <- 200
-
-# Variables predictoras
-income <- exp(rnorm(n_multi, mean = 10, sd = 0.5))  # Income log-normal
-education <- sample(1:5, n_multi, replace = TRUE)
-age <- rnorm(n_multi, mean = 45, sd = 12)
-urban <- rbinom(n_multi, 1, 0.6)
-
-# Múltiples variables respuesta
-# 1. Binaria: Posee casa propia
-own_house <- rbinom(n_multi, 1, plogis(-2 + 0.00002*income + 0.3*education + 0.02*age + 0.5*urban))
-
-# 2. Conteo: Número de productos financieros
-n_products <- rpois(n_multi, exp(0.5 + 0.00001*income + 0.1*education + 0.01*age + 0.2*urban))
-
-# 3. Continua positiva: Gasto anual en seguros
-insurance_spend <- rgamma(n_multi, shape = 2, 
-                         rate = 2/exp(5 + 0.00001*income + 0.1*education + 0.02*age + 0.3*urban))
-
-datos_financieros <- data.frame(
-  income = income,
-  education = education,
-  age = age,
-  urban = urban,
-  own_house = own_house,
-  n_products = n_products,
-  insurance_spend = insurance_spend
-)
-
-cat("=== EJERCICIO 3: SELECCIÓN DE MODELO GLM ===\n")
-cat("Dataset con múltiples tipos de respuesta:\n")
-cat("- own_house: Binaria (posee casa propia)\n")
-cat("- n_products: Conteo (número de productos financieros)\n")
-cat("- insurance_spend: Continua positiva (gasto en seguros)\n\n")
-
-cat("Tareas a realizar:\n")
-cat("1. Para cada variable respuesta, determinar la familia de distribución apropiada\n")
-cat("2. Ajustar modelos GLM apropiados\n")
-cat("3. Comparar diferentes especificaciones\n")
-cat("4. Realizar diagnósticos específicos\n")
-cat("5. Validar y comparar modelos\n\n")
-
-summary(datos_financieros)
-
-cat("Tu análisis aquí...\n")
-```
 
 ## Parte 6: Conceptos clave para recordar
 
@@ -903,7 +867,7 @@ cat("Tu análisis aquí...\n")
 - **Interpretación:** Odds Ratios
 - **Validación:** Matriz de confusión, Curva ROC, AUC
 
-**Variable de Conteo (0, 1, 2, 3, ...):**
+**Variable de conteo (0, 1, 2, 3, ...):**
 
 - **Modelo inicial:** Regresión de Poisson
 - **Familia:** Poisson
@@ -912,7 +876,7 @@ cat("Tu análisis aquí...\n")
 - **Si hay sobredispersión:** Cambiar a Binomial Negativa
 - **Interpretación:** Incidence Rate Ratios (IRR)
 
-**Variable Continua Positiva y Sesgada:**
+**Variable continua positiva y sesgada:**
 
 - **Modelo:** Regresión Gamma
 - **Familia:** Gamma
