@@ -38,13 +38,12 @@ mod_logit_quad <- glm(y ~ edad + I(edad^2) + ingresos + I(ingresos^2) + sexo,
                       family = binomial,
                       data = datos_logit)
 
-anova(mod_logit, mod_logit_quad, test = "Chisq")
+anova(mod_logit, mod_logit_quad, test = "Chisq") # test de la razón de verosimilitudes
 # Si los términos cuadrados mejoran mucho el ajuste, sospechamos no linealidad.
 
 ## Gráfico de residuos parciales aproximado
 # No existe el mismo “partial residual plot” clásico que en lineal, 
 # pero una forma útil es comparar con suavizados.
-
 library(ggplot2)
 
 datos_logit$pred <- predict(mod_logit, type = "response")
@@ -60,7 +59,7 @@ ggplot(datos_logit, aes(x = ingresos, y = resp_dev)) +
   geom_point(alpha = 0.5) +
   geom_smooth(se = FALSE) +
   labs(title = "Residuos deviance vs ingresos")
-# No buscamoss “nube normal”, sino patrones fuertes.
+# No buscamos “nube normal”, sino patrones fuertes.
 # Si el suavizado muestra curvatura clara, 
 # el predictor puede estar mal especificado.
 
@@ -139,42 +138,11 @@ roc_obj <- roc(datos_logit$y, prob_hat)
 plot(roc_obj, main = "Curva ROC")
 auc(roc_obj)
 
-## Calibración simple por grupos
-datos_logit$grupo <- cut(prob_hat,
-                         breaks = quantile(prob_hat, probs = seq(0, 1, 0.1)),
-                         include.lowest = TRUE)
 
-calib <- aggregate(cbind(obs = y, pred = prob_hat) ~ grupo,
-                   data = datos_logit,
-                   FUN = mean)
-
-print(calib)
-
-plot(calib$pred, calib$obs,
-     xlab = "Probabilidad predicha media",
-     ylab = "Proporción observada",
-     main = "Calibración")
-abline(0, 1, col = 2, lty = 2)
-# Si los puntos quedan cerca de la diagonal, la calibración va bien.
 library(car)
 residualPlots(mod_logit)
 
 
-## Resumen logística:
-# Ajuste
-mod <- glm(y ~ x1 + x2, family = binomial, data = datos)
-
-# Residuos
-plot(fitted(mod), residuals(mod, type="deviance"))
-plot(fitted(mod), residuals(mod, type="pearson"))
-
-# Influencia
-plot(hatvalues(mod), type="h")
-plot(cooks.distance(mod), type="h")
-
-# No linealidad
-mod2 <- glm(y ~ x1 + I(x1^2) + x2, family = binomial, data = datos)
-anova(mod, mod2, test = "Chisq")
 
 
 
