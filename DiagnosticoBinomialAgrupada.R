@@ -7,7 +7,7 @@
 set.seed(456)
 
 # -----------------------------
-# 1. Simular datos agrupados
+# Simular datos agrupados
 # -----------------------------
 g <- 120
 
@@ -24,7 +24,7 @@ fracasos <- ensayos - exitos
 datos_binom <- data.frame(exitos, fracasos, ensayos, tratamiento, dosis)
 
 # -----------------------------
-# 2. Ajustar modelo binomial agrupado
+# Ajustar modelo binomial agrupado
 # -----------------------------
 mod_binom <- glm(cbind(exitos, fracasos) ~ dosis + tratamiento,
                  family = binomial(link = "logit"),
@@ -113,25 +113,3 @@ mod_binom_nulo <- glm(cbind(exitos, fracasos) ~ 1,
 anova(mod_binom_nulo, mod_binom, test = "Chisq")
 
 
-
-
-## Resumen binomial agrupada
-# Ajuste
-mod <- glm(cbind(exitos, fracasos) ~ x1 + x2, family = binomial, data = datos)
-
-# Residuos
-plot(fitted(mod), residuals(mod, type="deviance"))
-plot(fitted(mod), residuals(mod, type="pearson"))
-
-# Influencia
-plot(hatvalues(mod), type="h")
-plot(cooks.distance(mod), type="h")
-
-# Sobre-dispersión
-sum(residuals(mod, type="pearson")^2) / mod$df.residual
-
-
-# Manteniendo constantes las demás variables, 
-# una unidad adicional en dosis multiplica por 1.49 los odds de éxito.
-
-# El grupo tratado presenta odds de éxito 2.23 veces mayores que el grupo control.
