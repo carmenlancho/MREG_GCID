@@ -8,9 +8,7 @@ Supongamos que queremos explicar el número de visitas al médico en un año seg
 
 set.seed(123)
 
-# -----------------------------
-# 1. Simular datos
-# -----------------------------
+# Simulamos los  datos
 n <- 500
 
 edad <- round(rnorm(n, mean = 45, sd = 12))
@@ -35,9 +33,6 @@ datos_pois <- data.frame(visitas, edad, fumador, ejercicio)
 Ajustamos el modelo
 
 ```{r}
-# -----------------------------
-# 2. Ajustar modelo Poisson
-# -----------------------------
 mod_pois <- glm(visitas ~ edad + fumador + ejercicio,
                 family = poisson(link = "log"),
                 data = datos_pois)
@@ -287,42 +282,5 @@ anova(mod_nulo, mod_pois, test = "Chisq")
 Nos dice si el modelo con covariables mejora frente al modelo con solo intercepto.
 
 
-## Resumen revisión Poisson
-```{r}
-# Ajuste
-# mod <- glm(y ~ x1 + x2 + x3, family = poisson(link = "log"), data = datos)
-# 
-# # Resumen
-# summary(mod)
-# exp(coef(mod))
-# exp(confint(mod))
-# 
-# # Residuos
-# res_dev <- residuals(mod, type = "deviance")
-# res_pear <- residuals(mod, type = "pearson")
-# fit <- fitted(mod)
-# 
-# par(mfrow = c(1, 2))
-# plot(fit, res_dev); abline(h = 0, lty = 2, col = 2)
-# plot(fit, res_pear); abline(h = 0, lty = 2, col = 2)
-# par(mfrow = c(1, 1))
-# 
-# # Influencia
-# plot(hatvalues(mod), type = "h")
-# abline(h = 2*mean(hatvalues(mod)), col = 2, lty = 2)
-# 
-# plot(cooks.distance(mod), type = "h")
-# abline(h = 4/nrow(datos), col = 2, lty = 2)
-# 
-# # Sobredispersión
-# sum(residuals(mod, type = "pearson")^2) / mod$df.residual
-# mod$deviance / mod$df.residual
-# 
-# # Comparación con modelo más flexible
-# library(MASS)
-# mod_nb <- glm.nb(y ~ x1 + x2 + x3, data = datos)
-# AIC(mod, mod_nb)
-# summary(mod_nb)
-```
 
 
