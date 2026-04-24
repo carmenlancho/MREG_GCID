@@ -19,6 +19,7 @@ book:
     - tema3.qmd
     - tema4.qmd
     - tema5.qmd
+    - tema6.qmd
     - conclusiones.qmd
     - references.qmd
   cover-image: images/DSLab_logo_2.png

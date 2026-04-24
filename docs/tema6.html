@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es-ES" xml:lang="es-ES"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>7&nbsp; Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs) – Modelos de Regresión</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./conclusiones.html" rel="next">
+<link href="./tema5.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-f0dd6a323f9ff68570894d7a6fc3e4f3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No se han encontrado resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="estilos_html.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema6.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs)</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Modelos de Regresión</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefacio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción a los modelos de regresión</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal simple</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal múltiple</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ingeniería de características: transformaciones de variables e interacciones</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Selección de variables, regularización y validación</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema6.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografía</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#fundamentos-de-los-gams" id="toc-fundamentos-de-los-gams" class="nav-link active" data-scroll-target="#fundamentos-de-los-gams"><span class="header-section-number">7.1</span> Fundamentos de los GAMs</a>
+  <ul class="collapse">
+  <li><a href="#suavizado-en-los-gams" id="toc-suavizado-en-los-gams" class="nav-link" data-scroll-target="#suavizado-en-los-gams"><span class="header-section-number">7.1.1</span> Suavizado en los GAMs</a></li>
+  <li><a href="#splines" id="toc-splines" class="nav-link" data-scroll-target="#splines"><span class="header-section-number">7.1.2</span> Splines</a></li>
+  </ul></li>
+  <li><a href="#interpretación-de-los-resultados" id="toc-interpretación-de-los-resultados" class="nav-link" data-scroll-target="#interpretación-de-los-resultados"><span class="header-section-number">7.2</span> Interpretación de los resultados</a></li>
+  <li><a href="#evaluación-del-modelo-y-selección-de-parámetros-en-gams" id="toc-evaluación-del-modelo-y-selección-de-parámetros-en-gams" class="nav-link" data-scroll-target="#evaluación-del-modelo-y-selección-de-parámetros-en-gams"><span class="header-section-number">7.3</span> Evaluación del modelo y selección de parámetros en GAMs</a>
+  <ul class="collapse">
+  <li><a href="#técnicas-para-evaluar-la-calidad-del-ajuste-en-gams" id="toc-técnicas-para-evaluar-la-calidad-del-ajuste-en-gams" class="nav-link" data-scroll-target="#técnicas-para-evaluar-la-calidad-del-ajuste-en-gams"><span class="header-section-number">7.3.1</span> Técnicas para evaluar la calidad del ajuste en GAMs</a></li>
+  <li><a href="#criterios-de-información-aic-gcv" id="toc-criterios-de-información-aic-gcv" class="nav-link" data-scroll-target="#criterios-de-información-aic-gcv"><span class="header-section-number">7.3.2</span> Criterios de Información (AIC, GCV)</a></li>
+  <li><a href="#análisis-de-residuos" id="toc-análisis-de-residuos" class="nav-link" data-scroll-target="#análisis-de-residuos"><span class="header-section-number">7.3.3</span> Análisis de residuos</a></li>
+  <li><a href="#selección-del-grado-de-suavizado-y-control-del-sobreajuste" id="toc-selección-del-grado-de-suavizado-y-control-del-sobreajuste" class="nav-link" data-scroll-target="#selección-del-grado-de-suavizado-y-control-del-sobreajuste"><span class="header-section-number">7.3.4</span> Selección del grado de suavizado y control del sobreajuste</a></li>
+  <li><a href="#diagnóstico-de-sobreajuste" id="toc-diagnóstico-de-sobreajuste" class="nav-link" data-scroll-target="#diagnóstico-de-sobreajuste"><span class="header-section-number">7.3.5</span> Diagnóstico de sobreajuste</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-tema6" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs)</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>En el análisis de datos y la modelización estadística, a menudo asumimos que las relaciones entre las variables independientes y la variable dependiente son lineales o que pueden transformarse fácilmente para cumplir con esta suposición. Sin embargo, en muchos contextos del mundo real, las relaciones entre las variables son <strong>no lineales</strong> y <strong>complejas</strong>, lo que limita la efectividad de los modelos de regresión tradicionales como la regresión lineal o polinomial.</p>
+<p>Los <strong>Modelos de Regresión Aditiva Generalizada (GAMs)</strong> ofrecen una solución poderosa y flexible para este problema. Los GAMs permiten modelar relaciones no lineales sin necesidad de especificar de antemano la forma exacta de la no linealidad <span class="citation" data-cites="hastie2017generalized">(<a href="references.html#ref-hastie2017generalized" role="doc-biblioref">Hastie 2017</a>)</span>. En lugar de ajustar una única función global para todos los predictores, los GAMs aplican funciones de suavizado a cada variable independiente por separado, lo que permite capturar patrones complejos y sutiles en los datos.</p>
+<p>Un <strong>Modelo Aditivo Generalizado (GAM)</strong> es una extensión de los <strong>Modelos Lineales Generalizados (GLM)</strong> vistos en el tema anterior y que permite que la relación entre la variable dependiente y las variables independientes sea <strong>no lineal</strong> y <strong>flexible</strong>. En un GAM, la variable dependiente se modela como una suma de funciones suavizadas de las variables independientes:</p>
+<p><span class="math display">\[
+g(\mu) = \beta_0 + f_1(X_1) + f_2(X_2) + \dots + f_p(X_p)
+\]</span></p>
+<p>Donde:</p>
+<ul>
+<li><span class="math inline">\(g(\mu)\)</span> es la <strong>función de enlace</strong> que conecta la media de la variable dependiente (<span class="math inline">\(\mu\)</span>) con los predictores.</li>
+<li><span class="math inline">\(\beta_0\)</span> es el <strong>intercepto</strong> del modelo.</li>
+<li><span class="math inline">\(f_i(X_i)\)</span> son funciones suavizadas que capturan la relación entre cada predictor <span class="math inline">\(X_i\)</span> y la variable dependiente.</li>
+</ul>
+<p>A diferencia de la regresión lineal, donde los predictores tienen una relación lineal con la variable dependiente, en los GAMs cada predictor puede tener una forma funcional diferente, permitiendo capturar <strong>curvas</strong>, <strong>patrones no lineales</strong> y <strong>efectos complejos</strong> en los datos.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Ventajas de los GAMs">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Ventajas de los GAMs
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>Flexibilidad para modelar No Linealidades:</strong><br>
+Los GAMs permiten capturar relaciones no lineales complejas sin necesidad de especificar una forma funcional exacta.</p>
+<p><strong>Interpretabilidad:</strong><br>
+A pesar de su flexibilidad, los GAMs siguen siendo interpretables, ya que el efecto de cada predictor puede visualizarse por separado.</p>
+<p><strong>Evita el sobreajuste:</strong><br>
+A través de técnicas de suavizado controlado, los GAMs pueden evitar el sobreajuste al equilibrar la complejidad del modelo con la precisión de las predicciones.</p>
+<p><strong>Adaptabilidad a diferentes tipos de datos:</strong><br>
+Los GAMs pueden aplicarse a variables continuas, categóricas y de conteo, lo que los hace útiles en una amplia variedad de contextos.</p>
+</div>
+</div>
+</div>
+<p>Los principales casos de uso de los GAMS son:</p>
+<ul>
+<li><p><strong>Relaciones no lineales complejas:</strong> Cuando se sospecha que la relación entre las variables no es lineal y los modelos polinomiales no capturan adecuadamente la estructura de los datos.</p></li>
+<li><p><strong>Interacciones complejas entre variables:</strong> Cuando los efectos de las variables pueden variar dependiendo del contexto o de otros predictores.</p></li>
+<li><p><strong>Datos con distribuciones no estándar:</strong> En combinación con funciones de enlace, los GAMs pueden manejar diferentes tipos de distribuciones en la variable dependiente, como datos de conteo, binarios o continuos sesgados.</p></li>
+</ul>
+<p>Los Modelos Aditivos Generalizados (GAMs) tienen aplicaciones en una amplia variedad de disciplinas debido a su capacidad para capturar relaciones no lineales complejas. En medicina y epidemiología, se utilizan para modelar el riesgo de enfermedades en función de múltiples factores de riesgo que interactúan de manera no lineal, permitiendo identificar patrones sutiles en la salud de las poblaciones. En economía y finanzas, los GAMs son útiles para analizar la relación entre variables económicas, como la inflación y el crecimiento del PIB, donde las interacciones y los efectos pueden variar a lo largo del tiempo. En el campo de las ciencias ambientales, permiten modelar la relación entre la temperatura y la concentración de contaminantes atmosféricos, lo cual es crucial para entender el impacto del cambio climático. Finalmente, en marketing y negocios, los GAMs ayudan a analizar el comportamiento del cliente, como la probabilidad de compra, en función de variables como el ingreso y la edad, proporcionando insights valiosos para la toma de decisiones estratégicas.</p>
+<section id="fundamentos-de-los-gams" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="fundamentos-de-los-gams"><span class="header-section-number">7.1</span> Fundamentos de los GAMs</h2>
+<p>Los <strong>Modelos Aditivos Generalizados (GAMs)</strong> son una extensión de los <strong>Modelos Lineales Generalizados (GLM)</strong> que permiten capturar relaciones <strong>no lineales</strong> entre la variable dependiente y las variables independientes. Mientras que los GLM asumen una relación lineal (o lineal después de una transformación mediante una función de enlace), los GAMs relajan esta suposición al permitir que cada predictor tenga su propia forma funcional no paramétrica.</p>
+<p>Un <strong>GLM</strong> se expresa como:</p>
+<p><span class="math display">\[
+g(\mu) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
+\]</span></p>
+<p>Donde:</p>
+<ul>
+<li><span class="math inline">\(g(\mu)\)</span> es la función de enlace que relaciona la media de la variable dependiente (<span class="math inline">\(\mu\)</span>) con el predictor lineal.</li>
+<li><span class="math inline">\(\beta_0, \beta_1, \dots, \beta_p\)</span> son los coeficientes del modelo que representan el efecto lineal de cada predictor.</li>
+</ul>
+<p>En contraste, un <strong>GAM</strong> se define como:</p>
+<p><span class="math display">\[
+g(\mu) = \beta_0 + f_1(X_1) + f_2(X_2) + \dots + f_p(X_p)
+\]</span></p>
+<p>Donde <span class="math inline">\(f_i(X_i)\)</span> son <strong>funciones suavizadas</strong> que capturan la relación (posiblemente no lineal) entre el predictor <span class="math inline">\(X_i\)</span> y la variable dependiente.</p>
+<p>En los GLM, los efectos de los predictores son estrictamente lineales o transformados de forma lineal. En los GAMs, la relación puede ser cualquier forma no paramétrica, determinada por los datos. Los GAMs ofrecen mayor flexibilidad al permitir que la forma de la relación entre cada predictor y la respuesta sea modelada directamente a partir de los datos. Aunque los GAMs son más flexibles, siguen siendo interpretables, ya que el efecto de cada variable puede visualizarse y analizarse individualmente.</p>
+<hr>
+<section id="suavizado-en-los-gams" class="level3" data-number="7.1.1">
+<h3 data-number="7.1.1" class="anchored" data-anchor-id="suavizado-en-los-gams"><span class="header-section-number">7.1.1</span> Suavizado en los GAMs</h3>
+<p>El componente fundamental de los GAMs es el uso de <strong>funciones de suavizado</strong>, que permiten modelar relaciones no lineales de manera flexible y controlada. El suavizado evita el sobreajuste (overfitting) al no intentar seguir cada fluctuación en los datos, sino al capturar las <strong>tendencias generales</strong> subyacentes.</p>
+<p>El <strong>suavizado</strong> consiste en ajustar una curva a los datos de tal manera que se capturen las tendencias generales sin que el modelo sea demasiado sensible al ruido o a las fluctuaciones aleatorias. En el contexto de los GAMs, cada predictor tiene su propia función de suavizado que determina cómo se ajusta la relación entre esa variable y la variable dependiente:</p>
+<p><span class="math display">\[
+g(\mu) = \beta_0 + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p),
+\]</span></p>
+<p>donde <span class="math inline">\(s_i(X_i)\)</span> representa una función suavizada para el predictor <span class="math inline">\(X_i\)</span>.</p>
+<p>El grado de suavizado controla cuánto sigue el modelo las fluctuaciones de los datos:</p>
+<ul>
+<li><strong>Suavizado bajo:</strong> El modelo se ajusta demasiado a los datos, capturando incluso el ruido aleatorio. Esto puede llevar al <strong>sobreajuste</strong>.</li>
+<li><strong>Suavizado alto:</strong> El modelo puede no capturar adecuadamente la estructura subyacente de los datos, llevando al <strong>subajuste</strong> (underfitting).</li>
+</ul>
+<p>El <strong>criterio de suavizado óptimo</strong> se selecciona automáticamente mediante técnicas como la <strong>minimización del criterio de información de Akaike (AIC)</strong> o el uso de <strong>validación cruzada</strong>.</p>
+<p>El <strong>suavizado</strong> en los <strong>Modelos Aditivos Generalizados (GAMs)</strong> ofrece múltiples ventajas que los convierten en una herramienta poderosa para el análisis de datos complejos. En primer lugar, permite <strong>capturar no linealidades complejas</strong>, detectando patrones que no pueden ser representados adecuadamente por términos lineales o polinomiales simples. Esta flexibilidad es crucial para modelar relaciones reales que rara vez son estrictamente lineales. Además, el suavizado ayuda a <strong>evitar el sobreajuste</strong>; a diferencia de los polinomios de alto grado, que pueden generar oscilaciones indeseadas y seguir de manera excesiva las fluctuaciones del ruido en los datos, el suavizado controlado proporciona una representación más estable y generalizable de la relación entre las variables. Finalmente, una de las características más valiosas del suavizado en GAMs es su <strong>interpretación intuitiva</strong>. Las funciones suavizadas pueden visualizarse de manera clara y directa, lo que facilita la comprensión del impacto de cada predictor sobre la variable de respuesta, haciendo que los GAMs sean no solo potentes, sino también accesibles desde el punto de vista interpretativo.</p>
+</section>
+<section id="splines" class="level3" data-number="7.1.2">
+<h3 data-number="7.1.2" class="anchored" data-anchor-id="splines"><span class="header-section-number">7.1.2</span> Splines</h3>
+<p>En los GAMs, las funciones de suavizado se implementan comúnmente mediante <strong>splines</strong>, que son funciones polinómicas definidas por tramos. Estas permiten una flexibilidad controlada al ajustar diferentes tramos de los datos mientras se mantiene la continuidad y la suavidad en los puntos de unión (nudos).</p>
+<ul>
+<li><p><strong>Splines lineales:</strong><br>
+Son polinomios de primer grado ajustados por tramos. Aunque permiten cierta flexibilidad, pueden generar ángulos agudos en los puntos de unión.</p></li>
+<li><p><strong>Splines cúbicos:</strong><br>
+Utilizan polinomios de tercer grado en cada tramo, asegurando continuidad en la primera y segunda derivada en los <strong>nudos</strong>. Los <strong>splines cúbicos</strong> son los más utilizados en la práctica debido a su capacidad para capturar curvaturas suaves sin introducir oscilaciones no deseadas.</p></li>
+</ul>
+<p>Los <strong>splines penalizados</strong> añaden una penalización al modelo para controlar la suavidad de la curva. Esto se logra añadiendo un término de penalización al proceso de ajuste que limita la complejidad de la función suavizada.</p>
+<p><span class="math display">\[
+\min \left( \sum_{i=1}^{n} (y_i - f(x_i))^2 + \lambda \int [f''(x)]^2 dx \right)
+\]</span></p>
+<p>Donde:</p>
+<ul>
+<li><span class="math inline">\(\lambda\)</span> es el <strong>parámetro de suavizado</strong> que controla el equilibrio entre el ajuste a los datos y la suavidad de la curva.</li>
+<li>Si <span class="math inline">\(\lambda\)</span> es grande, el modelo será más suave; si es pequeño, el modelo se ajustará más a los datos.</li>
+</ul>
+<p>El número y la ubicación de los <strong>nudos</strong> (puntos donde cambian los tramos polinómicos) es un aspecto crucial en el ajuste de splines:</p>
+<ul>
+<li><strong>Muchos nudos:</strong> Mayor flexibilidad, pero riesgo de sobreajuste.</li>
+<li><strong>Pocos nudos:</strong> Modelo más simple, pero riesgo de no capturar la estructura subyacente de los datos.</li>
+</ul>
+<p>La elección óptima del número de nudos puede realizarse mediante criterios automáticos como el <strong>AIC</strong> o mediante validación cruzada.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo:  Ajuste de un GAM con Splines">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo: Ajuste de un GAM con Splines
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Vamos a ajustar un <strong>GAM</strong> utilizando la librería <code>mgcv</code> en R, que es una de las herramientas más utilizadas para trabajar con GAMs.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar y cargar la librería mgcv</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mgcv)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: nlme</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is mgcv 1.9-4. For overview type '?mgcv'.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulación de datos</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="at">length.out =</span> n)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sin</span>(x) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.3</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuste de un GAM con splines cúbicos</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>modelo_gam <span class="ot">&lt;-</span> <span class="fu">gam</span>(y <span class="sc">~</span> <span class="fu">s</span>(x), <span class="at">method =</span> <span class="st">"REML"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_gam)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Family: gaussian 
+Link function: identity 
+
+Formula:
+y ~ s(x)
+
+Parametric coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.20631    0.02749   7.505 4.01e-11 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Approximate significance of smooth terms:
+      edf Ref.df     F p-value    
+s(x) 8.03   8.75 62.31  &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+R-sq.(adj) =  0.846   Deviance explained = 85.9%
+-REML =  30.36  Scale est. = 0.075575  n = 100</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualización de la función suavizada</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_gam, <span class="at">main =</span> <span class="st">"Ajuste GAM con Splines Cúbicos"</span>, <span class="at">shade =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema6_files/figure-html/gam1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="interpretación-de-los-resultados" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="interpretación-de-los-resultados"><span class="header-section-number">7.2</span> Interpretación de los resultados</h2>
+<p>Después de ajustar el modelo, el siguiente paso es interpretar los resultados proporcionados por la función <code>summary()</code> de R.</p>
+<p>El comando <code>summary(modelo_gam)</code> proporciona la siguiente información clave:</p>
+<ol type="1">
+<li><strong>Resumen de la suavización:</strong>
+<ul>
+<li><strong><code>edf (effective degrees of freedom)</code>:</strong> Indica el grado de flexibilidad del suavizado.
+<ul>
+<li>Un <strong>edf cercano a 1</strong> sugiere una relación lineal.<br>
+</li>
+<li>Un <strong>edf mayor que 1</strong> indica una relación no lineal.</li>
+</ul></li>
+</ul></li>
+<li><strong>Significancia de los predictores:</strong>
+<ul>
+<li><strong><code>p-values</code>:</strong> Indican si la función suavizada para cada predictor es significativa. Un valor <span class="math inline">\(p &lt; 0.05\)</span> sugiere que la relación entre el predictor y la variable dependiente es estadísticamente significativa.</li>
+</ul></li>
+<li><strong>Medidas de ajuste:</strong>
+<ul>
+<li><strong><code>Deviance explained</code>:</strong> Similar al <span class="math inline">\(R^2\)</span> en regresión lineal, indica el porcentaje de la variabilidad de los datos explicada por el modelo.</li>
+<li><strong><code>GCV score</code> y <code>AIC</code>:</strong> Utilizados para evaluar la calidad del ajuste y comparar diferentes modelos.</li>
+</ul></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_gam)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Family: gaussian 
+Link function: identity 
+
+Formula:
+y ~ s(x)
+
+Parametric coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.20631    0.02749   7.505 4.01e-11 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Approximate significance of smooth terms:
+      edf Ref.df     F p-value    
+s(x) 8.03   8.75 62.31  &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+R-sq.(adj) =  0.846   Deviance explained = 85.9%
+-REML =  30.36  Scale est. = 0.075575  n = 100</code></pre>
+</div>
+</div>
+<ul>
+<li>El <strong>intercepto</strong> (0.01852) no es significativo, lo que sugiere que el valor medio de <span class="math inline">\(y\)</span> cuando <span class="math inline">\(x = 0\)</span> no difiere significativamente de cero.</li>
+<li>La función suavizada <span class="math inline">\(s(x)\)</span> tiene un <strong>edf de 7.54</strong>, indicando que la relación entre <span class="math inline">\(x\)</span> e <span class="math inline">\(y\)</span> es altamente no lineal.</li>
+<li>El <strong>valor p (&lt;2e-16)</strong> para <span class="math inline">\(s(x)\)</span> sugiere que la relación no lineal es estadísticamente significativa.</li>
+<li>El <strong>82.1% de la devianza explicada</strong> indica que el modelo captura bien la variabilidad de los datos.</li>
+<li>Un <strong>GCV (Generalized Cross-Validation)</strong> bajo indica un buen ajuste.</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Una de las principales ventajas de los GAMs es la posibilidad de visualizar fácilmente la relación entre cada predictor y la variable dependiente. La función <code>plot()</code> de <code>mgcv</code> permite crear gráficos claros e intuitivos de los efectos suavizados.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualización del efecto suavizado de x en y</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_gam, <span class="at">shade =</span> <span class="cn">TRUE</span>, <span class="at">main =</span> <span class="st">"Relación No Lineal entre x e y"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema6_files/figure-html/gams3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>El <strong>área sombreada</strong> alrededor de la curva representa el <strong>intervalo de confianza</strong> al 95%. La <strong>forma de la curva</strong> muestra la relación entre <span class="math inline">\(x\)</span> e $ y$; en este caso, debería reflejar una forma sinusoidal. Si la curva es recta, la relación es aproximadamente lineal.</p>
+</div>
+</div>
+</div>
+<p>Es posible personalizar el gráfico para mejorar la presentación:</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Personalización avanzada del gráfico</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_gam, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">residuals =</span> <span class="cn">TRUE</span>,  <span class="co"># Muestra los residuos</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>,          <span class="co"># Estilo de los puntos de datos</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"blue"</span>,      <span class="co"># Color de la curva suavizada</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">seWithMean =</span> <span class="cn">TRUE</span>, <span class="co"># Muestra intervalos de confianza ajustados al promedio</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">rug =</span> <span class="cn">TRUE</span>,        <span class="co"># Añade marcas en el eje x para indicar la densidad de los datos</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Efecto Suavizado de x sobre y"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema6_files/figure-html/gams4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Si el modelo incluye múltiples predictores suavizados, <code>plot()</code> creará un gráfico para cada uno.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulación de un segundo predictor</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="at">length.out =</span> n)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> <span class="fu">sin</span>(x) <span class="sc">+</span> <span class="fu">log</span>(x2 <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.3</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuste del GAM con dos predictores suavizados</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>modelo_gam_multi <span class="ot">&lt;-</span> <span class="fu">gam</span>(y2 <span class="sc">~</span> <span class="fu">s</span>(x) <span class="sc">+</span> <span class="fu">s</span>(x2), <span class="at">method =</span> <span class="st">"REML"</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualización de los efectos suavizados</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_gam_multi, <span class="at">pages =</span> <span class="dv">1</span>, <span class="at">shade =</span> <span class="cn">TRUE</span>, <span class="at">main =</span> <span class="st">"Efectos Suavizados de x y x2"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema6_files/figure-html/gams5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>El parámetro <code>pages = 1</code> muestra todos los efectos en una sola página. Cada gráfico muestra cómo cada predictor afecta la variable dependiente, permitiendo una interpretación clara de efectos individuales.</p>
+</div>
+</div>
+</div>
+<p>Un valor de <strong><code>edf</code> cercano a 1</strong> indica un efecto lineal, mientras que valores mayores sugieren una relación no lineal más compleja. La <strong>significancia estadística</strong> de los efectos suavizados indica qué predictores tienen una relación significativa con la variable dependiente. La <strong>devianza explicada</strong> y el <strong>AIC</strong> proporcionan medidas para evaluar la calidad del ajuste y comparar diferentes modelos. Los gráficos permiten identificar patrones no lineales complejos y facilitan la comunicación de los resultados a audiencias no técnicas.</p>
+</section>
+<section id="evaluación-del-modelo-y-selección-de-parámetros-en-gams" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="evaluación-del-modelo-y-selección-de-parámetros-en-gams"><span class="header-section-number">7.3</span> Evaluación del modelo y selección de parámetros en GAMs</h2>
+<p>Una vez ajustado un <strong>Modelo Aditivo Generalizado (GAM)</strong>, es fundamental evaluar su calidad y ajustar adecuadamente el <strong>grado de suavizado</strong> para garantizar que el modelo capture las relaciones relevantes sin caer en el <strong>sobreajuste</strong> o <strong>subajuste</strong>. Esta sección explora las técnicas para evaluar el rendimiento de los GAMs, identificar problemas en el ajuste y seleccionar los parámetros óptimos de suavizado.</p>
+<section id="técnicas-para-evaluar-la-calidad-del-ajuste-en-gams" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="técnicas-para-evaluar-la-calidad-del-ajuste-en-gams"><span class="header-section-number">7.3.1</span> Técnicas para evaluar la calidad del ajuste en GAMs</h3>
+<p>La evaluación de la calidad del ajuste en GAMs implica una combinación de <strong>métricas estadísticas</strong> y <strong>diagnósticos gráficos</strong>. Estas herramientas permiten determinar cómo de bien se ajusta el modelo a los datos y si los supuestos subyacentes son válidos.</p>
+<p>La <strong>deviance explicada</strong> es una medida análoga al <span class="math inline">\(R^2\)</span> en la regresión lineal. Indica la proporción de la variabilidad de la variable dependiente que es explicada por el modelo:</p>
+<p><span class="math display">\[
+\text{Deviance Explicada} = 1 - \frac{\text{Deviance del Modelo}}{\text{Deviance del Modelo Nulo}}
+\]</span></p>
+<ul>
+<li><strong>Valores cercanos a 1</strong> indican que el modelo explica bien la variabilidad de los datos.</li>
+<li><strong>Valores cercanos a 0</strong> sugieren que el modelo no captura adecuadamente la estructura de los datos.</li>
+</ul>
+<p>El <strong><span class="math inline">\(R^2\)</span> ajustado</strong> también puede interpretarse en modelos GAM cuando la familia es <code>gaussian</code>. Este valor se reporta en la salida de <code>summary(modelo_gam)</code>.</p>
+</section>
+<section id="criterios-de-información-aic-gcv" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="criterios-de-información-aic-gcv"><span class="header-section-number">7.3.2</span> Criterios de Información (AIC, GCV)</h3>
+<p>Los <strong>criterios de información</strong> permiten comparar modelos y evaluar su capacidad para generalizar a nuevos datos. Dos de las métricas más comunes en GAMs son:</p>
+<p><strong>AIC (Akaike Information Criterion):</strong></p>
+<p><span class="math display">\[
+AIC = -2 \log(L) + 2k
+\]</span></p>
+<p>Visto en temas anteriores, donde <span class="math inline">\(L\)</span> es el log-likelihood del modelo y <span class="math inline">\(k\)</span> es el número de parámetros. <strong>Un AIC más bajo</strong> sugiere un modelo mejor ajustado.</p>
+<p><strong>GCV (Generalized Cross-Validation):</strong></p>
+<p>El <strong>GCV</strong> es una medida específica para modelos de suavizado y penalización. Estima el error de predicción esperado usando una forma eficiente de validación cruzada. Un <strong>GCV bajo</strong> indica un buen ajuste sin sobreajuste.</p>
+</section>
+<section id="análisis-de-residuos" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="análisis-de-residuos"><span class="header-section-number">7.3.3</span> Análisis de residuos</h3>
+<p>Como en otros modelos de regresión, el análisis de residuos es una herramienta esencial para diagnosticar el ajuste del modelo y detectar patrones no explicados.</p>
+<ul>
+<li><p><strong>Residuos Pearson y Deviance:</strong><br>
+Deben distribuirse aleatoriamente alrededor de cero si el modelo está bien especificado.</p></li>
+<li><p><strong>Gráficos de residuos:</strong><br>
+Permiten identificar valores atípicos, heterocedasticidad y patrones no capturados por el modelo.</p></li>
+</ul>
+<hr>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo: Evaluación del ajuste de un GAM">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo: Evaluación del ajuste de un GAM
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuste del modelo GAM</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mgcv)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="at">length.out =</span> n)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sin</span>(x) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.3</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>modelo_gam <span class="ot">&lt;-</span> <span class="fu">gam</span>(y <span class="sc">~</span> <span class="fu">s</span>(x), <span class="at">method =</span> <span class="st">"REML"</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_gam)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Family: gaussian 
+Link function: identity 
+
+Formula:
+y ~ s(x)
+
+Parametric coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.17902    0.02011   8.902  4.3e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Approximate significance of smooth terms:
+       edf Ref.df     F p-value    
+s(x) 8.414  8.904 123.7  &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+R-sq.(adj) =  0.847   Deviance explained = 85.3%
+-REML =  52.84  Scale est. = 0.080887  n = 200</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verificar la deviance explicada y el AIC</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Deviance Explicada:"</span>, <span class="fu">summary</span>(modelo_gam)<span class="sc">$</span>dev.expl, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Deviance Explicada: 0.8533086 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"AIC del Modelo:"</span>, <span class="fu">AIC</span>(modelo_gam), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AIC del Modelo: 75.89817 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Diagnóstico de residuos</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gam.check</span>(modelo_gam)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema6_files/figure-html/eval_gam1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Method: REML   Optimizer: outer newton
+full convergence after 8 iterations.
+Gradient range [-3.529919e-09,3.476724e-09]
+(score 52.83958 &amp; scale 0.08088732).
+Hessian positive definite, eigenvalue range [3.67346,99.14414].
+Model rank =  10 / 10 
+
+Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+indicate that k is too low, especially if edf is close to k'.
+
+       k'  edf k-index p-value
+s(x) 9.00 8.41     1.1    0.94</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>El comando <code>gam.check()</code> proporciona múltiples gráficos de diagnóstico para evaluar la adecuación del modelo, incluyendo la distribución de los residuos y la comprobación del grado de suavizado.</p>
+</section>
+<section id="selección-del-grado-de-suavizado-y-control-del-sobreajuste" class="level3" data-number="7.3.4">
+<h3 data-number="7.3.4" class="anchored" data-anchor-id="selección-del-grado-de-suavizado-y-control-del-sobreajuste"><span class="header-section-number">7.3.4</span> Selección del grado de suavizado y control del sobreajuste</h3>
+<p>El <strong>grado de suavizado</strong> en los GAMs controla la flexibilidad del modelo. Un suavizado adecuado permite capturar la estructura subyacente de los datos sin ajustarse al ruido aleatorio.</p>
+<p>El <strong>grado de suavizado</strong> determina la complejidad de la función que se ajusta a los datos. Esto se representa mediante los <strong>grados de libertad efectivos (edf)</strong>:</p>
+<ul>
+<li><strong>edf cercano a 1:</strong> Indica una relación casi lineal.</li>
+<li><strong>edf mayor que 1:</strong> Sugiere una relación no lineal más compleja.</li>
+</ul>
+<p>Un <strong>grado de suavizado demasiado bajo</strong> puede llevar al <strong>subajuste</strong> (el modelo no captura adecuadamente los patrones de los datos), mientras que un <strong>suavizado excesivo</strong> puede llevar al <strong>sobreajuste</strong> (el modelo sigue el ruido en lugar de la tendencia general).</p>
+<p>La librería <code>mgcv</code> ajusta automáticamente el grado de suavizado utilizando métodos de optimización como <strong>REML</strong> (Restricted Maximum Likelihood) o <strong>GCV</strong> (Generalized Cross-Validation).</p>
+<ul>
+<li><strong><code>method = "REML"</code>:</strong> Proporciona un ajuste más robusto y es menos propenso al sobreajuste que GCV.</li>
+<li><strong><code>method = "GCV.Cp"</code>:</strong> Utiliza la validación cruzada para seleccionar el suavizado, pero puede ser más sensible al ruido.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo: Comparación de métodos de suavizado">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo: Comparación de métodos de suavizado
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuste usando REML</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>modelo_reml <span class="ot">&lt;-</span> <span class="fu">gam</span>(y <span class="sc">~</span> <span class="fu">s</span>(x), <span class="at">method =</span> <span class="st">"REML"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuste usando GCV</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>modelo_gcv <span class="ot">&lt;-</span> <span class="fu">gam</span>(y <span class="sc">~</span> <span class="fu">s</span>(x), <span class="at">method =</span> <span class="st">"GCV.Cp"</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Comparación de AIC y GCV</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"AIC (REML):"</span>, <span class="fu">AIC</span>(modelo_reml), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AIC (REML): 75.89817 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"GCV (GCV.Cp):"</span>, modelo_gcv<span class="sc">$</span>gcv.ubre, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>GCV (GCV.Cp): 0.08456186 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Aunque <code>mgcv</code> selecciona automáticamente el grado de suavizado, es posible <strong>controlar manualmente</strong> la complejidad del modelo especificando el número de <strong>bases de suavizado</strong> mediante el argumento <code>k</code> en la función <code>s()</code>:</p>
+<ul>
+<li><strong><code>k</code> pequeño:</strong> Menor flexibilidad, puede llevar al subajuste.</li>
+<li><strong><code>k</code> grande:</strong> Mayor flexibilidad, riesgo de sobreajuste.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo: Control manual del suavizado">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo: Control manual del suavizado
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Menor suavizado (k = 3)</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>modelo_suave <span class="ot">&lt;-</span> <span class="fu">gam</span>(y <span class="sc">~</span> <span class="fu">s</span>(x, <span class="at">k =</span> <span class="dv">3</span>), <span class="at">method =</span> <span class="st">"REML"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mayor suavizado (k = 20)</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>modelo_mas_flexible <span class="ot">&lt;-</span> <span class="fu">gam</span>(y <span class="sc">~</span> <span class="fu">s</span>(x, <span class="at">k =</span> <span class="dv">20</span>), <span class="at">method =</span> <span class="st">"REML"</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualización de los diferentes ajustes</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_suave, <span class="at">main =</span> <span class="st">"Suavizado Bajo (k=3)"</span>, <span class="at">shade =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_mas_flexible, <span class="at">main =</span> <span class="st">"Suavizado Alto (k=20)"</span>, <span class="at">shade =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema6_files/figure-html/suavizado2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>La <strong>validación cruzada</strong> es una técnica robusta para seleccionar el grado de suavizado. Tal y como hemos visto en temas anteriores, en este enfoque, el conjunto de datos se divide en varios subconjuntos (folds), y el modelo se entrena y evalúa en diferentes combinaciones de estos subconjuntos.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo: Valización cruzada para GAMs">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo: Valización cruzada para GAMs
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar librerías necesarias</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cvTools)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: robustbase</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mgcv)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Configuración de la validación cruzada 5-fold</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">cvFolds</span>(<span class="at">n =</span> n, <span class="at">K =</span> <span class="dv">5</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Inicializar un vector para almacenar el error</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>errores <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">5</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Validación cruzada manual</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Dividir en conjunto de entrenamiento y prueba</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  test_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(folds<span class="sc">$</span>which <span class="sc">==</span> i)</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  train_idx <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="dv">1</span><span class="sc">:</span>n, test_idx)</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ajustar el modelo en el conjunto de entrenamiento</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  modelo_gam_cv <span class="ot">&lt;-</span> <span class="fu">gam</span>(y <span class="sc">~</span> <span class="fu">s</span>(x), <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x[train_idx], <span class="at">y =</span> y[train_idx]), <span class="at">method =</span> <span class="st">"REML"</span>)</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predecir en el conjunto de prueba</span></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>  predicciones <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_gam_cv, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x[test_idx]))</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calcular el error cuadrático medio (RMSE)</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>  errores[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((y[test_idx] <span class="sc">-</span> predicciones)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Promedio del error de la validación cruzada</span></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>error_promedio <span class="ot">&lt;-</span> <span class="fu">mean</span>(errores)</span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Error Promedio (RMSE) de la Validación Cruzada:"</span>, error_promedio)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Error Promedio (RMSE) de la Validación Cruzada: 0.2946876</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="diagnóstico-de-sobreajuste" class="level3" data-number="7.3.5">
+<h3 data-number="7.3.5" class="anchored" data-anchor-id="diagnóstico-de-sobreajuste"><span class="header-section-number">7.3.5</span> Diagnóstico de sobreajuste</h3>
+<p>Un modelo sobreajustado sigue de cerca las fluctuaciones del ruido en los datos, lo que puede detectarse mediante:</p>
+<ul>
+<li><strong>Residuos estructurados:</strong> Los residuos no deberían mostrar patrones sistemáticos.</li>
+<li><strong>Curvas excesivamente flexibles:</strong> Si la curva suavizada presenta oscilaciones innecesarias, es señal de sobreajuste.</li>
+<li><strong>Baja generalización:</strong> Evaluar el rendimiento del modelo en datos de prueba puede revelar problemas de sobreajuste.</li>
+</ul>
+<hr>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-hastie2017generalized" class="csl-entry" role="listitem">
+Hastie, Trevor J. 2017. <span>«Generalized additive models»</span>. En <em>Statistical models in S</em>, 249-307. Routledge.
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./tema5.html" class="pagination-link" aria-label="Modelos de regresión generalizada">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./conclusiones.html" class="pagination-link" aria-label="Conclusiones">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Conclusiones</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
