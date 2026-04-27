@@ -12,33 +12,33 @@ $$
 
 Donde:
 
-  - $g(\mu)$ es la **función de enlace** que conecta la media de la variable dependiente ($\mu$) con los predictores.
-  - $\beta_0$ es el **intercepto** del modelo.
-  - $f_i(X_i)$ son funciones suavizadas que capturan la relación entre cada predictor $X_i$ y la variable dependiente.
+-   $g(\mu)$ es la **función de enlace** que conecta la media de la variable dependiente ($\mu$) con los predictores.
+-   $\beta_0$ es el **intercepto** del modelo.
+-   $f_i(X_i)$ son funciones suavizadas que capturan la relación entre cada predictor $X_i$ y la variable dependiente.
 
 A diferencia de la regresión lineal, donde los predictores tienen una relación lineal con la variable dependiente, en los GAMs cada predictor puede tener una forma funcional diferente, permitiendo capturar **curvas**, **patrones no lineales** y **efectos complejos** en los datos.
 
 ::: {.callout-note title="Ventajas de los GAMs" collapse="false"}
-**Flexibilidad para modelar No Linealidades:**  
-   Los GAMs permiten capturar relaciones no lineales complejas sin necesidad de especificar una forma funcional exacta.
+**Flexibilidad para modelar No Linealidades:**\
+Los GAMs permiten capturar relaciones no lineales complejas sin necesidad de especificar una forma funcional exacta.
 
-**Interpretabilidad:**  
-   A pesar de su flexibilidad, los GAMs siguen siendo interpretables, ya que el efecto de cada predictor puede visualizarse por separado.
+**Interpretabilidad:**\
+A pesar de su flexibilidad, los GAMs siguen siendo interpretables, ya que el efecto de cada predictor puede visualizarse por separado.
 
-**Evita el sobreajuste:**  
-   A través de técnicas de suavizado controlado, los GAMs pueden evitar el sobreajuste al equilibrar la complejidad del modelo con la precisión de las predicciones.
+**Evita el sobreajuste:**\
+A través de técnicas de suavizado controlado, los GAMs pueden evitar el sobreajuste al equilibrar la complejidad del modelo con la precisión de las predicciones.
 
-**Adaptabilidad a diferentes tipos de datos:**  
-   Los GAMs pueden aplicarse a variables continuas, categóricas y de conteo, lo que los hace útiles en una amplia variedad de contextos.
+**Adaptabilidad a diferentes tipos de datos:**\
+Los GAMs pueden aplicarse a variables continuas, categóricas y de conteo, lo que los hace útiles en una amplia variedad de contextos.
 :::
 
 Los principales casos de uso de los GAMS son:
 
-  - **Relaciones no lineales complejas:** Cuando se sospecha que la relación entre las variables no es lineal y los modelos polinomiales no capturan adecuadamente la estructura de los datos.
-  
-  - **Interacciones complejas entre variables:** Cuando los efectos de las variables pueden variar dependiendo del contexto o de otros predictores.
+-   **Relaciones no lineales complejas:** Cuando se sospecha que la relación entre las variables no es lineal y los modelos polinomiales no capturan adecuadamente la estructura de los datos.
 
-  - **Datos con distribuciones no estándar:** En combinación con funciones de enlace, los GAMs pueden manejar diferentes tipos de distribuciones en la variable dependiente, como datos de conteo, binarios o continuos sesgados.
+-   **Interacciones complejas entre variables:** Cuando los efectos de las variables pueden variar dependiendo del contexto o de otros predictores.
+
+-   **Datos con distribuciones no estándar:** En combinación con funciones de enlace, los GAMs pueden manejar diferentes tipos de distribuciones en la variable dependiente, como datos de conteo, binarios o continuos sesgados.
 
 Los Modelos Aditivos Generalizados (GAMs) tienen aplicaciones en una amplia variedad de disciplinas debido a su capacidad para capturar relaciones no lineales complejas. En medicina y epidemiología, se utilizan para modelar el riesgo de enfermedades en función de múltiples factores de riesgo que interactúan de manera no lineal, permitiendo identificar patrones sutiles en la salud de las poblaciones. En economía y finanzas, los GAMs son útiles para analizar la relación entre variables económicas, como la inflación y el crecimiento del PIB, donde las interacciones y los efectos pueden variar a lo largo del tiempo. En el campo de las ciencias ambientales, permiten modelar la relación entre la temperatura y la concentración de contaminantes atmosféricos, lo cual es crucial para entender el impacto del cambio climático. Finalmente, en marketing y negocios, los GAMs ayudan a analizar el comportamiento del cliente, como la probabilidad de compra, en función de variables como el ingreso y la edad, proporcionando insights valiosos para la toma de decisiones estratégicas.
 
@@ -54,8 +54,8 @@ $$
 
 Donde:
 
-- $g(\mu)$ es la función de enlace que relaciona la media de la variable dependiente ($\mu$) con el predictor lineal.
-- $\beta_0, \beta_1, \dots, \beta_p$ son los coeficientes del modelo que representan el efecto lineal de cada predictor.
+-   $g(\mu)$ es la función de enlace que relaciona la media de la variable dependiente ($\mu$) con el predictor lineal.
+-   $\beta_0, \beta_1, \dots, \beta_p$ son los coeficientes del modelo que representan el efecto lineal de cada predictor.
 
 En contraste, un **GAM** se define como:
 
@@ -67,7 +67,7 @@ Donde $f_i(X_i)$ son **funciones suavizadas** que capturan la relación (posible
 
 En los GLM, los efectos de los predictores son estrictamente lineales o transformados de forma lineal. En los GAMs, la relación puede ser cualquier forma no paramétrica, determinada por los datos. Los GAMs ofrecen mayor flexibilidad al permitir que la forma de la relación entre cada predictor y la respuesta sea modelada directamente a partir de los datos. Aunque los GAMs son más flexibles, siguen siendo interpretables, ya que el efecto de cada variable puede visualizarse y analizarse individualmente.
 
----
+------------------------------------------------------------------------
 
 ### Suavizado en los GAMs
 
@@ -83,22 +83,22 @@ donde $s_i(X_i)$ representa una función suavizada para el predictor $X_i$.
 
 El grado de suavizado controla cuánto sigue el modelo las fluctuaciones de los datos:
 
-  - **Suavizado bajo:** El modelo se ajusta demasiado a los datos, capturando incluso el ruido aleatorio. Esto puede llevar al **sobreajuste**.
-  - **Suavizado alto:** El modelo puede no capturar adecuadamente la estructura subyacente de los datos, llevando al **subajuste** (underfitting).
+-   **Suavizado bajo:** El modelo se ajusta demasiado a los datos, capturando incluso el ruido aleatorio. Esto puede llevar al **sobreajuste**.
+-   **Suavizado alto:** El modelo puede no capturar adecuadamente la estructura subyacente de los datos, llevando al **subajuste** (underfitting).
 
 El **criterio de suavizado óptimo** se selecciona automáticamente mediante técnicas como la **minimización del criterio de información de Akaike (AIC)** o el uso de **validación cruzada**.
 
 El **suavizado** en los **Modelos Aditivos Generalizados (GAMs)** ofrece múltiples ventajas que los convierten en una herramienta poderosa para el análisis de datos complejos. En primer lugar, permite **capturar no linealidades complejas**, detectando patrones que no pueden ser representados adecuadamente por términos lineales o polinomiales simples. Esta flexibilidad es crucial para modelar relaciones reales que rara vez son estrictamente lineales. Además, el suavizado ayuda a **evitar el sobreajuste**; a diferencia de los polinomios de alto grado, que pueden generar oscilaciones indeseadas y seguir de manera excesiva las fluctuaciones del ruido en los datos, el suavizado controlado proporciona una representación más estable y generalizable de la relación entre las variables. Finalmente, una de las características más valiosas del suavizado en GAMs es su **interpretación intuitiva**. Las funciones suavizadas pueden visualizarse de manera clara y directa, lo que facilita la comprensión del impacto de cada predictor sobre la variable de respuesta, haciendo que los GAMs sean no solo potentes, sino también accesibles desde el punto de vista interpretativo.
 
-### Splines 
+### Splines
 
 En los GAMs, las funciones de suavizado se implementan comúnmente mediante **splines**, que son funciones polinómicas definidas por tramos. Estas permiten una flexibilidad controlada al ajustar diferentes tramos de los datos mientras se mantiene la continuidad y la suavidad en los puntos de unión (nudos).
 
-  - **Splines lineales:**  
-  Son polinomios de primer grado ajustados por tramos. Aunque permiten cierta flexibilidad, pueden generar ángulos agudos en los puntos de unión.
+-   **Splines lineales:**\
+    Son polinomios de primer grado ajustados por tramos. Aunque permiten cierta flexibilidad, pueden generar ángulos agudos en los puntos de unión.
 
-  - **Splines cúbicos:**  
-  Utilizan polinomios de tercer grado en cada tramo, asegurando continuidad en la primera y segunda derivada en los **nudos**. Los **splines cúbicos** son los más utilizados en la práctica debido a su capacidad para capturar curvaturas suaves sin introducir oscilaciones no deseadas.
+-   **Splines cúbicos:**\
+    Utilizan polinomios de tercer grado en cada tramo, asegurando continuidad en la primera y segunda derivada en los **nudos**. Los **splines cúbicos** son los más utilizados en la práctica debido a su capacidad para capturar curvaturas suaves sin introducir oscilaciones no deseadas.
 
 Los **splines penalizados** añaden una penalización al modelo para controlar la suavidad de la curva. Esto se logra añadiendo un término de penalización al proceso de ajuste que limita la complejidad de la función suavizada.
 
@@ -107,17 +107,16 @@ $$
 $$
 
 Donde:
-  
-  - $\lambda$ es el **parámetro de suavizado** que controla el equilibrio entre el ajuste a los datos y la suavidad de la curva.
-  - Si $\lambda$ es grande, el modelo será más suave; si es pequeño, el modelo se ajustará más a los datos.
+
+-   $\lambda$ es el **parámetro de suavizado** que controla el equilibrio entre el ajuste a los datos y la suavidad de la curva.
+-   Si $\lambda$ es grande, el modelo será más suave; si es pequeño, el modelo se ajustará más a los datos.
 
 El número y la ubicación de los **nudos** (puntos donde cambian los tramos polinómicos) es un aspecto crucial en el ajuste de splines:
 
-  - **Muchos nudos:** Mayor flexibilidad, pero riesgo de sobreajuste.
-  - **Pocos nudos:** Modelo más simple, pero riesgo de no capturar la estructura subyacente de los datos.
+-   **Muchos nudos:** Mayor flexibilidad, pero riesgo de sobreajuste.
+-   **Pocos nudos:** Modelo más simple, pero riesgo de no capturar la estructura subyacente de los datos.
 
 La elección óptima del número de nudos puede realizarse mediante criterios automáticos como el **AIC** o mediante validación cruzada.
-
 
 ::: {.callout-tip title="Ejemplo:  Ajuste de un GAM con Splines" collapse="true"}
 Vamos a ajustar un **GAM** utilizando la librería `mgcv` en R, que es una de las herramientas más utilizadas para trabajar con GAMs.
@@ -143,37 +142,32 @@ plot(modelo_gam, main = "Ajuste GAM con Splines Cúbicos", shade = TRUE)
 ```
 :::
 
-
 ## Interpretación de los resultados
 
 Después de ajustar el modelo, el siguiente paso es interpretar los resultados proporcionados por la función `summary()` de R.
 
-
 El comando `summary(modelo_gam)` proporciona la siguiente información clave:
 
-1. **Resumen de la suavización:**
-   - **`edf (effective degrees of freedom)`:** Indica el grado de flexibilidad del suavizado.  
-     - Un **edf cercano a 1** sugiere una relación lineal.  
-     - Un **edf mayor que 1** indica una relación no lineal.
-   
-2. **Significancia de los predictores:**
-   - **`p-values`:** Indican si la función suavizada para cada predictor es significativa. Un valor $p < 0.05$ sugiere que la relación entre el predictor y la variable dependiente es estadísticamente significativa.
-
-3. **Medidas de ajuste:**
-   - **`Deviance explained`:** Similar al $R^2$ en regresión lineal, indica el porcentaje de la variabilidad de los datos explicada por el modelo.
-   - **`GCV score` y `AIC`:** Utilizados para evaluar la calidad del ajuste y comparar diferentes modelos.
-
+1.  **Resumen de la suavización:**
+    -   **`edf (effective degrees of freedom)`:** Indica el grado de flexibilidad del suavizado.
+        -   Un **edf cercano a 1** sugiere una relación lineal.\
+        -   Un **edf mayor que 1** indica una relación no lineal.
+2.  **Significancia de los predictores:**
+    -   **`p-values`:** Indican si la función suavizada para cada predictor es significativa. Un valor $p < 0.05$ sugiere que la relación entre el predictor y la variable dependiente es estadísticamente significativa.
+3.  **Medidas de ajuste:**
+    -   **`Deviance explained`:** Similar al $R^2$ en regresión lineal, indica el porcentaje de la variabilidad de los datos explicada por el modelo.
+    -   **`GCV score` y `AIC`:** Utilizados para evaluar la calidad del ajuste y comparar diferentes modelos.
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
 ```{r gams2}
 summary(modelo_gam)
 ```
 
-- El **intercepto** (0.01852) no es significativo, lo que sugiere que el valor medio de $y$ cuando $x = 0$ no difiere significativamente de cero.
-- La función suavizada $s(x)$ tiene un **edf de 7.54**, indicando que la relación entre $x$ e $y$ es altamente no lineal.
-- El **valor p (<2e-16)** para $s(x)$ sugiere que la relación no lineal es estadísticamente significativa.
-- El **82.1% de la devianza explicada** indica que el modelo captura bien la variabilidad de los datos.
-- Un **GCV (Generalized Cross-Validation)** bajo indica un buen ajuste.
+-   El **intercepto** (0.01852) no es significativo, lo que sugiere que el valor medio de $y$ cuando $x = 0$ no difiere significativamente de cero.
+-   La función suavizada $s(x)$ tiene un **edf de 7.54**, indicando que la relación entre $x$ e $y$ es altamente no lineal.
+-   El **valor p (\<2e-16)** para $s(x)$ sugiere que la relación no lineal es estadísticamente significativa.
+-   El **82.1% de la devianza explicada** indica que el modelo captura bien la variabilidad de los datos.
+-   Un **GCV (Generalized Cross-Validation)** bajo indica un buen ajuste.
 :::
 
 Una de las principales ventajas de los GAMs es la posibilidad de visualizar fácilmente la relación entre cada predictor y la variable dependiente. La función `plot()` de `mgcv` permite crear gráficos claros e intuitivos de los efectos suavizados.
@@ -184,7 +178,7 @@ Una de las principales ventajas de los GAMs es la posibilidad de visualizar fác
 plot(modelo_gam, shade = TRUE, main = "Relación No Lineal entre x e y")
 ```
 
-El **área sombreada** alrededor de la curva representa el **intervalo de confianza** al 95%. La **forma de la curva** muestra la relación entre $x$ e $ y$; en este caso, debería reflejar una forma sinusoidal. Si la curva es recta, la relación es aproximadamente lineal.
+El **área sombreada** alrededor de la curva representa el **intervalo de confianza** al 95%. La **forma de la curva** muestra la relación entre $x$ e \$ y\$; en este caso, debería reflejar una forma sinusoidal. Si la curva es recta, la relación es aproximadamente lineal.
 :::
 
 Es posible personalizar el gráfico para mejorar la presentación:
@@ -218,23 +212,18 @@ modelo_gam_multi <- gam(y2 ~ s(x) + s(x2), method = "REML")
 plot(modelo_gam_multi, pages = 1, shade = TRUE, main = "Efectos Suavizados de x y x2")
 ```
 
-
 El parámetro `pages = 1` muestra todos los efectos en una sola página. Cada gráfico muestra cómo cada predictor afecta la variable dependiente, permitiendo una interpretación clara de efectos individuales.
 :::
 
-
 Un valor de **`edf` cercano a 1** indica un efecto lineal, mientras que valores mayores sugieren una relación no lineal más compleja. La **significancia estadística** de los efectos suavizados indica qué predictores tienen una relación significativa con la variable dependiente. La **devianza explicada** y el **AIC** proporcionan medidas para evaluar la calidad del ajuste y comparar diferentes modelos. Los gráficos permiten identificar patrones no lineales complejos y facilitan la comunicación de los resultados a audiencias no técnicas.
-
 
 ## Evaluación del modelo y selección de parámetros en GAMs
 
 Una vez ajustado un **Modelo Aditivo Generalizado (GAM)**, es fundamental evaluar su calidad y ajustar adecuadamente el **grado de suavizado** para garantizar que el modelo capture las relaciones relevantes sin caer en el **sobreajuste** o **subajuste**. Esta sección explora las técnicas para evaluar el rendimiento de los GAMs, identificar problemas en el ajuste y seleccionar los parámetros óptimos de suavizado.
 
-
 ### Técnicas para evaluar la calidad del ajuste en GAMs
 
 La evaluación de la calidad del ajuste en GAMs implica una combinación de **métricas estadísticas** y **diagnósticos gráficos**. Estas herramientas permiten determinar cómo de bien se ajusta el modelo a los datos y si los supuestos subyacentes son válidos.
-
 
 La **deviance explicada** es una medida análoga al $R^2$ en la regresión lineal. Indica la proporción de la variabilidad de la variable dependiente que es explicada por el modelo:
 
@@ -242,11 +231,10 @@ $$
 \text{Deviance Explicada} = 1 - \frac{\text{Deviance del Modelo}}{\text{Deviance del Modelo Nulo}}
 $$
 
-  - **Valores cercanos a 1** indican que el modelo explica bien la variabilidad de los datos.
-  - **Valores cercanos a 0** sugieren que el modelo no captura adecuadamente la estructura de los datos.
+-   **Valores cercanos a 1** indican que el modelo explica bien la variabilidad de los datos.
+-   **Valores cercanos a 0** sugieren que el modelo no captura adecuadamente la estructura de los datos.
 
-El **$R^2$ ajustado** también puede interpretarse en modelos GAM cuando la familia es `gaussian`. Este valor se reporta en la salida de `summary(modelo_gam)`.
-
+El $R^2$ ajustado también puede interpretarse en modelos GAM cuando la familia es `gaussian`. Este valor se reporta en la salida de `summary(modelo_gam)`.
 
 ### Criterios de Información (AIC, GCV)
 
@@ -264,18 +252,17 @@ Visto en temas anteriores, donde $L$ es el log-likelihood del modelo y $k$ es el
 
 El **GCV** es una medida específica para modelos de suavizado y penalización. Estima el error de predicción esperado usando una forma eficiente de validación cruzada. Un **GCV bajo** indica un buen ajuste sin sobreajuste.
 
-
 ### Análisis de residuos
 
 Como en otros modelos de regresión, el análisis de residuos es una herramienta esencial para diagnosticar el ajuste del modelo y detectar patrones no explicados.
 
-  - **Residuos Pearson y Deviance:**  
-  Deben distribuirse aleatoriamente alrededor de cero si el modelo está bien especificado.
+-   **Residuos Pearson y Deviance:**\
+    Deben distribuirse aleatoriamente alrededor de cero si el modelo está bien especificado.
 
-  - **Gráficos de residuos:**  
-  Permiten identificar valores atípicos, heterocedasticidad y patrones no capturados por el modelo.
+-   **Gráficos de residuos:**\
+    Permiten identificar valores atípicos, heterocedasticidad y patrones no capturados por el modelo.
 
----
+------------------------------------------------------------------------
 
 ::: {.callout-tip title="Ejemplo: Evaluación del ajuste de un GAM" collapse="true"}
 ```{r eval_gam1}
@@ -303,22 +290,21 @@ gam.check(modelo_gam)
 
 El comando `gam.check()` proporciona múltiples gráficos de diagnóstico para evaluar la adecuación del modelo, incluyendo la distribución de los residuos y la comprobación del grado de suavizado.
 
-
 ### Selección del grado de suavizado y control del sobreajuste
 
 El **grado de suavizado** en los GAMs controla la flexibilidad del modelo. Un suavizado adecuado permite capturar la estructura subyacente de los datos sin ajustarse al ruido aleatorio.
 
 El **grado de suavizado** determina la complejidad de la función que se ajusta a los datos. Esto se representa mediante los **grados de libertad efectivos (edf)**:
 
-  - **edf cercano a 1:** Indica una relación casi lineal.
-  - **edf mayor que 1:** Sugiere una relación no lineal más compleja.
+-   **edf cercano a 1:** Indica una relación casi lineal.
+-   **edf mayor que 1:** Sugiere una relación no lineal más compleja.
 
 Un **grado de suavizado demasiado bajo** puede llevar al **subajuste** (el modelo no captura adecuadamente los patrones de los datos), mientras que un **suavizado excesivo** puede llevar al **sobreajuste** (el modelo sigue el ruido en lugar de la tendencia general).
 
 La librería `mgcv` ajusta automáticamente el grado de suavizado utilizando métodos de optimización como **REML** (Restricted Maximum Likelihood) o **GCV** (Generalized Cross-Validation).
 
-  - **`method = "REML"`:** Proporciona un ajuste más robusto y es menos propenso al sobreajuste que GCV.
-  - **`method = "GCV.Cp"`:** Utiliza la validación cruzada para seleccionar el suavizado, pero puede ser más sensible al ruido.
+-   **`method = "REML"`:** Proporciona un ajuste más robusto y es menos propenso al sobreajuste que GCV.
+-   **`method = "GCV.Cp"`:** Utiliza la validación cruzada para seleccionar el suavizado, pero puede ser más sensible al ruido.
 
 ::: {.callout-tip title="Ejemplo: Comparación de métodos de suavizado" collapse="true"}
 ```{r suaviza1}
@@ -336,8 +322,8 @@ cat("GCV (GCV.Cp):", modelo_gcv$gcv.ubre, "\n")
 
 Aunque `mgcv` selecciona automáticamente el grado de suavizado, es posible **controlar manualmente** la complejidad del modelo especificando el número de **bases de suavizado** mediante el argumento `k` en la función `s()`:
 
-  - **`k` pequeño:** Menor flexibilidad, puede llevar al subajuste.
-  - **`k` grande:** Mayor flexibilidad, riesgo de sobreajuste.
+-   **`k` pequeño:** Menor flexibilidad, puede llevar al subajuste.
+-   **`k` grande:** Mayor flexibilidad, riesgo de sobreajuste.
 
 ::: {.callout-tip title="Ejemplo: Control manual del suavizado" collapse="true"}
 ```{r suavizado2}
@@ -396,9 +382,10 @@ cat("Error Promedio (RMSE) de la Validación Cruzada:", error_promedio)
 
 Un modelo sobreajustado sigue de cerca las fluctuaciones del ruido en los datos, lo que puede detectarse mediante:
 
-  - **Residuos estructurados:** Los residuos no deberían mostrar patrones sistemáticos.
-  - **Curvas excesivamente flexibles:** Si la curva suavizada presenta oscilaciones innecesarias, es señal de sobreajuste.
-  - **Baja generalización:** Evaluar el rendimiento del modelo en datos de prueba puede revelar problemas de sobreajuste.
+-   **Residuos estructurados:** Los residuos no deberían mostrar patrones sistemáticos.
+-   **Curvas excesivamente flexibles:** Si la curva suavizada presenta oscilaciones innecesarias, es señal de sobreajuste.
+-   **Baja generalización:** Evaluar el rendimiento del modelo en datos de prueba puede revelar problemas de sobreajuste.
 
----
+------------------------------------------------------------------------
 
+![](images/clipboard-1971478422.png)
